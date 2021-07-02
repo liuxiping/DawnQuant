@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "Protos/EssentialData/Common.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "DawnQuant.AShare.Api.EssentialData";
+
+package DawnQuant.AShare.Api.EssentialData;
+
+
+// 公司基本信息服务
+service ReversionFactorApi {
+ 
+ // rpc SaveReversionFactor(SaveReversionFactorRequest) returns (google.protobuf.Empty);
+
+  rpc GetReversionFactor(GetReversionFactorRequest) returns (stream  GetReversionFactorResponse);
+
+  rpc CalculateReversionFactor(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
+
+
+message SaveReversionFactorRequest
+{
+    string TSCode=1;
+    repeated ReversionFactorDto Entities=2;
+    
+}
+
+message  GetReversionFactorRequest
+{
+    string TSCode=1;
+    google.protobuf.Timestamp StartDate =2;
+    google.protobuf.Timestamp EndDate =3;
+}
+
+
+message GetReversionFactorResponse
+{
+repeated ReversionFactorDto Entities=1;
+}
+
+
+message ReversionFactorDto{
+         google.protobuf.Timestamp TradeDate =1;
+
+        /// 开盘价
+         double Before =2;
+
+        /// 收盘价
+         double After =3;
+}
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,8 @@
+﻿Add-Migration InitPersistedGrantDbMigration -c PersistedGrantDbContext -o Migrations/PersistedGrantDb
+Add-Migration InitConfigurationDbMigration -c ConfigurationDbContext -o Migrations/ConfigurationDb
+Add-Migration InitDawnQuantIdentityDbMigration -c DawnQuantIdentityDbContext -o Migrations/IdentityDb
+
+
+Update-Database -Context DawnQuantIdentityDbContext
+Update-Database -Context ConfigurationDbContext
+Update-Database -Context PersistedGrantDbContext

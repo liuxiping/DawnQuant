@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+import "Protos/EssentialData/Common.proto";
+option csharp_namespace = "DawnQuant.AShare.Api.EssentialData";
+
+package DawnQuant.AShare.Api.EssentialData;
+
+
+// 公司行业信息
+service IndustryApi {
+ 
+  rpc SaveIndustry(SaveIndustryRequest) returns (SaveIndustryResponse);
+
+  rpc  ParseIndustry(ParseIndustryRequest) returns (ParseIndustryResponse);
+
+}
+
+
+message SaveIndustryRequest
+{
+    IndustryDto Entity=1;
+}
+message SaveIndustryResponse
+{
+    IndustryDto Entity=1;
+}
+
+
+message ParseIndustryRequest
+{
+    string First=1;
+	string Second =2;
+    string Three=3;
+}
+
+message ParseIndustryResponse
+{
+    IndustryDto Entity=1;
+}
+
+
+
+
+
+
+
+

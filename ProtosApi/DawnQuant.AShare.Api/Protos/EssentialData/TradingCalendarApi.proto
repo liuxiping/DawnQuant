@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option csharp_namespace = "DawnQuant.AShare.Api.EssentialData";
+
+package DawnQuant.AShare.Api.EssentialData;
+
+
+// 公司基本信息服务
+service TradingCalendarApi {
+ 
+  rpc SaveTradingCalendar(SaveTradingCalendarRequest) returns (google.protobuf.Empty);
+  rpc MarketIsOpen(MarketIsOpenRequest) returns (MarketIsOpenResponse);
+}
+
+message SaveTradingCalendarRequest{
+ repeated TradingCalendarDto Entities=1;
+
+}
+
+message MarketIsOpenRequest
+{
+google.protobuf.Timestamp Date=1;
+string Exchange=2;
+}
+
+message MarketIsOpenResponse
+{
+bool IsOpen=1;
+}
+
+message TradingCalendarDto
+{
+
+      //主键Id
+         int32 Id =1;
+
+        /// 日期
+         google.protobuf.Timestamp Date =2;
+
+
+        /// 前一个交易日
+         google.protobuf.Timestamp PreDate =3;
+
+        /// <summary>
+        /// 是否开市
+        /// </summary>
+         bool IsOpen =4;
+
+        /// 证券交易所类型
+         string Exchange =5;
+}

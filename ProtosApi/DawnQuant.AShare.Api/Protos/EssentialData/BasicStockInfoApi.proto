@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "Protos/EssentialData/Common.proto";
+
+
+option csharp_namespace = "DawnQuant.AShare.Api.EssentialData";
+
+package DawnQuant.AShare.Api.EssentialData;
+
+
+//股票基本信息服务.
+service BasicStockInfoApi {
+  
+//获取所有股票TS_Code
+  rpc GetAllTSCodes(google.protobuf.Empty) returns (GetAllTSCodesResponse);
+
+  //保存股票基本信息
+  rpc SaveBasicStockInfo(SaveBasicStockInfoRequest) returns ( google.protobuf.Empty);
+
+   //获取股票基本信息
+  rpc GetBasicStockInfo(GetBasicStockInfoRequest) returns (GetBasicStockInfoResponse);
+
+  //更新行业信息
+  rpc UpdateIndustry(UpdateIndustryRequest) returns (google.protobuf.Empty);
+
+   //根据代码或者名称模糊查询
+  rpc GetSuggestStocks(GetSuggestStocksRequest) returns (GetSuggestStocksResponse);
+
+  //相同行业的股票
+  rpc GetSameIndustryStocks(GetSameIndustryStocksRequest) returns (GetSameIndustryStocksResponse);
+}
+
+
+message GetAllTSCodesResponse{
+repeated string TSCodes = 1;
+}
+
+
+message SaveBasicStockInfoRequest
+{
+  repeated  BasicStockInfoDto Entities=1;
+}
+
+message GetBasicStockInfoRequest
+{
+    repeated string TSCodes = 1;
+}
+
+message GetBasicStockInfoResponse
+{
+   repeated  BasicStockInfoDto Entities=1;
+}
+
+
+
+message UpdateIndustryRequest
+{
+	string TSCode=1;
+	int32 IndustryId=2;
+}
+
+message GetSuggestStocksRequest
+{
+    string pattern=1;
+}
+
+message GetSuggestStocksResponse
+{
+  repeated  RelatedStockItem Entities=1;
+}
+
+
+message RelatedStockItem
+{
+         /// TSCode
+         string TSCode=1 ;
+        /// 股票简称
+         string Name =2;
+         //行业
+         string  Industry=3 ;
+}
+
+
+message GetSameIndustryStocksRequest
+{
+string TSCode=1;
+}
+
+message  GetSameIndustryStocksResponse
+{
+    repeated  RelatedStockItem Entities=1;
+}
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+option csharp_namespace = "DawnQuant.AShare.Api.EssentialData";
+
+package DawnQuant.AShare.Api.EssentialData;
+
+
+// 每日指标
+service StockDailyIndicatorApi {
+  rpc SaveStockDailyIndicator(SaveStockDailyIndicatorRequest) returns (google.protobuf.Empty);
+  rpc GetStockDailyIndicator(GetStockDailyIndicatorRequest) returns (stream  GetStockDailyIndicatorResponse);
+}
+
+message SaveStockDailyIndicatorRequest{
+
+    string TSCode=1;
+	repeated StockDailyIndicatorDto Entities=2;
+
+}
+
+message GetStockDailyIndicatorRequest
+{
+string TSCode=1;
+google.protobuf.Timestamp StartDateTime =2;
+    google.protobuf.Timestamp EndDateTime =3;
+}
+
+message GetStockDailyIndicatorResponse
+{
+repeated StockDailyIndicatorDto Entities=1;
+}
+
+
+message StockDailyIndicatorDto
+{
+      
+        /// 交易日期
+         google.protobuf.Timestamp TradeDate =1;
+
+        /// 收盘价
+         double Close =2;
+
+        /// 换手率
+         double Turnover =3;
+
+        /// 换手率（自由流通股）
+         double Turnover_Free =4;
+
+
+        /// 量比
+         double VolumeRatio =5;
+
+        /// 市盈率（总市值/净利润， 亏损的PE为空）
+         google.protobuf.FloatValue PE =6;
+
+        /// 市盈率（TTM，亏损的PE为空）
+         google.protobuf.FloatValue PETTM =7;
+
+        /// 市净率（总市值/净资产）
+         double PB =8;
+
+        ///市销率 
+         double PS =9;
+
+        /// 市销率（TTM）
+         double PSTTM =10;
+
+        /// 股息率 （%）
+         double DV =11;
+
+        /// 股息率（TTM）（%）
+         double DVTTM =12;
+
+        /// 总股本 
+         double TotalShare =13;
+
+        /// 流通股本 （万股）
+         double FloatShare =14;
+
+        /// 自由流通股本 （万）
+         double FreeShare =15;
+
+        /// 总市值 （万元）
+         double TotalMarketValue =16;
+
+        /// 流通市值（万元）
+         double CirculateMarketValue =17;
+}
+

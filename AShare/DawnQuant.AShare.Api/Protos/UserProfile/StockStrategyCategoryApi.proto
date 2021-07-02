@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+import "Protos/UserProfile/Common.proto";
+import "google/protobuf/empty.proto";
+option csharp_namespace = "DawnQuant.AShare.Api.UserProfile";
+
+package DawnQuant.AShare.Api.UserProfile;
+
+
+//自选股票分类明细
+service StockStrategyCategoryApi {
+
+ //获取所有自定义分类
+ rpc GetStrategyCategoriesByUser(GetStrategyCategoriesByUserRequest) returns (GetStrategyCategoriesByUserResponse);
+  //保存自定义分类
+ rpc SaveStrategyCategories(SaveStrategyCategoriesRequest) returns (SaveStrategyCategoriesResponse);
+  //获取所有的分类和分类下的策略
+ rpc GetCategoriesIncludeStrategiesByUser(GetCategoriesIncludeStrategiesByUserRequest) returns (GetCategoriesIncludeStrategiesByUserResponse);
+
+ rpc DelStrategyCategory(DelStrategyCategoryRequest) returns (google.protobuf.Empty);
+
+}
+
+message GetStrategyCategoriesByUserRequest
+{
+    int64 UserId=1;
+}
+
+message GetStrategyCategoriesByUserResponse
+{
+     repeated StockStrategyCategoryDto Entities=1;
+}
+
+message SaveStrategyCategoriesRequest
+{
+repeated StockStrategyCategoryDto Entities=1;
+}
+message SaveStrategyCategoriesResponse
+{
+repeated StockStrategyCategoryDto Entities=1;
+}
+
+
+message GetCategoriesIncludeStrategiesByUserRequest
+{
+ int64 UserId=1;
+}
+
+message GetCategoriesIncludeStrategiesByUserResponse
+{
+  repeated StockStrategyCategoryDto  Entities=1;
+}
+
+message DelStrategyCategoryRequest
+{
+ int64 Id=1;
+}

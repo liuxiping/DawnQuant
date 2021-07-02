@@ -1,0 +1,78 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <StartupObject>DawnQuant.AShare.Api.Program</StartupObject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Services\EssentialData\ReversionFactorService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Protos\EssentialData\ReversionFactorApi.proto" />
+    <None Remove="Protos\SyncToy_a74b51fc-14e0-4c1f-8048-92502a6d3f82.dat" />
+    <None Remove="Protos\UserProfile\StrategyApi.proto" />
+  </ItemGroup>
+
+
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.38.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.38.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.7">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0" />
+    <PackageReference Include="Quartz" Version="3.3.2" />
+    <PackageReference Include="Serilog" Version="2.10.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\DawnQuant.AMConverter\DawnQuant.AMConverter.csproj" />
+    <ProjectReference Include="..\DawnQuant.AShare.Analysis\DawnQuant.AShare.Analysis.csproj" />
+    <ProjectReference Include="..\DawnQuant.AShare.Repository\DawnQuant.AShare.Repository.csproj" />
+    <ProjectReference Include="..\DawnQuant.AShare.Strategy\DawnQuant.AShare.Strategy.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\EssentialData\BasicStockInfoApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\EssentialData\Common.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\EssentialData\CompanyApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\EssentialData\IndustryApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\EssentialData\StockDailyIndicatorApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\EssentialData\StockTradeDataApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\EssentialData\TradingCalendarApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\StrategyMetadata\Common.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\StrategyMetadata\FactorMetadataApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\StrategyMetadata\FactorMetadataCategoryApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\StrategyMetadata\SelectScopeMetadataApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\StrategyMetadata\SelectScopeMetadataCategoryApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\UserProfile\Common.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\UserProfile\ExclusionStockApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\UserProfile\SelfSelectStockApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\UserProfile\SelfSelectStockCategoryApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\UserProfile\StockStrategyApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\UserProfile\StockStrategyCategoryApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\StrategyExecutor\StrategyExecutorApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\UserProfile\StrategyScheduledTaskApi.proto" GrpcServices="Server" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Config\FinancialDbSql.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

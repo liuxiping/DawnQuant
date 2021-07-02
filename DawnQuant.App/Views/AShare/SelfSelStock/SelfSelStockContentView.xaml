@@ -1,0 +1,122 @@
+﻿<UserControl x:Class="DawnQuant.App.Views.AShare.SelfSelStock.SelfSelStockContentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+              xmlns:lccom="clr-namespace:DawnQuant.App.Views.AShare.Common"
+             
+             mc:Ignorable="d"  Loaded="MvxWpfView_Loaded" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="0" Name="gdStockItemList">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" >
+            </ScrollViewer>
+
+            <Border BorderThickness="1"   Grid.Row="1" BorderBrush="{Binding ElementName=dgStockItem, Path=BorderBrush}" Margin="0,3,0,3">
+                <StackPanel  HorizontalAlignment="Right" Orientation="Horizontal">
+                    <ToggleButton Padding="5" Margin="0,3,10,3" Name="btnGroup" IsChecked="{Binding IsGroupByIndustry, Mode=TwoWay}"  Checked="btnGroup_Checked" Unchecked="btnGroup_Unchecked">按行业分组</ToggleButton>
+                    <Button Padding="5" Margin="0,3,3,3" Command="{Binding AddStockItemCommand}" >添加股票</Button>
+                </StackPanel>
+            </Border>
+
+        </Grid>
+
+        <Grid Grid.Column="1" Name="gdContent">
+            <lccom:StockChartView DataContext="{Binding StockChartViewModel}"></lccom:StockChartView>
+        </Grid>
+        <Grid Grid.Column="2" Width="320" Name="gdIndicator">
+            <Border BorderThickness="1,0,1,1" BorderBrush="{Binding ElementName=dgStockItem, Path=BorderBrush}">
+                <Grid>
+                    <Grid.Resources>
+
+                    </Grid.Resources>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition ></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Border BorderBrush="{Binding ElementName=dgStockItem, Path=BorderBrush}" BorderThickness="0,1,0,1">
+                        <Grid  >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <TextBlock Margin="5" Grid.Column="0"  Text="市盈率"></TextBlock>
+                            <TextBlock Margin="5" Grid.Column="1"  Text="{ Binding Path=DailyIndicator.PE ,StringFormat=F2}" Foreground="Blue"></TextBlock>
+                            <TextBlock Margin="5" Grid.Column="2"  Text="市盈率(TTM)"></TextBlock>
+                            <TextBlock Margin="5" Grid.Column="3"  Text="{ Binding Path=DailyIndicator.PETTM ,StringFormat=F2}" Foreground="Blue"></TextBlock>
+
+                            <TextBlock Margin="5" Grid.Row="1" Grid.Column="0" Text="市净率"></TextBlock>
+                            <TextBlock Margin="5" Grid.Row="1" Grid.Column="1" Text="{ Binding Path=DailyIndicator.PB ,StringFormat=F2}" Foreground="Blue"></TextBlock>
+                            <TextBlock Margin="5" Grid.Row="1" Grid.Column="2" Text="市销率"></TextBlock>
+                            <TextBlock Margin="5" Grid.Row="1" Grid.Column="3" Text="{ Binding Path=DailyIndicator.PS ,StringFormat=F2}" Foreground="Blue"></TextBlock>
+
+                            <TextBlock Margin="5" Grid.Row="2" Grid.Column="0" Text="市销率(TTM)"></TextBlock>
+                            <TextBlock Margin="5" Grid.Row="2" Grid.Column="1" Text="{ Binding Path=DailyIndicator.PSTTM ,StringFormat=F2}" Foreground="Blue"></TextBlock>
+                            <TextBlock Margin="5" Grid.Row="2" Grid.Column="2" Text="股息率"></TextBlock>
+                            <TextBlock Margin="5" Grid.Row="2" Grid.Column="3" Text="{ Binding Path=DailyIndicator.DV ,StringFormat=F2}" Foreground="Blue"></TextBlock>
+
+                            <TextBlock Margin="5" Grid.Row="3" Grid.Column="0" Text="股息率(TTM)"></TextBlock>
+                            <TextBlock Margin="5" Grid.Row="3" Grid.Column="1" Text="{ Binding Path=DailyIndicator.DVTTM ,StringFormat=F2}" Foreground="Blue"></TextBlock>
+                            <TextBlock Margin="5" Grid.Row="3" Grid.Column="2" Text="量比"></TextBlock>
+                            <TextBlock Margin="5" Grid.Row="3" Grid.Column="3" Text="{ Binding Path=DailyIndicator.VolumeRatio ,StringFormat=F2}" Foreground="Blue"></TextBlock>
+
+
+
+                        </Grid>
+                    </Border>
+                    <Border Grid.Row="1" BorderBrush="{Binding ElementName=dgStockItem, Path=BorderBrush}" BorderThickness="0,0,0,1">
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition ></RowDefinition>
+                                <RowDefinition ></RowDefinition>
+                                <RowDefinition ></RowDefinition>
+                                <RowDefinition ></RowDefinition>
+                                <RowDefinition ></RowDefinition>
+                                <RowDefinition ></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <TextBlock Margin="5" Grid.Row="0" Grid.Column="0" Text="总股本(万)"></TextBlock>
+                            <TextBlock Margin="5" Grid.Row="0" Grid.Column="1" Text="{ Binding Path=DailyIndicator.TotalShare ,StringFormat=F2}" Foreground="Blue"></TextBlock>
+                            <TextBlock Margin="5" Grid.Row="2" Grid.Column="0" Text="流通股本(万)"></TextBlock>
+                            <TextBlock Margin="5" Grid.Row="2" Grid.Column="1" Text="{ Binding Path=DailyIndicator.FloatShare ,StringFormat=F2}" Foreground="Blue"></TextBlock>
+
+                            <TextBlock Margin="5" Grid.Row="3" Grid.Column="0" Text="自由流通股本(万)"></TextBlock>
+                            <TextBlock Margin="5" Grid.Row="3" Grid.Column="1" Text="{ Binding Path=DailyIndicator.FreeShare ,StringFormat=F2}" Foreground="Blue"></TextBlock>
+                            <TextBlock Margin="5" Grid.Row="4" Grid.Column="0" Text="总市值(万元)"></TextBlock>
+                            <TextBlock Margin="5" Grid.Row="4" Grid.Column="1" Text="{ Binding Path=DailyIndicator.TotalMarketValue ,StringFormat=F2}" Foreground="Blue" ></TextBlock>
+
+                            <TextBlock Margin="5" Grid.Row="5" Grid.Column="0" Text="流通市值(万元)"></TextBlock>
+                            <TextBlock Margin="5" Grid.Row="5" Grid.Column="1" Text="{ Binding Path=DailyIndicator.CirculateMarketValue ,StringFormat=F2}" Foreground="Blue"></TextBlock>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

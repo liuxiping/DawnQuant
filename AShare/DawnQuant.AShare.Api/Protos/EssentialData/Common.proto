@@ -1,0 +1,194 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "DawnQuant.AShare.Api.EssentialData";
+
+package DawnQuant.AShare.Api.EssentialData;
+
+// 股票基本信息.
+message BasicStockInfoDto {
+  
+        /// TSCode
+         string TSCode=1 ;
+
+        /// 股票代码/公司代码
+         string StockCode=2 ;
+
+        /// 股票简称
+         string StockName =3;
+
+        /// 公司名称全称
+         string FullName =4;
+
+        /// 公司英文全称
+         string EnFullName=5 ;
+
+        /// 行业
+         string  PrimaryIndustry=6 ;
+
+        /// 三级行业，第三级行业
+         int32 IndustryId=7 ;
+
+        /// 上市日期
+         google.protobuf.Timestamp ListingDate=8 ;
+
+        /// <summary>
+        /// 退市日期
+        /// </summary>
+         google.protobuf.Timestamp DelistingDate=9 ;
+
+        ///  上市状态 上市 退市 暂停上市
+         string ListedStatus=10 ;
+        
+        /// 所属区域
+         string Area =11;
+
+        /// 市场类型
+         string MarketType =12;
+
+        /// 交易所代码
+         string Exchange=13 ;
+
+        /// 交易货币
+         string Currency=14 ;
+
+        /// 是否沪深港通标的，N否 H沪股通 S深股通
+         string StockConnect=15;
+
+       
+}
+
+
+message CompanyDto
+{
+	
+        /// 股票代码/公司代码
+         string TSCode =1;
+      
+        /// 交易所代码 ，SSE上交所 SZSE深交所
+         string Exchange=2;
+       
+        /// 法人代表
+         string Chairman =3;
+
+        /// 总经理
+         string GeneralManager  =4;
+     
+        /// 董事会秘书
+         string Secretary  =5;
+
+        /// 注册资本
+         double RegisteredCapital  =6;
+
+        /// 成立日期
+         google.protobuf.Timestamp EstablishmentDate  =7;
+
+        /// 所在省;
+         string Province  =8;
+
+        /// 所在城市
+         string City  =9;
+
+        /// 简介
+         string BriefIntroduction  =10;
+
+        /// 公司网址
+         string Website  =11;
+
+        /// 邮箱
+         string Email  =12;
+
+
+        /// 公司办公地址
+         string OfficeAddress  =13;
+
+
+        /// 员工人数
+         int32 EmployeeCount  =14;
+
+
+        /// 经营范围
+         string BusinessScope  =15;
+
+        /// 主营业务
+         string MainBusiness  =16;
+
+      
+}
+
+message IndustryDto
+{
+        /// Id
+         int32 Id =1;
+       
+        /// 行业名称
+         string Name=2;
+
+        /// 行业分类的层级 一共三级  1 2 3 分别代表
+         int32  Level =3;
+      
+        /// 父级 ParentId=0 为顶级
+         int32 ParentId =4;
+
+        repeated  BasicStockInfoDto StockInfos=5;
+}
+
+
+
+// K线周期
+ enum KCycleDto
+{
+    Minute1 = 0;
+    Minute5 = 1;
+    Minute15 = 2;
+    Minute30 = 3;
+    Minute60 = 4;
+    Minute120 = 5;
+    Day = 6;
+    Week = 7;
+    Month = 8;
+    Year = 9;
+    Other = 10;
+}
+
+   
+    // 市场类型 （主板/中小板/创业板/科创板/CDR）
+     enum MarketTypeDto
+    {
+        MainBoard=0;
+        SmallAndMediumSizedBoard=1;
+        GEMBoard=2;
+        STARBoard=3;
+        CDRBoard=4;
+    }
+
+
+    /// <summary>
+    /// 上市状态
+    /// </summary>
+     enum ListedStateDto
+    {
+        Listed=0;
+        Delisted=1;
+        Suspend=2;
+    }
+
+    /// 数据状态 维护全(原始数据) 前复权 后复权
+    enum AdjustedStateDto
+    {
+        /// <summary>
+        /// 未复权
+        /// </summary>
+        None=0;
+
+        /// <summary>
+        /// 前复权
+        /// </summary>
+        Pre=1;
+
+        /// <summary>
+        /// 后复权
+        /// </summary>
+        After=2;
+    }

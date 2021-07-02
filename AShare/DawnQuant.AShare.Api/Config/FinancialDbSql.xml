@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <StockTradeDataSql class="object">
+    
+    <IsDailyExistSql type="string">
+		SELECT CASE WHEN COUNT(*) = 0 THEN FALSE ELSE TRUE END
+		FROM information_schema.tables
+		WHERE table_type = 'BASE TABLE' AND table_schema = 'dawnquant.ashare.stock.dailytd'  and table_name='tablename'
+	</IsDailyExistSql>
+
+    <CreateSql type="string">
+      CREATE TABLE `tablename` (
+      `TradeDateTime` datetime(6) NOT NULL,
+      `Open` double NOT NULL,
+      `Close` double NOT NULL,
+      `PreClose` double DEFAULT NULL,
+      `High` double NOT NULL,
+      `Low` double NOT NULL,
+      `Volume` double NOT NULL,
+      `Amount` double NOT NULL,
+      `AdjustFactor` double NOT NULL,
+      PRIMARY KEY (`TradeDateTime`),
+      KEY `indexname` (`TradeDateTime`)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+    </CreateSql>
+ 
+  </StockTradeDataSql>
+
+  <StockDailyIndicatorSql   class="object">
+
+    <IsExistSql type="string">
+		SELECT CASE WHEN COUNT(*) = 0 THEN FALSE ELSE TRUE END
+		FROM information_schema.tables
+		WHERE table_type = 'BASE TABLE' AND table_schema = 'dawnquant.ashare.stock.dailyindicator'  and table_name='tablename'
+	</IsExistSql>
+
+    <CreateSql type="string">
+      CREATE TABLE `tablename` (
+      `TradeDate` datetime(6) NOT NULL,
+      `Close` double NOT NULL,
+      `Turnover` double NOT NULL,
+      `TurnoverFree` double NOT NULL,
+      `VolumeRatio` double NOT NULL,
+      `PE` double DEFAULT NULL,
+      `PETTM` double DEFAULT NULL,
+      `PB` double NOT NULL,
+      `PS` double NOT NULL,
+      `PSTTM` double NOT NULL,
+      `DV` double NOT NULL,
+      `DVTTM` double NOT NULL,
+      `TotalShare` double NOT NULL,
+      `FloatShare` double NOT NULL,
+      `FreeShare` double NOT NULL,
+      `TotalMarketValue` double NOT NULL,
+      `CirculateMarketValue` double NOT NULL,
+      PRIMARY KEY (`TradeDate`),
+      KEY `indexname` (`TradeDate`)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+    </CreateSql>
+
+  </StockDailyIndicatorSql>
+
+  
+</configuration>
+

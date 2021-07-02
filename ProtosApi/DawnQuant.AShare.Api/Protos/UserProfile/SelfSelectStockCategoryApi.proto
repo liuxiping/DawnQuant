@@ -1,0 +1,54 @@
+syntax = "proto3";
+import "Protos/UserProfile/Common.proto";
+import "google/protobuf/empty.proto";
+option csharp_namespace = "DawnQuant.AShare.Api.UserProfile";
+
+package DawnQuant.AShare.Api.UserProfile;
+
+
+//股票基本信息服务.
+service SelfSelectStockCategoryApi
+{
+  
+//获取所有自定义分类
+  rpc GetStockCategoriesByUser(GetStockCategoriesByUserRequest) returns (GetStockCategoriesByUserResponse);
+  //保存自定义分类
+  rpc SaveStockCategories(SaveStockCategoriesRequest) returns (SaveStockCategoriesResponse);
+  rpc DelStockCategory(DelStockCategoryRequest) returns (google.protobuf.Empty);
+}
+
+message GetStockCategoriesByUserRequest
+{
+    int64 UserId=1;
+}
+
+message GetStockCategoriesByUserResponse
+{
+     repeated SelfSelectStockCategoryDto Entities=1;
+}
+
+message SaveStockCategoriesRequest
+{
+repeated SelfSelectStockCategoryDto Entities=1;
+}
+
+message SaveStockCategoriesResponse
+{
+repeated SelfSelectStockCategoryDto Entities=1;
+}
+
+
+message DelStockCategoryRequest
+{
+    int64  CategoryId=1;
+}
+
+
+
+
+
+
+
+
+
+

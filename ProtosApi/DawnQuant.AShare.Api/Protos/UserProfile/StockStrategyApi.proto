@@ -1,0 +1,53 @@
+syntax = "proto3";
+import "Protos/UserProfile/Common.proto";
+import "google/protobuf/empty.proto";
+option csharp_namespace = "DawnQuant.AShare.Api.UserProfile";
+
+package DawnQuant.AShare.Api.UserProfile;
+
+
+service StockStrategyApi {
+  
+  rpc GetStockStrategyByUser(GetStockStrategyByUserRequest) returns (GetStockStrategyByUserResponse);
+  rpc GetStockStrategiesByCategory(GetStockStrategiesByCategoryRequest) returns (GetStockStrategiesByCategoryResponse);
+  rpc SaveStockStrategies(SaveStockStrategiesRequest)returns (SaveStockStrategiesResponse);
+  rpc DelStockStrategyById(DelStockStrategyByIdRequest)returns (google.protobuf.Empty);
+
+}
+
+
+message DelStockStrategyByIdRequest{
+int64 Id=1;
+}
+
+message  GetStockStrategyByUserRequest
+{
+    int64 UserId=1;
+}
+
+message  GetStockStrategyByUserResponse
+{
+    repeated  StockStrategyDto Entities=1;
+}
+
+message GetStockStrategiesByCategoryRequest
+{
+ int64 CategoryId=1;
+}
+
+message GetStockStrategiesByCategoryResponse
+{
+ repeated  StockStrategyDto Entities=1;
+}
+message SaveStockStrategiesRequest
+{
+    repeated  StockStrategyDto Entities=1; 
+}
+
+message  SaveStockStrategiesResponse
+{
+ repeated  StockStrategyDto Entities=1; 
+}
+
+
+

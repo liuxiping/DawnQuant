@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+option csharp_namespace = "DawnQuant.AShare.Api.StrategyMetadata";
+
+package DawnQuant.AShare.Api.StrategyMetadata;
+
+
+
+message FactorMetadataDto
+{
+        int64 Id =1;
+        int64 CategoryId=2;
+        string Name =3;
+        string ImplClassName =4;
+        string ImplAssemblyName =5;
+        string ParameterClassName =6;
+        string ParameterAssemblyName =7;
+        string Desc =8;
+        int32 SortNum=9;
+}
+
+message FactorMetadataCategoryDto
+{
+         int64 Id =1;
+         int32 SortNum =2;
+         string Name=3;
+         string Desc =4;
+
+         repeated FactorMetadataDto FactorMetadatas=5;
+}
+
+
+message SelectScopeMetadataCategoryDto
+{
+         int64 Id =1;
+         int32 SortNum =2;
+         string Name=3;
+         string Desc =4;
+         repeated SelectScopeMetadataDto  SelectScopeMetadatas=5;
+}
+
+message SelectScopeMetadataDto
+{
+
+        int64 Id =1;
+        int64 CategoryId=2;
+        string Name =3;
+        string ImplClassName =4;
+        string ImplAssemblyName =5;
+        string ParameterClassName =6;
+        string ParameterAssemblyName =7;
+        string Desc =8;
+         int32 SortNum=9;
+}

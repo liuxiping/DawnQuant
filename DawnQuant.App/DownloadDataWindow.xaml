@@ -1,0 +1,33 @@
+﻿<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:gif="http://wpfanimatedgif.codeplex.com"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" 
+    x:Class="DawnQuant.App.DownloadDataWindow"   
+    Height="430" Width="650"   Padding="0"  Margin="0" ShowInTaskbar="True"
+    WindowStyle="None" AllowsTransparency="True" Name="_downloadDataWindow" 
+    MouseDown="_downloadDataWindow_MouseDown" Loaded="_downloadDataWindow_Loaded"
+    mc:Ignorable="d"   WindowStartupLocation="CenterScreen"
+    >
+    <Border BorderThickness="0" BorderBrush="#1296db">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Image Grid.RowSpan="4" Stretch="Fill"  gif:ImageBehavior.AnimatedSource="Assets/Images/loadsplash.gif"  Opacity="0.9"/>
+            <!--<dxe:ProgressBarEdit   HorizontalAlignment="Stretch"  Grid.Row="2" >
+                <dxe:ProgressBarEdit.StyleSettings>
+                    <dxe:ProgressBarMarqueeStyleSettings></dxe:ProgressBarMarqueeStyleSettings>
+                </dxe:ProgressBarEdit.StyleSettings>
+            </dxe:ProgressBarEdit>-->
+            <StackPanel Margin="10" Grid.Row="3" Orientation="Horizontal">
+                <TextBlock FontSize="12" Foreground="White"> 正在更新交易数据,请稍后...</TextBlock>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

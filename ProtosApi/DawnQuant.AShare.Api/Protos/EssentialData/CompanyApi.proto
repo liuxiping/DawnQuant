@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "Protos/EssentialData/Common.proto";
+
+option csharp_namespace = "DawnQuant.AShare.Api.EssentialData";
+
+package DawnQuant.AShare.Api.EssentialData;
+
+
+// 公司基本信息服务
+service CompanyApi {
+ 
+  rpc SaveCompanys(SaveCompanysRequest) returns (google.protobuf.Empty);
+
+}
+
+
+message SaveCompanysRequest
+{
+     repeated CompanyDto Entities=1;
+}
+
+
+
+
+
+
+
+
+
+
+
+

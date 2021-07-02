@@ -1,0 +1,19 @@
+﻿<dx:DXTabbedWindow  
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        x:Class="DawnQuant.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:AShareViews="clr-namespace:DawnQuant.App.Views.AShare"
+        xmlns:local="clr-namespace:DawnQuant.App" 
+        ShowIcon="True" ShowTitle="False" Unloaded="_mainWindow_Unloaded"
+        mc:Ignorable="d" Name="_mainWindow"  WindowState="Maximized"
+        Title="DawnQuant" Height="450" Width="800">
+    <dx:DXTabControl TabContentCacheMode="CacheAllTabs" Padding="0" Margin="0">
+        <dx:DXTabItem FontSize="15" Header="沪深股市" >
+            <AShareViews:AShareMainView></AShareViews:AShareMainView>
+        </dx:DXTabItem>
+       
+    </dx:DXTabControl>
+</dx:DXTabbedWindow>

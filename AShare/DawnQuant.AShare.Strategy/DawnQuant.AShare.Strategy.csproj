@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Executor\Factor\Technical\HardenCountFactor.cs" />
+    <Compile Remove="Executor\Factor\Technical\HardenCountFactorParameter.cs" />
+    <Compile Remove="Utils\ISelfSelectService.cs" />
+    <Compile Remove="Utils\ISupportedCategoriesService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Executor\SelectScope\Index\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MathNet.Numerics" Version="4.15.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DawnQuant.AShare.Analysis\DawnQuant.AShare.Analysis.csproj" />
+    <ProjectReference Include="..\DawnQuant.AShare.Repository\DawnQuant.AShare.Repository.csproj" />
+  </ItemGroup>
+
+</Project>

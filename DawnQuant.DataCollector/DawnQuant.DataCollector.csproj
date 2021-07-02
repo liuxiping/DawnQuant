@@ -1,0 +1,64 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\Icons\app.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\Icons\app.ico" />
+    <None Remove="Assets\Icons\app.png" />
+    <None Remove="Assets\Icons\history.png" />
+    <None Remove="Assets\Icons\increment.png" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Resource Include="Assets\Icons\app.ico" />
+    <Resource Include="Assets\Icons\app.png" />
+    <Resource Include="Assets\Icons\history.png" />
+    <Resource Include="Assets\Icons\increment.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.2.0" />
+    <PackageReference Include="DevExpress.Wpf" Version="21.1.*-*" />
+    <PackageReference Include="DevExpress.Wpf.Themes.Win10Light" Version="21.1.3" />
+    <PackageReference Include="DynamicDns.TencentCloud" Version="1.0.1" />
+    <PackageReference Include="Google.Protobuf" Version="3.17.3" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.38.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.38.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.34" />
+    <PackageReference Include="IdentityModel" Version="5.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
+    <PackageReference Include="Quartz" Version="3.3.2" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="TuShareHttpSDKLibrary" Version="1.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Assets\Images\" />
+    <Folder Include="Models\" />
+    <Folder Include="ViewModels\Other\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Infrastructure\DawnQuant.Passport\DawnQuant.Passport.csproj">
+      <TreatAsUsed>true</TreatAsUsed>
+    </ProjectReference>
+    <ProjectReference Include="..\ProtosApi\DawnQuant.AShare.Api\DawnQuant.AShare.Api.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>D:\Microsoft\Nuget\.nuget\automapper\10.0.0\lib\netstandard2.0\AutoMapper.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

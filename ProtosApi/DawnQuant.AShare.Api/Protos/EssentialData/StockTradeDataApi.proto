@@ -1,0 +1,109 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+import "Protos/EssentialData/Common.proto";
+import "google/protobuf/empty.proto";
+
+
+option csharp_namespace = "DawnQuant.AShare.Api.EssentialData";
+
+package DawnQuant.AShare.Api.EssentialData;
+
+
+// 股票交易数据
+service StockTradeDataApi {
+ 
+ rpc SaveStockTradeData(SaveStockTradeDataRequest) returns (google.protobuf.Empty);
+
+ rpc GetTradeData(GetTradeDataRequest) returns (stream  GetTradeDataResponse);
+
+ rpc GetLatestTradeData(GetLatestTradeDataRequest) returns (GetLatestTradeDataResponse);
+
+ //计算全部股票复权因子
+ rpc CalculateAllAdjustFactor(CalculateAllAdjustFactorRequest) returns (google.protobuf.Empty);
+
+ //增量计算股票复权因子
+ rpc CalculateInsAdjustFactor(CalculateInsAdjustFactorRequest) returns (google.protobuf.Empty);
+
+
+}
+
+message SaveStockTradeDataRequest
+{
+    string TSCode=1;
+    KCycleDto KCycle=2;
+    repeated StockTradeDataDto Entities=3;
+    
+}
+
+message  GetTradeDataRequest
+{
+    string TSCode=1;
+    KCycleDto KCycle=2;
+    google.protobuf.Timestamp StartDateTime =4;
+    google.protobuf.Timestamp EndDateTime =5;
+}
+
+
+message GetTradeDataResponse
+{
+repeated StockTradeDataDto Entities=1;
+}
+
+
+message GetLatestTradeDataRequest
+{
+    string TSCode=1;
+    KCycleDto KCycle=2;
+    int32 Size=3;
+    AdjustedStateDto  AdjustedState=4;
+}
+
+message GetLatestTradeDataResponse
+{
+repeated StockTradeDataDto Entities=1;
+}
+
+
+message CalculateAllAdjustFactorRequest
+{
+    //原始数据支持支 日线 5分钟
+    KCycleDto KCycle=1;
+}
+
+message CalculateInsAdjustFactorRequest
+{
+ //原始数据支持支 日线 5分钟
+    KCycleDto KCycle=1;
+}
+
+message StockTradeDataDto
+{
+        /// 开盘价
+         double Open =1;
+
+        /// 收盘价
+         double Close =2;
+
+        /// 昨日收盘价
+         google.protobuf.FloatValue PreClose =3;
+
+        /// 最高价
+         double High =4;
+
+        ///  最低价
+         double Low =5;
+
+        /// 成交量
+         double Volume =6;
+
+        /// 成交额
+         double Amount =7;
+
+        /// 交易时间
+         google.protobuf.Timestamp TradeDateTime =8;
+
+         ///复权因子
+        double AdjustFactor =9;
+}

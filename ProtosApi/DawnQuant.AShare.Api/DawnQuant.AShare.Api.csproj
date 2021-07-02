@@ -1,0 +1,71 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Protos\Strategy\**" />
+    <EmbeddedResource Remove="Protos\Strategy\**" />
+    <None Remove="Protos\Strategy\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Protos\EssentialData\BasicStockInfoApi.proto" />
+    <None Remove="Protos\EssentialData\Common.proto" />
+    <None Remove="Protos\EssentialData\CompanyApi.proto" />
+    <None Remove="Protos\EssentialData\IndustryApi.proto" />
+    <None Remove="Protos\EssentialData\ReversionFactorApi.proto" />
+    <None Remove="Protos\EssentialData\StockDailyIndicatorApi.proto" />
+    <None Remove="Protos\EssentialData\StockTradeDataApi.proto" />
+    <None Remove="Protos\EssentialData\TradingCalendarApi.proto" />
+    <None Remove="Protos\StrategyExecutor\StrategyExecutorApi.proto" />
+    <None Remove="Protos\StrategyMetadata\Common.proto" />
+    <None Remove="Protos\StrategyMetadata\FactorMetadataApi.proto" />
+    <None Remove="Protos\StrategyMetadata\FactorMetadataCategoryApi.proto" />
+    <None Remove="Protos\StrategyMetadata\SelectScopeMetadataApi.proto" />
+    <None Remove="Protos\StrategyMetadata\SelectScopeMetadataCategoryApi.proto" />
+    <None Remove="Protos\SyncToy_d91a667c-faf2-4f0b-8cbc-9765406e02a6.dat" />
+    <None Remove="Protos\UserProfile\Common.proto" />
+    <None Remove="Protos\UserProfile\ExclusionStockApi.proto" />
+    <None Remove="Protos\UserProfile\SelfSelectStockApi.proto" />
+    <None Remove="Protos\UserProfile\SelfSelectStockCategoryApi.proto" />
+    <None Remove="Protos\UserProfile\StockStrategyApi.proto" />
+    <None Remove="Protos\UserProfile\StockStrategyCategoryApi.proto" />
+    <None Remove="Protos\UserProfile\StrategyScheduledTaskApi.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.17.3" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.38.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.38.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\EssentialData\BasicStockInfoApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\EssentialData\Common.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\EssentialData\CompanyApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\EssentialData\IndustryApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\EssentialData\ReversionFactorApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\EssentialData\StockDailyIndicatorApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\EssentialData\StockTradeDataApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\EssentialData\TradingCalendarApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\StrategyExecutor\StrategyExecutorApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\StrategyMetadata\Common.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\StrategyMetadata\FactorMetadataApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\StrategyMetadata\FactorMetadataCategoryApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\StrategyMetadata\SelectScopeMetadataApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\StrategyMetadata\SelectScopeMetadataCategoryApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\UserProfile\Common.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\UserProfile\ExclusionStockApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\UserProfile\SelfSelectStockApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\UserProfile\SelfSelectStockCategoryApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\UserProfile\StockStrategyApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\UserProfile\StockStrategyCategoryApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\UserProfile\StrategyScheduledTaskApi.proto" GrpcServices="Client" />
+  </ItemGroup>
+
+</Project>

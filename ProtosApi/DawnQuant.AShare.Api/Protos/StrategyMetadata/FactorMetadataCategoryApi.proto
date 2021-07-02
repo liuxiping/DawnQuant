@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "Protos/StrategyMetadata/Common.proto";
+
+option csharp_namespace = "DawnQuant.AShare.Api.StrategyMetadata";
+
+package DawnQuant.AShare.Api.StrategyMetadata;
+
+
+// 股票策略服务
+service FactorMetadataCategoryApi {
+
+  rpc GetFactorMetadataCategoriesIncludeItems(google.protobuf.Empty) returns (GetFactorMetadataCategoriesIncludeItemsResponse);
+
+}
+
+message GetFactorMetadataCategoriesIncludeItemsResponse
+{
+   repeated FactorMetadataCategoryDto  Entities=1;
+}
+
+
+
+
+
+

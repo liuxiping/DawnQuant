@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option csharp_namespace = "DawnQuant.AShare.Api.UserProfile";
+
+package DawnQuant.AShare.Api.UserProfile;
+
+
+// 策略计划任务
+service StrategyScheduledTaskApi {
+//执行策略
+  rpc SaveStrategyScheduledTasks(SaveStrategyScheduledTasksRequest) returns (SaveStrategyScheduledTasksResponse);
+  rpc GetStrategyScheduledTasksByUserId(GetStrategyScheduledTasksByUserIdRequest) returns (GetStrategyScheduledTasksByUserIdResponse);
+  rpc DelStrategyScheduledTaskById(DelStrategyScheduledTaskByIdRequest) returns (google.protobuf.Empty);
+  rpc ExecuteStrategyScheduledTask(ExecuteStrategyScheduledTaskRequest) returns (ExecuteStrategyScheduledTaskResponse);
+}
+message SaveStrategyScheduledTasksRequest
+{
+   repeated StrategyScheduledTaskDto Entities=1;
+}
+message SaveStrategyScheduledTasksResponse
+{
+   repeated StrategyScheduledTaskDto Entities=1;
+
+}
+message GetStrategyScheduledTasksByUserIdRequest{
+int64 UserId=1;
+}
+
+message GetStrategyScheduledTasksByUserIdResponse{
+repeated StrategyScheduledTaskDto Entities=1;
+}
+
+message DelStrategyScheduledTaskByIdRequest{
+int64 Id=1;
+}
+
+message ExecuteStrategyScheduledTaskRequest
+{
+    int64 Id=1;
+}
+message ExecuteStrategyScheduledTaskResponse
+{
+  repeated  string TSCodes=1;
+}
+
+message StrategyScheduledTaskDto
+{
+         int64 Id =1;
+         int64 UserId =2;
+         string StrategyIds =3;
+         int64 OutputStockCategoryId =4;
+         string Name =5;
+         string Desc =6;
+         int32 SortNum =7;
+         google.protobuf.Timestamp LatestExecuteTime =8;
+         bool IsJoinServerScheduleTask =9;
+         google.protobuf.Timestamp CreateTime =10;
+}
+
+
+

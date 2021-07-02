@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "Protos/StrategyMetadata/common.proto";
+
+option csharp_namespace = "DawnQuant.AShare.Api.StrategyMetadata";
+
+package DawnQuant.AShare.Api.StrategyMetadata;
+
+
+service SelectScopeMetadataCategoryApi {
+
+  rpc GetSelectScopeMetadataCategoriesIncludeItems(google.protobuf.Empty) returns (GetSelectScopeMetadataCategoriesIncludeItemsResponse);
+
+}
+
+
+message GetSelectScopeMetadataCategoriesIncludeItemsResponse
+{
+  repeated SelectScopeMetadataCategoryDto  Entities=1;
+}
+
+
+
+
+
+
+
+

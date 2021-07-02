@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option csharp_namespace = "DawnQuant.AShare.Api.UserProfile";
+
+package DawnQuant.AShare.Api.UserProfile;
+
+
+// 策略计划任务
+service ExclusionStockApi {
+//执行策略
+  rpc SaveExclusionStocks(SaveExclusionStocksRequest) returns (SaveExclusionStocksResponse);
+ 
+}
+message SaveExclusionStocksRequest
+{
+   repeated ExclusionStockDto Entities=1;
+}
+message SaveExclusionStocksResponse
+{
+   repeated ExclusionStockDto Entities=1;
+
+}
+
+message ExclusionStockDto{
+         int64 Id =1;
+         int64 UserId =2;
+         string TSCode =3;
+         string Name =4;
+         string Industry =5;
+         int32 SortNum=6;
+         google.protobuf.Timestamp CreateTime =7;
+}
+
+
+

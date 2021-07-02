@@ -1,0 +1,93 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "Protos/UserProfile/Common.proto";
+option csharp_namespace = "DawnQuant.AShare.Api.UserProfile";
+
+package DawnQuant.AShare.Api.UserProfile;
+
+
+//自选股票分类明细
+service SelfSelectStockApi {
+  
+//获取所有自定义分类
+  rpc GetSelfSelectStocksByCategory(GetSelfSelectStocksByCategoryRequest) returns (GetSelfSelectStocksByCategoryResponse);
+
+  rpc GetSelfSelectStocksByUser(GetSelfSelectStocksByUserRequest) returns (GetSelfSelectStocksByUserResponse);
+
+  //保存自定义分类
+  rpc SaveSelfSelectStocks(SaveSelfSelectStocksRequest) returns ( SaveSelfSelectStocksResponse);
+
+  //删除自选股
+  rpc DelSelfSelectStockById(DelSelfSelectStockByIdRequest) returns ( google.protobuf.Empty);
+  rpc DelSelfSelectStocksByCategory(DelSelfSelectStocksByCategoryRequest) returns ( google.protobuf.Empty);
+  rpc DelSelfSelectStocksByUser(DelSelfSelectStocksByUserRequest) returns ( google.protobuf.Empty);
+
+  //导入自选股
+  rpc ImportSelfStocks(ImportSelfStocksRequest) returns (ImportSelfStocksResponse);
+
+}
+
+message DelSelfSelectStockByIdRequest
+{
+int64 Id=1;
+}
+
+message DelSelfSelectStocksByCategoryRequest
+{
+int64 CategoryId=1;
+}
+
+message DelSelfSelectStocksByUserRequest
+{
+int64 UserId=1;
+}
+
+message GetSelfSelectStocksByCategoryRequest
+{
+int64 CategoryId=1;
+}
+message GetSelfSelectStocksByCategoryResponse
+{
+ repeated SelfSelectStockDto Entities=1;
+}
+
+
+message GetSelfSelectStocksByUserRequest
+{
+int64 UserId=1;
+}
+message GetSelfSelectStocksByUserResponse
+{
+ repeated SelfSelectStockDto Entities=1;
+}
+
+message SaveSelfSelectStocksRequest
+{
+repeated SelfSelectStockDto Entities=1;
+}
+
+message SaveSelfSelectStocksResponse
+{
+repeated SelfSelectStockDto Entities=1;
+}
+
+
+message ImportSelfStocksRequest
+{
+	int64 UserId=1;
+	repeated string StocksId=2;
+	int64 CategoryId=3;
+}
+
+message ImportSelfStocksResponse
+{
+repeated SelfSelectStockDto Entities=1;
+}
+
+
+
+
+
+
+

@@ -1,0 +1,43 @@
+syntax = "proto3";
+option csharp_namespace = "DawnQuant.AShare.Api.StrategyExecutor";
+
+package DawnQuant.AShare.Api.StrategyExecutor;
+
+
+// 股票策略服务
+service StrategyExecutorApi {
+//执行策略
+  rpc ExecuteStrategyByContent(ExecuteStrategyByContentRequest) returns (ExecuteStrategyResponse);
+
+  rpc ExecuteStrategyById(ExecuteStrategyByIdRequest) returns (ExecuteStrategyResponse);
+
+}
+
+
+message ExecuteStrategyByContentRequest
+{
+    string StrategyContent=1;
+}
+message ExecuteStrategyResponse
+{
+   repeated ExecuteStrategyResult Entities=1; 
+
+}
+
+
+message ExecuteStrategyByIdRequest{
+    int64 StrategyId=1;
+}
+
+message ExecuteStrategyResult
+{
+      /// TSCode
+         string TSCode=1 ;
+        /// 股票简称
+         string Name =2;
+         //行业
+         string  Industry=3 ;
+}
+
+
+
