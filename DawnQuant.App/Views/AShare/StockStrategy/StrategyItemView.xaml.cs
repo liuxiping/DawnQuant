@@ -34,12 +34,15 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
         {
             _btnDel.Visibility = Visibility.Visible;
             _btnEdit.Visibility = Visibility.Visible;
+            _btnExecuteStrategy.Visibility = Visibility.Visible;
         }
 
         private void viewStrategyItem_MouseLeave(object sender, MouseEventArgs e)
         {
             _btnDel.Visibility = Visibility.Collapsed;
             _btnEdit.Visibility = Visibility.Collapsed;
+            _btnExecuteStrategy.Visibility = Visibility.Collapsed;
+
         }
 
         private void viewStrategyItem_Loaded(object sender, RoutedEventArgs e)
@@ -94,11 +97,15 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
             StockStrategyView ssv = ControlsSearchUtil.GetParentObject<StockStrategyView>(this);
             AccordionControl _acStrategyList = ControlsSearchUtil.GetParentObject<AccordionControl>(this);
 
+            UserProfile.StockStrategy stockStrategy = null;
+
+
             long cid = 0;
 
             if (_acStrategyList.SelectedItem is UserProfile.StockStrategy ss)
             {
                 cid = ss.CategoryId;
+                stockStrategy = ss;
             }
 
             if (_acStrategyList.SelectedItem is UserProfile.StockStrategyCategory ssc)
@@ -108,6 +115,8 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
 
             ssv.Model.LoadCategoriesIncludeStrategies();
 
+
+            ///展开分类
             for (int index = 0; index < _acStrategyList.Items.Count; index++)
             {
                 var ca = (StockStrategyCategory)_acStrategyList.Items[index];
@@ -119,6 +128,47 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
                 }
             }
 
+
+            //设置选择
+            if (stockStrategy != null)
+            {
+                bool isFind = false;
+                foreach (var c in _acStrategyList.Items)
+                {
+                    var tssc = (StockStrategyCategory)c;
+
+                    if (tssc.StockStrategies != null && tssc.StockStrategies.Count > 0)
+                    {
+                        for (int index = 0; index < tssc.StockStrategies.Count; index++)
+                        {
+                            var tss = tssc.StockStrategies[index];
+                            if (tss.Id == stockStrategy.Id)
+                            {
+                                _acStrategyList.SelectedItem = tssc.StockStrategies[index];
+                                isFind = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (isFind)
+                    {
+                        break;
+                    }
+                }
+            }
+
+        }
+
+        private void _btnExecuteStrategy_Click(object sender, RoutedEventArgs e)
+        {
+            OnExecuteStrategyClick(Model.Strategy);
+        }
+
+
+        public event Action<UserProfile.StockStrategy> ExecuteStrategyClick;
+        protected  void OnExecuteStrategyClick(UserProfile.StockStrategy stockStrategy)
+        {
+            ExecuteStrategyClick?.Invoke(stockStrategy);
         }
     }
     

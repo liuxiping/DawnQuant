@@ -63,27 +63,8 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void _acStrategyList_SelectedItemChanged(object sender, DevExpress.Xpf.Accordion.AccordionSelectedItemChangedEventArgs e)
+        private  void _acStrategyList_SelectedItemChanged(object sender, DevExpress.Xpf.Accordion.AccordionSelectedItemChangedEventArgs e)
         {
-            if (_acStrategyList.SelectedItem is UserProfile.StockStrategy ss)
-            {
-
-                _waiting.Visibility = Visibility.Visible;
-
-                RenderTargetBitmap targetBitmap = new RenderTargetBitmap((int)_ssvChart.ActualWidth, (int)_ssvChart.ActualHeight, 96d, 96d, PixelFormats.Default);
-                targetBitmap.Render(_ssvChart);
-                _imgChart.Source = BitmapFrame.Create(targetBitmap);
-                _ssvChart.Visibility = Visibility.Collapsed;
-                _imgChart.Visibility = Visibility.Visible;
-
-
-                await Model.ExecuteStrategyCommand.ExecuteAsync(ss);
-                _waiting.Visibility = Visibility.Collapsed;
-                _ssvChart.Visibility = Visibility.Visible;
-                _imgChart.Visibility = Visibility.Collapsed;
-
-            }
-          
         }
 
 
@@ -104,76 +85,75 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private  void btnNewStrategy_Click(object sender, RoutedEventArgs e)
+        private void btnNewStrategy_Click(object sender, RoutedEventArgs e)
         {
             StrategySetupWindow strategySetupWindow = new StrategySetupWindow();
 
-        
-
-            if (strategySetupWindow.ShowDialog()== true)
+            if (strategySetupWindow.ShowDialog() == true)
             {
                 long cid = 0;
+                UserProfile.StockStrategy stockStrategy = null;
 
                 if (_acStrategyList.SelectedItem is UserProfile.StockStrategy ss)
                 {
                     cid = ss.CategoryId;
+                    stockStrategy = ss;
                 }
-                
-                if(_acStrategyList.SelectedItem is UserProfile.StockStrategyCategory ssc)
+
+                if (_acStrategyList.SelectedItem is UserProfile.StockStrategyCategory ssc)
                 {
                     cid = ssc.Id;
                 }
-                   
 
-                 Model.LoadCategoriesIncludeStrategies();
+                Model.LoadCategoriesIncludeStrategies();
 
-
+                //展开分类
                 for (int index = 0; index < _acStrategyList.Items.Count; index++)
                 {
                     var ca = (StockStrategyCategory)_acStrategyList.Items[index];
                     if (ca.Id == cid)
                     {
-                        _acStrategyList.SelectedItem=_acStrategyList.Items[index];
+                        _acStrategyList.SelectedItem = _acStrategyList.Items[index];
                         _acStrategyList.ExpandItem(_acStrategyList.Items[index]);
                         break;
                     }
                 }
 
+                //设置选择
+                if (stockStrategy != null)
+                {
+                    bool isFind = false;
+                    foreach (var c in _acStrategyList.Items)
+                    {
+                        var tssc = (StockStrategyCategory)c;
+
+                        if (tssc.StockStrategies != null && tssc.StockStrategies.Count > 0)
+                        {
+                            for (int index = 0; index < tssc.StockStrategies.Count; index++)
+                            {
+                                var tss = tssc.StockStrategies[index];
+                                if (tss.Id == stockStrategy.Id)
+                                {
+                                    _acStrategyList.SelectedItem = tssc.StockStrategies[index];
+                                    isFind = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (isFind)
+                        {
+                            break;
+                        }
+                    }
+                }
+
+               
             }
         }
 
         private void StrategySetupWindow_Closed(object sender, EventArgs e)
         {
-            //StrategySetupWindow strategySetupWindow = (StrategySetupWindow)sender;
-            //if (strategySetupWindow.DialogResult == true)
-            //{
-            //    long cid = 0;
-
-            //    if (_acStrategyList.SelectedItem is UserProfile.StockStrategy ss)
-            //    {
-            //        cid = ss.CategoryId;
-            //    }
-
-            //    if (_acStrategyList.SelectedItem is UserProfile.StockStrategyCategory ssc)
-            //    {
-            //        cid = ssc.Id;
-            //    }
-
-
-            //    Model.LoadCategoriesIncludeStrategies();
-
-
-            //    for (int index = 0; index < _acStrategyList.Items.Count; index++)
-            //    {
-            //        var ca = (StockStrategyCategory)_acStrategyList.Items[index];
-            //        if (ca.Id == cid)
-            //        {
-            //            _acStrategyList.ExpandItem(_acStrategyList.Items[index]);
-            //            break;
-            //        }
-            //    }
-
-            //}
+            
 
         }
 
@@ -209,6 +189,11 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
             }
         }
 
+        /// <summary>
+        /// 快捷键
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void _stockStrategyView_KeyDown(object sender, KeyEventArgs e)
         {
             ///删除当前自选股
@@ -226,6 +211,53 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
             {
                 _gcStockList.View.MoveNextRow();
             }
+        }
+
+        private async void StrategyItemView_ExecuteStrategyClick(UserProfile.StockStrategy stockStrategy)
+        {
+            _waiting.Visibility = Visibility.Visible;
+
+            RenderTargetBitmap targetBitmap = new RenderTargetBitmap((int)_ssvChart.ActualWidth, (int)_ssvChart.ActualHeight, 96d, 96d, PixelFormats.Default);
+            targetBitmap.Render(_ssvChart);
+            _imgChart.Source = BitmapFrame.Create(targetBitmap);
+            _ssvChart.Visibility = Visibility.Collapsed;
+            _imgChart.Visibility = Visibility.Visible;
+
+
+
+            //设置选择
+            if (stockStrategy != null)
+            {
+                bool isFind = false;
+                foreach (var c in _acStrategyList.Items)
+                {
+                    var tssc = (StockStrategyCategory)c;
+
+                    if (tssc.StockStrategies != null && tssc.StockStrategies.Count > 0)
+                    {
+                        for (int index = 0; index < tssc.StockStrategies.Count; index++)
+                        {
+                            var tss = tssc.StockStrategies[index];
+                            if (tss.Id == stockStrategy.Id)
+                            {
+                                _acStrategyList.SelectedItem = tssc.StockStrategies[index];
+                                isFind = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (isFind)
+                    {
+                        break;
+                    }
+                }
+            }
+
+
+            await Model.ExecuteStrategyCommand.ExecuteAsync(stockStrategy);
+            _waiting.Visibility = Visibility.Collapsed;
+            _ssvChart.Visibility = Visibility.Visible;
+            _imgChart.Visibility = Visibility.Collapsed;
         }
     }
 }

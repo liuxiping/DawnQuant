@@ -70,7 +70,7 @@
                                     </Grid>
                                     <HierarchicalDataTemplate.ItemTemplate>
                                         <DataTemplate DataType="{x:Type lappen:StockStrategy}" >
-                                            <local:StrategyItemView></local:StrategyItemView>
+                                            <local:StrategyItemView ExecuteStrategyClick="StrategyItemView_ExecuteStrategyClick"></local:StrategyItemView>
                                         </DataTemplate>
                                     </HierarchicalDataTemplate.ItemTemplate>
                                 </HierarchicalDataTemplate>

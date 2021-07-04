@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Fonts\iconfont - back.ttf" />
     <None Remove="Assets\Fonts\iconfont.ttf" />
     <None Remove="Assets\Icons\app.ico" />
     <None Remove="Assets\Icons\app.png" />
@@ -72,6 +73,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\Fonts\iconfont - back.ttf" />
     <Resource Include="Assets\Fonts\iconfont.ttf" />
     <Resource Include="Assets\Icons\app.ico" />
     <Resource Include="Assets\Icons\app.png" />

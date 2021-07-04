@@ -12,15 +12,22 @@
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <TextBlock  VerticalAlignment="Center" Text="{Binding Path=Strategy.Name}"></TextBlock>
+        <Button x:Name="_btnExecuteStrategy"  
+                BorderBrush="Transparent" Click="_btnExecuteStrategy_Click" Background="Transparent" Visibility="Collapsed" Grid.Column="1" Padding="3">
+            <Button.Content>
+                <TextBlock Text="&#xe614;" Foreground="#1296db" FontSize="20" FontFamily="/Assets/Fonts/#iconfont"></TextBlock>
+            </Button.Content>
+        </Button>
         <Button x:Name="_btnEdit" Click="_btnEdit_Click" 
-                BorderBrush="Transparent" Background="Transparent" Visibility="Collapsed" Grid.Column="1" Padding="3">
+                BorderBrush="Transparent" Background="Transparent" Visibility="Collapsed" Grid.Column="2" Padding="3">
             <Button.Content>
                 <TextBlock Text="&#xe650;" Foreground="#1296db" FontSize="20" FontFamily="/Assets/Fonts/#iconfont"></TextBlock>
             </Button.Content>
         </Button>
-        <Button x:Name="_btnDel"  Click="_btnDel_Click"  BorderBrush="Transparent" Background="Transparent" Visibility="Collapsed" Grid.Column="2" Padding="3" >
+        <Button x:Name="_btnDel"  Click="_btnDel_Click"  BorderBrush="Transparent" Background="Transparent" Visibility="Collapsed" Grid.Column="3" Padding="3" >
             <Button.Content>
                 <TextBlock FontSize="20" Foreground="#1296db" Text="&#xe604;" FontFamily="/Assets/Fonts/#iconfont"></TextBlock>
             </Button.Content>
