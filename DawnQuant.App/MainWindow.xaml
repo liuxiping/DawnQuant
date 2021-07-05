@@ -7,9 +7,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:AShareViews="clr-namespace:DawnQuant.App.Views.AShare"
         xmlns:local="clr-namespace:DawnQuant.App" 
+        xmlns:LayoutView="clr-namespace:DawnQuant.App.Views.Layout"
         ShowIcon="True" ShowTitle="False" Unloaded="_mainWindow_Unloaded"
         mc:Ignorable="d" Name="_mainWindow"  WindowState="Maximized"
         Title="DawnQuant" Height="450" Width="800">
+    <dx:DXWindow.HeaderItems>
+        <LayoutView:HeaderView></LayoutView:HeaderView>
+    </dx:DXWindow.HeaderItems>
     <dx:DXTabControl TabContentCacheMode="CacheAllTabs" Padding="0" Margin="0">
         <dx:DXTabItem FontSize="15" Header="沪深股市" >
             <AShareViews:AShareMainView></AShareViews:AShareMainView>

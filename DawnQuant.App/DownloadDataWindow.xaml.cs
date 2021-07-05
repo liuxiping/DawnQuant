@@ -27,6 +27,7 @@ namespace DawnQuant.App
         public DownloadDataWindow()
         {
             InitializeComponent();
+            IsCreateFromLogin = true;
         }
         private void _downloadDataWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -36,10 +37,13 @@ namespace DawnQuant.App
 
             }
         }
+        /// <summary>
+        /// 时候是登录窗体创建的
+        /// </summary>
+        public bool  IsCreateFromLogin { get; set; }
 
         private void _downloadDataWindow_Loaded(object sender, RoutedEventArgs e)
         {
-
             //更新数据自选股数据
             AShareDataMaintainService _aShareDataMaintainService=IOCUtil.Container.Resolve< AShareDataMaintainService>();
 
@@ -50,19 +54,20 @@ namespace DawnQuant.App
 
             t.ContinueWith((t) =>
             {
-
                 Dispatcher.Invoke(() =>
                 {
-                  
-                    Visibility = Visibility.Collapsed;
-                    MainWindow mainWindow = new MainWindow();
-                    mainWindow.ShowDialog();
+
+                    if (IsCreateFromLogin)
+                    {
+                        this.ShowInTaskbar = false;
+                        Visibility = Visibility.Hidden;
+                        MainWindow mainWindow = new MainWindow();
+                        mainWindow.Show();
+                       
+                    }
                     Close();
                 });
-               
-
             });
-
         }
     }
 }

@@ -134,6 +134,11 @@
                                AutoWidth="False" HorizontalAlignment="Center" UseLayoutRounding="True"
                                ShowIndicator="False" ShowHorizontalLines="True"   BorderThickness="0"
                                ShowVerticalLines="True">
+                                    <dxg:TableView.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="复制股票代码" Command="{Binding CopyRelateStockCodeCommand}"></MenuItem>
+                                        </ContextMenu>
+                                    </dxg:TableView.ContextMenu>
                                 </dxg:TableView>
                             </dxg:GridControl.View>
                         </dxg:GridControl>

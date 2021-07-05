@@ -10,7 +10,7 @@
         mc:Ignorable="d"  FontSize="15"  d:Height="600" d:Width="1200"  Loaded="_aShareMain_Loaded" 
              Name="_aShareMain">
     <Grid >
-        <dxwui:HamburgerMenu   Name="_hmAShare"  
+        <dxwui:HamburgerMenu   Name="_hmAShare"   ShowMenuOnEmptySpaceBarClick="False"
                                SelectedItemChanged="_hmAShare_SelectedItemChanged"  AvailableViewStates="Overlay"  ViewState="Overlay" 
                           HeaderHeight="0" >
             <dxwui:HamburgerMenu.Content>

@@ -45,6 +45,8 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
 
         }
 
+        AccordionControl _acStrategyList = null;
+
         private void viewStrategyItem_Loaded(object sender, RoutedEventArgs e)
         {
             if (this.DataContext is UserProfile.StockStrategy ss)
@@ -53,6 +55,9 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
                 model.Strategy = ss;
                 DataContext = model;
             }
+
+            _acStrategyList = ControlsSearchUtil.GetParentObject<AccordionControl>(this);
+
         }
 
         StrategyItemViewModel Model
@@ -76,6 +81,8 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
         /// <param name="e"></param>
         private void _btnEdit_Click(object sender, RoutedEventArgs e)
         {
+
+            SetSelectStockStrategy();
             StrategySetupWindow strategySetupWindow = new StrategySetupWindow();
 
             //编辑状态初始化参数
@@ -84,8 +91,10 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
             if (strategySetupWindow.ShowDialog() == true)
             {
                 UpdateCategoriesIncludeStrategies();
+               
             }
 
+           
         }
 
         /// <summary>
@@ -95,17 +104,12 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
         {
             //更新界面
             StockStrategyView ssv = ControlsSearchUtil.GetParentObject<StockStrategyView>(this);
-            AccordionControl _acStrategyList = ControlsSearchUtil.GetParentObject<AccordionControl>(this);
-
-            UserProfile.StockStrategy stockStrategy = null;
-
 
             long cid = 0;
 
             if (_acStrategyList.SelectedItem is UserProfile.StockStrategy ss)
             {
                 cid = ss.CategoryId;
-                stockStrategy = ss;
             }
 
             if (_acStrategyList.SelectedItem is UserProfile.StockStrategyCategory ssc)
@@ -128,8 +132,29 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
                 }
             }
 
+            ///设置选择
+            SetSelectStockStrategy();
+        }
 
-            //设置选择
+        private void _btnExecuteStrategy_Click(object sender, RoutedEventArgs e)
+        {
+            OnExecuteStrategyClick(Model.Strategy);
+        }
+
+
+        public event Action<UserProfile.StockStrategy> ExecuteStrategyClick;
+        protected  void OnExecuteStrategyClick(UserProfile.StockStrategy stockStrategy)
+        {
+            ExecuteStrategyClick?.Invoke(stockStrategy);
+        }
+
+
+        /// <summary>
+        /// 设置选择
+        /// </summary>
+        private void  SetSelectStockStrategy()
+        {
+            UserProfile.StockStrategy stockStrategy = Model.Strategy;
             if (stockStrategy != null)
             {
                 bool isFind = false;
@@ -159,17 +184,6 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
 
         }
 
-        private void _btnExecuteStrategy_Click(object sender, RoutedEventArgs e)
-        {
-            OnExecuteStrategyClick(Model.Strategy);
-        }
-
-
-        public event Action<UserProfile.StockStrategy> ExecuteStrategyClick;
-        protected  void OnExecuteStrategyClick(UserProfile.StockStrategy stockStrategy)
-        {
-            ExecuteStrategyClick?.Invoke(stockStrategy);
-        }
     }
     
 }

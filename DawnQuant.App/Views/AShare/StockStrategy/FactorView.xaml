@@ -60,8 +60,8 @@
                     </ListBox>
                 </dxlc:GroupBox>
                 <dxlc:GroupBox Header="参数设置" Padding="0" BorderThickness="1,1,1,0" Grid.Column="3">
-                    <dxprg:PropertyGridControl  ShowToolPanel="False" ShowDescriptionIn="ToolTipAndPanel"
-                                                ShowCategories="Hidden"  ShowSearchBox="False"
+                    <dxprg:PropertyGridControl  ShowToolPanel="False" ShowDescriptionIn="ToolTipAndPanel" ShowMenuButtonInRows="False"
+                                                ShowCategories="Hidden"  ShowSearchBox="False" AllowExpanding="Force" 
                         ExpandCategoriesWhenSelectedObjectChanged="True" SelectedObject="{Binding FactorParameter}" BorderThickness="0"></dxprg:PropertyGridControl>
                 </dxlc:GroupBox>
             </Grid>

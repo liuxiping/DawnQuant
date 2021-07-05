@@ -99,8 +99,8 @@ namespace DawnQuant.AShare.Strategy.Executor.Factor
             double pre = datas[0].PreClose;
             double last = datas[datas.Count - 1].Close;
 
-            double gain = (last - pre) / pre;
-            if (gain*100 >= p.MinGain && gain <= p.MaxGain)
+            double gain = ((last - pre) / pre)*100;
+            if (gain >= p.MinGain && gain <= p.MaxGain)
             {
                 return true;
             }

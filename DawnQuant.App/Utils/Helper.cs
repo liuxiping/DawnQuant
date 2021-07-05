@@ -11,23 +11,21 @@ namespace DawnQuant.App.Utils
 {
    public class Helper
     {
-        static bool isExistsDailyTDPath = false;
+       
         public static string GetStockTradeDataFileName(string tscode, KCycle kCycle)
         {
             //日线
-            if (kCycle == KCycle.Day  )
+            if (kCycle == KCycle.Day)
             {
                 string dailyTDPath = Path.Combine(Environment.CurrentDirectory, "Data\\DailyTD\\");
 
                 //确保目录已经创建
-                if (!isExistsDailyTDPath)
+
+                if (!Directory.Exists(dailyTDPath))
                 {
-                    if (!Directory.Exists(dailyTDPath))
-                    {
-                        Directory.CreateDirectory(dailyTDPath);
-                    }
-                    isExistsDailyTDPath = true;
+                    Directory.CreateDirectory(dailyTDPath);
                 }
+
 
                 return Path.Combine(dailyTDPath, tscode + "_" + kCycle.ToString() + ".bin");
             }

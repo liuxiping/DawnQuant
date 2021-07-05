@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="DawnQuant.App.Views.AShare.Layout.HeaderView"
+﻿<UserControl x:Class="DawnQuant.App.Views.Layout.HeaderView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -63,12 +63,12 @@
     <StackPanel  HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True"
                  VerticalAlignment="Center" Orientation="Horizontal">
 
-        <TextBox Style="{DynamicResource SearchTextBoxStyle}" FontSize="15" HorizontalAlignment="Left"
+        <!--<TextBox Style="{DynamicResource SearchTextBoxStyle}" FontSize="15" HorizontalAlignment="Left"
                  Width="180" Margin="0,3,0,3" >
 
-        </TextBox>
+        </TextBox>-->
 
-        <Menu   HorizontalAlignment="Center" >
+        <!--<Menu   HorizontalAlignment="Center" >
             <MenuItem >
                 <MenuItem.Header >
                     <TextBlock    VerticalAlignment="Center" Text="&#xe654;" FontFamily="../../Assets/Fonts/#iconfont" ></TextBlock>
@@ -77,12 +77,23 @@
                 <MenuItem  FontSize="15" Name="miOffice2010Silver"   Header="皓月银光"/>
                 <MenuItem   FontSize="15" Name="miBlend"   Header="怀旧经典"/>
             </MenuItem>
+        </Menu>-->
+
+        <Menu >
+            <MenuItem   >
+                <MenuItem.Header>
+                    <TextBlock  Text="&#xe60a;"  Foreground="#1296db" FontFamily="../../Assets/Fonts/#iconfont" ></TextBlock>
+                </MenuItem.Header>
+                <MenuItem FontSize="15" Name="_miDawnloadData" Click="_miDawnloadData_Click" Header="下载数据"/>
+                <Separator></Separator>
+                <MenuItem FontSize="15"  Name="_miDelData" Click="_miDelData_Click" Header="删除数据"/>
+            </MenuItem>
         </Menu>
 
         <Menu  >
             <MenuItem   >
                 <MenuItem.Header>
-                    <TextBlock   Text="&#xe64b;" FontFamily="../../Assets/Fonts/#iconfont" ></TextBlock>
+                    <TextBlock   Foreground="#1296db" Text="&#xe611;" FontFamily="../../Assets/Fonts/#iconfont" ></TextBlock>
                 </MenuItem.Header>
                 <MenuItem FontSize="15" Header="系统设置"/>
                 <MenuItem FontSize="15" Header="关于"/>

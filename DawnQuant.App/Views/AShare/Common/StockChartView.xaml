@@ -56,7 +56,7 @@
                 <WebBrowser Name="_wbStockInfo"    />
             </Grid>
             <Grid  Grid.Row="1" Name="_gdChart" Visibility="{Binding VA , ConverterParameter=Chart, Converter={StaticResource vaConverter}}">
-                <dxc:ChartControl x:Name="fchart"    
+                <dxc:ChartControl x:Name="fchart"     
                               DataSource="{Binding Path=PlotContext.PlotDatas}" 
                               AutoLayout="True"  SelectionMode="Multiple"
                               BorderThickness="0"  

@@ -56,8 +56,8 @@
                 </dxlc:GroupBox>
                 <dxlc:GroupBox Header="参数设置" Padding="0" 
                                BorderThickness="1,1,1,0" Grid.Column="3">
-                    <dxprg:PropertyGridControl  ShowDescriptionIn="ToolTipAndPanel" ShowMenu="OnMenuButtonClick"
-                                                AllowExpanding="Force"   ShowToolPanel="False"
+                    <dxprg:PropertyGridControl  ShowDescriptionIn="ToolTipAndPanel" ShowMenuButtonInRows="False"
+                                                AllowExpanding="Force"   ShowToolPanel="False"  
                                                 ShowCategories="Hidden"  ShowSearchBox="False"
                                                 ExpandCategoriesWhenSelectedObjectChanged="True" 
                                                 SelectedObject="{Binding SelectScopeParameter}" BorderThickness="0" 

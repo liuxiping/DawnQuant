@@ -47,7 +47,7 @@ namespace DawnQuant.Passport
 
             if (disc.IsError)
             {
-                throw disc.Exception;
+                throw new Exception(disc.Error);
             }
             var tokenResponseTask = client.RequestPasswordTokenAsync(new PasswordTokenRequest
             {

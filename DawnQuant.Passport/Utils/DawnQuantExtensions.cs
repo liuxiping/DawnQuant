@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Microsoft.AspNetCore.DataProtection;
+using System;
 
 namespace DawnQuant.Passport.Utils
 {
@@ -52,21 +53,22 @@ namespace DawnQuant.Passport.Utils
         {
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
-            services.AddIdentityServer()
-                // .AddDeveloperSigningCredential()
-                //  .AddDataProtection()
-                .AddConfigurationStore(options =>
-                {
-                    options.ConfigureDbContext = b => b.UseMySql(strCon, MySqlServerVersion.AutoDetect(strCon),
-                        sql => sql.MigrationsAssembly(migrationsAssembly));
-                })
-                .AddOperationalStore(options =>
-                {
-                    options.ConfigureDbContext = b => b.UseMySql(strCon, MySqlServerVersion.AutoDetect(strCon),
-                        sql => sql.MigrationsAssembly(migrationsAssembly));
-                })
-                .AddAspNetIdentity<DawnQuantIdentityUser>();
-            // .AddProfileService<ProfileService>();
+            services.AddIdentityServer((options) =>
+            {
+                
+            })
+            .AddConfigurationStore(options =>
+            {
+                options.ConfigureDbContext = b => b.UseMySql(strCon, MySqlServerVersion.AutoDetect(strCon),
+                    sql => sql.MigrationsAssembly(migrationsAssembly));
+            })
+            .AddOperationalStore(options =>
+            {
+                options.ConfigureDbContext = b => b.UseMySql(strCon, MySqlServerVersion.AutoDetect(strCon),
+                    sql => sql.MigrationsAssembly(migrationsAssembly));
+            })
+            .AddAspNetIdentity<DawnQuantIdentityUser>();
+        // .AddProfileService<ProfileService>();
 
         }
     }

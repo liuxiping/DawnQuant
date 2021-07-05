@@ -10,6 +10,7 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace DawnQuant.App
 {
@@ -29,55 +30,89 @@ namespace DawnQuant.App
             get { return (LoginWindowModel)DataContext; }
         }
 
+
+        bool cancelLogging = false;
         private void _btnLogin_Click(object sender, RoutedEventArgs e)
         {
-          
+            if (_btnLogin.Content.ToString()== "取消登录")
+            {
+                cancelLogging = true;
+                _btnLogin.Content = "登    录";
+                return;
+            }
             try
             {
-                _btnLogin.IsEnabled = false;
 
                 if (string.IsNullOrEmpty(Model.Name) || string.IsNullOrEmpty(_txtPassword.Password))
                 {
                     ThemedMessageBox.Show("温馨提示", "用户名和密码不能为空！", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
+
+                _btnLogin.Content = "取消登录";
+                
+
                 Model.Password = _txtPassword.Password;
                 IPassportProvider _passportProvider = IOCUtil.Container.Resolve<IPassportProvider>();
-                if (_passportProvider.Login(Model.Name, Model.Password))
+
+                bool isSuccess = false;
+                string name = Model.Name;
+                string pwd = Model.Password;
+                var t = Task.Run(() =>
+                  {
+                      Thread.Sleep(3000);
+                      isSuccess = _passportProvider.Login(name, pwd);
+
+                  });
+
+                t.ContinueWith((t) =>
                 {
-                    //保存配置信息
-                    if (Model.Remember)
+
+                    Dispatcher.Invoke(() =>
                     {
-                        //base 编码
-                        string jsonUserInfo = JsonSerializer.Serialize(Model);
-                        byte[] bytes = Encoding.UTF8.GetBytes(jsonUserInfo);
-                        string base64UserInfo = Convert.ToBase64String(bytes);
-
-                        //保存信息
-                        string configPath = Path.Combine(Environment.CurrentDirectory, "\\Config");
-                        if (!Directory.Exists(configPath))
+                        //保存配置信息
+                        if (isSuccess && !cancelLogging)
                         {
-                            Directory.CreateDirectory(configPath);
+                            //保存登录信息
+                            if (Model.Remember)
+                            {
+                                //base 编码
+                                string jsonUserInfo = JsonSerializer.Serialize(Model);
+                                byte[] bytes = Encoding.UTF8.GetBytes(jsonUserInfo);
+                                string base64UserInfo = Convert.ToBase64String(bytes);
+
+                                //保存信息
+                                string configPath = Path.Combine(Environment.CurrentDirectory, "Config");
+                                if (!Directory.Exists(configPath))
+                                {
+                                    Directory.CreateDirectory(configPath);
+                                }
+                                string configFile = Path.Combine(Environment.CurrentDirectory, "Config\\user.config");
+                                File.WriteAllText(configFile, base64UserInfo);
+                            }
+
+                            //登录成功 更新数据
+                            this.ShowInTaskbar = false;
+                            Visibility = Visibility.Hidden;
+                            DownloadDataWindow loadDataWindow = new DownloadDataWindow();
+                            loadDataWindow.IsCreateFromLogin = true;
+                            loadDataWindow.Show();
+                            this.Close();
                         }
-                        string configFile = Path.Combine(Environment.CurrentDirectory, "\\Config\\user.config");
-                        File.WriteAllText(configFile, base64UserInfo);
-                    }
+                        else if(cancelLogging)
+                        {
+                            cancelLogging = false;
+                            _btnLogin.Content = "登    录";
+                        }
+                        else
+                        {
+                            _btnLogin.Content = "登    录";
+                            ThemedMessageBox.Show("温馨提示", "用户名或密码错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    });
+                });
 
-                    //登录成功 更新数据
-                    Visibility = Visibility.Collapsed;
 
-                    DownloadDataWindow loadDataWindow = new DownloadDataWindow();
-                    loadDataWindow.ShowDialog();
-
-                    this.Close();
-
-                }
-                else
-                {
-                    _btnLogin.IsEnabled = true;
-                    ThemedMessageBox.Show("温馨提示", "用户名或密码错误", MessageBoxButton.OK, MessageBoxImage.Error);
-
-                }
             }
             catch (Exception ex)
             {
@@ -146,7 +181,7 @@ namespace DawnQuant.App
         private async void _loginWindow_Loaded(object sender, RoutedEventArgs e)
         {
             //读取配置文件信息
-            string configFile = Path.Combine(Environment.CurrentDirectory, "\\Config\\user.config");
+            string configFile = Path.Combine(Environment.CurrentDirectory, "Config\\user.config");
             if (File.Exists(configFile))
             {
                 //base64 解码
@@ -167,16 +202,11 @@ namespace DawnQuant.App
                 //自动登录
                 if (model.AutoLogin)
                 {
-                    _btnLogin.IsEnabled = false;
                     //延时2后登录
                     await Task.Delay(2000);
                     if (chkAutoLogin.IsChecked == true)
                     {
                         _btnLogin_Click(null, null);
-                    }
-                    else
-                    {
-                        _btnLogin.IsEnabled = true;
                     }
                 }
             }

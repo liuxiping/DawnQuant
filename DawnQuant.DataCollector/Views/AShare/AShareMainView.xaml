@@ -14,7 +14,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <dxwui:HamburgerMenu   Name="hmMain"  AvailableViewStates="Overlay"  ViewState="Overlay" 
                            SelectedItemChanged="hmMain_SelectedItemChanged"
-                          HeaderHeight="0" >
+                          HeaderHeight="0"  ShowMenuOnEmptySpaceBarClick="False">
         <dxwui:HamburgerMenu.Content>
             <Grid x:Name="_gdContent">
                 <Views:IncrementDataView x:Name="_increment"></Views:IncrementDataView>
