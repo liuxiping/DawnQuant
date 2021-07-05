@@ -60,7 +60,7 @@ namespace DawnQuant.App
                 string pwd = Model.Password;
                 var t = Task.Run(() =>
                   {
-                      Thread.Sleep(3000);
+                    //  Thread.Sleep(3000);
                       isSuccess = _passportProvider.Login(name, pwd);
 
                   });

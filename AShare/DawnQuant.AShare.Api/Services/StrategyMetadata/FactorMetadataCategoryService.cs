@@ -28,7 +28,8 @@ namespace DawnQuant.AShare.Api.StrategyMetadata
             {
                 GetFactorMetadataCategoriesIncludeItemsResponse response = new GetFactorMetadataCategoriesIncludeItemsResponse();
 
-                var categories = _categoryRepository.Entities.Include(p => p.FactorMetadatas).ToList() ;
+                var categories = _categoryRepository.Entities.OrderBy(p => p.SortNum)
+                .Include(p => p.FactorMetadatas.OrderBy(sp => sp.SortNum)).ToList();
 
                 foreach (var c in categories)
                 {

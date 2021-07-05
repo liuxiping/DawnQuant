@@ -224,12 +224,23 @@ namespace DawnQuant.AShare.Api.Data
                     factorMetadataRepository.Insert(new FactorMetadata
                     {
                         CategoryId = ti.Id,
+                        Name = "均线之下因子",
+                        ImplAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ImplClassName = "DawnQuant.AShare.Strategy.Executor.Factor.BelowSMAFactorExecutor",
+                        ParameterAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ParameterClassName = "DawnQuant.AShare.Strategy.Executor.Factor.BelowSMAFactorExecutorParameter",
+                        SortNum = 4
+                    });
+
+                    factorMetadataRepository.Insert(new FactorMetadata
+                    {
+                        CategoryId = ti.Id,
                         Name = "振幅因子",
                         ImplAssemblyName = "DawnQuant.AShare.Strategy.dll",
                         ImplClassName = "DawnQuant.AShare.Strategy.Executor.Factor.AMFactorExecutor",
                         ParameterAssemblyName = "DawnQuant.AShare.Strategy.dll",
                         ParameterClassName = "DawnQuant.AShare.Strategy.Executor.Factor.AMFactorExecutorParameter",
-                        SortNum = 4
+                        SortNum = 5
                     });
 
                     factorMetadataRepository.Insert(new FactorMetadata
@@ -240,7 +251,7 @@ namespace DawnQuant.AShare.Api.Data
                         ImplClassName = "DawnQuant.AShare.Strategy.Executor.Factor.GainFactorExecutor",
                         ParameterAssemblyName = "DawnQuant.AShare.Strategy.dll",
                         ParameterClassName = "DawnQuant.AShare.Strategy.Executor.Factor.GainFactorExecutorParameter",
-                        SortNum = 5
+                        SortNum = 6
                     });
 
                     factorMetadataRepository.Insert(new FactorMetadata
@@ -251,7 +262,7 @@ namespace DawnQuant.AShare.Api.Data
                         ImplClassName = "DawnQuant.AShare.Strategy.Executor.Factor.VolReductionFactorExecutor",
                         ParameterAssemblyName = "DawnQuant.AShare.Strategy.dll",
                         ParameterClassName = "DawnQuant.AShare.Strategy.Executor.Factor.VolReductionFactorExecutorParameter",
-                        SortNum = 6
+                        SortNum = 7
                     });
 
                     factorMetadataRepository.Insert(new FactorMetadata
@@ -262,7 +273,7 @@ namespace DawnQuant.AShare.Api.Data
                         ImplClassName = "DawnQuant.AShare.Strategy.Executor.Factor.CorrelationFactorExecutor",
                         ParameterAssemblyName = "DawnQuant.AShare.Strategy.dll",
                         ParameterClassName = "DawnQuant.AShare.Strategy.Executor.Factor.CorrelationFactorExecutorParameter",
-                        SortNum = 7
+                        SortNum = 8
                     });
 
                     factorMetadataRepository.Insert(new FactorMetadata
@@ -273,7 +284,7 @@ namespace DawnQuant.AShare.Api.Data
                         ImplClassName = "DawnQuant.AShare.Strategy.Executor.Factor.HardenFactorExecutor",
                         ParameterAssemblyName = "DawnQuant.AShare.Strategy.dll",
                         ParameterClassName = "DawnQuant.AShare.Strategy.Executor.Factor.HardenFactorExecutorParameter",
-                        SortNum = 8
+                        SortNum = 9
                     });
 
 

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -54,16 +55,18 @@ namespace DawnQuant.App
 
             t.ContinueWith((t) =>
             {
+                
                 Dispatcher.Invoke(() =>
                 {
 
                     if (IsCreateFromLogin)
                     {
                         this.ShowInTaskbar = false;
+                        Height = 0;
+                        Width = 0;
                         Visibility = Visibility.Hidden;
                         MainWindow mainWindow = new MainWindow();
                         mainWindow.Show();
-                       
                     }
                     Close();
                 });
