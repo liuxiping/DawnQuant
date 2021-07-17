@@ -288,6 +288,17 @@ namespace DawnQuant.AShare.Api.Data
                     });
 
 
+                    factorMetadataRepository.Insert(new FactorMetadata
+                    {
+                        CategoryId = ti.Id,
+                        Name = "锤子线",
+                        ImplAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ImplClassName = "DawnQuant.AShare.Strategy.Executor.Factor.HammerFactorExecutor",
+                        ParameterAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ParameterClassName = "DawnQuant.AShare.Strategy.Executor.Factor.HammerFactorExecutorParameter",
+                        SortNum = 10
+                    });
+
                     var ex = factorMetadataCategoryRepository.Insert(new FactorMetadataCategory { Name = "排除指标", SortNum = 3 });
 
                     factorMetadataRepository.Insert(new FactorMetadata

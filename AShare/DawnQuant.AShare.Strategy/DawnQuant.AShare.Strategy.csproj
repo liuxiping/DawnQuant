@@ -18,6 +18,7 @@
   <ItemGroup>
     <PackageReference Include="MathNet.Numerics" Version="4.15.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="TALib.NETCore" Version="0.4.4" />
   </ItemGroup>
 
   <ItemGroup>
