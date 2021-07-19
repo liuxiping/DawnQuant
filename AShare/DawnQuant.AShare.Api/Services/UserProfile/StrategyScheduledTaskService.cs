@@ -199,7 +199,7 @@ namespace DawnQuant.AShare.Api.UserProfile
                     if (self != null)
                     {
                         //更新创建时间
-                        self.CreateTime = DateTime.Now;
+                       // self.CreateTime = DateTime.Now;
                         ustocks.Add(self);
                     }
                     else

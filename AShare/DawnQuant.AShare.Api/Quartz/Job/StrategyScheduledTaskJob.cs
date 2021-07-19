@@ -268,7 +268,7 @@ namespace DawnQuant.AShare.Api.Quartz.Job
                 if (self != null)
                 {
                     //更新创建时间
-                    self.CreateTime = DateTime.Now;
+                   // self.CreateTime = DateTime.Now;
                     ustocks.Add(self);
                 }
                 else
