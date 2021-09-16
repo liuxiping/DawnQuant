@@ -36,7 +36,10 @@ namespace DawnQuant.App.ViewModels.AShare.SelfSelStock
             DelStockItemCommand = new DelegateCommand(DelStockItem);
             MoveToOtherCategoryCommand = new DelegateCommand<SelfSelectStockCategory>(MoveToOtherCategory);
             CopyStockCodeCommand = new DelegateCommand(CopyStockCode);
+            CopyStockNameCommand = new DelegateCommand(CopyStockName);
+
             CopyRelateStockCodeCommand = new DelegateCommand(CopyRelateStockCode);
+            CopyRelateStockNameCommand = new DelegateCommand(CopyRelateStockName);
 
             //初始化 加载自选分类数据
             Initialize();
@@ -354,12 +357,32 @@ namespace DawnQuant.App.ViewModels.AShare.SelfSelStock
             }
         }
 
+        public DelegateCommand CopyStockNameCommand { set; get; }
+        private void CopyStockName()
+        {
+            if (CurSelStock != null)
+            {
+                TextCopy.ClipboardService.SetText(CurSelStock.Name);
+            }
+        }
+        
+
         public DelegateCommand CopyRelateStockCodeCommand { set; get; }
         private void CopyRelateStockCode()
         {
             if (CurSelRelateStock != null)
             {
                 TextCopy.ClipboardService.SetText(CurSelRelateStock.TSCode.Substring(0, 6));
+            }
+        }
+
+
+        public DelegateCommand CopyRelateStockNameCommand { set; get; }
+        private void CopyRelateStockName()
+        {
+            if (CurSelRelateStock != null)
+            {
+                TextCopy.ClipboardService.SetText(CurSelRelateStock.Name);
             }
         }
 

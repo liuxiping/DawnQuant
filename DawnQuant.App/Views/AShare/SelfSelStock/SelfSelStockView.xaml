@@ -86,6 +86,8 @@
                             <dxg:TableView.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="复制股票代码" Command="{Binding CopyStockCodeCommand}"></MenuItem>
+                                    <MenuItem Header="复制股票名称" Command="{Binding CopyStockNameCommand}"></MenuItem>
+
                                     <Separator></Separator>
                                     <MenuItem Name="_miImportTSCodes" Header="导入股票代码"  Click="_miImportTSCodes_Click" ></MenuItem>
 
@@ -137,6 +139,8 @@
                                     <dxg:TableView.ContextMenu>
                                         <ContextMenu>
                                             <MenuItem Header="复制股票代码" Command="{Binding CopyRelateStockCodeCommand}"></MenuItem>
+                                            <MenuItem Header="复制股票名称" Command="{Binding CopyRelateStockNameCommand}"></MenuItem>
+
                                         </ContextMenu>
                                     </dxg:TableView.ContextMenu>
                                 </dxg:TableView>
