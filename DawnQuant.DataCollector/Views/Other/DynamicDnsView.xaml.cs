@@ -4,10 +4,9 @@ using DynamicDns.TencentCloud.Http;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-
+using System.Windows.Threading;
 
 namespace DawnQuant.DataCollector.Views.Other
 {
@@ -22,33 +21,33 @@ namespace DawnQuant.DataCollector.Views.Other
         }
 
         string _ip = null;
-        Timer _tm = null;
+        DispatcherTimer _tm = null;
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            _tm = new Timer();
+            _tm = new DispatcherTimer();
 
             //http://pv.sohu.com/cityjson
             //http://checkip.amazonaws.com
 
 
-            _tm.Interval = 1000 * 60 * 50;
-            _tm.Elapsed += Tm_Elapsed;
-            _tm.Enabled = true;
+            _tm.Interval = new TimeSpan(0, 5, 0);
+            _tm.Tick += _tm_Tick; ;
+            
 
             _tm.Start();
 
             //程序启动更新Dns
-            Tm_Elapsed(null, null);
+            _tm_Tick(null, null);
 
         }
 
-
-        private  void Tm_Elapsed(object sender, ElapsedEventArgs e)
+        private void _tm_Tick(object sender, EventArgs e)
         {
-            var t =  UpdateIpAsync();
-           
+            var t = UpdateIpAsync();
         }
+
+       
 
         private async Task UpdateIpAsync()
         {
@@ -60,7 +59,7 @@ namespace DawnQuant.DataCollector.Views.Other
 
                 if (ip != _ip)
                 {
-                    _txtMsg.Text += $"更新DNS,当前IP:{ip}\r\n\r\n";
+                    _txtMsg.Text += $"更新DNS,当前IP:{ip}\r\n更新时间：{DateTime.Now.ToString()}\r\n\r\n";
 
                     _ip = ip;
 
@@ -85,13 +84,13 @@ namespace DawnQuant.DataCollector.Views.Other
             }
             catch (Exception e)
             {
-                _txtMsg.Text += $"ExceptionMessage: {e.Message ?? ""}\r\n";
+                _txtMsg.Text += $"ExceptionMessage: {e.Message ?? ""}\r\n\r\n";
             }
 
         }
         private void UserControl_Unloaded(object sender, RoutedEventArgs e)
         {
-            _tm.Elapsed -= Tm_Elapsed;
+            _tm.Tick -= _tm_Tick;
             _tm.Stop();
             _tm = null;
         }
