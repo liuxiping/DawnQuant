@@ -19,17 +19,24 @@ namespace DawnQuant.DataCollector.ViewModels.AShare
                 var config = scope.Resolve<CollectorConfig>();
                 _dailyTradeDataTaskCron = config.DailyTradeDataTaskCron;
                 _stockDailyIndicatorTaskCron = config.StockDailyIndicatorTaskCron;
+                _230dailyTradeDataTaskCron = config.DailyTradeDataTask230Cron;
 
                 _jobMessageUtil = scope.Resolve<JobMessageUtil>();
 
                 _jobMessageUtil.DailyTradeDataJobProgressChanged += _jobMessageUtility_DailyTradeDataJobProgressChanged;
                 _jobMessageUtil.StockDailyIndicatorJobProgressChanged += _jobMessageUtility_StockDailyIndicatorJobProgressChanged;
+               
             };
 
             StartIDTDTaskCommand = new DelegateCommand(StartIDTDTask, () =>
              {
                  return !isStartInDailyTradeData;
              });
+
+            StartI230DTDTaskCommand = new DelegateCommand(StartI230DTDTask, () => 
+            {
+                return !isStartIn230DailyTradeData;
+            });
 
             StartIDITaskCommand = new DelegateCommand(StartIDITask, () =>
                {
@@ -63,10 +70,12 @@ namespace DawnQuant.DataCollector.ViewModels.AShare
         }
 
         string _dailyTradeDataTaskCron;
+        string _230dailyTradeDataTaskCron;
         string _stockDailyIndicatorTaskCron;
 
         bool isStartInDailyTradeData = false;
         bool isStartInStockDailyIndicator = false;
+        bool isStartIn230DailyTradeData=false;
 
         JobMessageUtil _jobMessageUtil;
 
@@ -154,6 +163,23 @@ namespace DawnQuant.DataCollector.ViewModels.AShare
         }
 
 
+        /// <summary>
+        /// 交易日每日2:30 更新实时数据
+        /// </summary>
+        public DelegateCommand StartI230DTDTaskCommand { set; get; }
+        private void StartI230DTDTask()
+        {
+            isStartIn230DailyTradeData = true;
+            StartI230DTDTaskCommand.RaiseCanExecuteChanged();
+
+            //任务
+            IJobDetail job = JobBuilder.Create<In230DailyTradeDataJob>()
+                .WithIdentity("In230DailyTradeDataJob").Build();
+
+            ITrigger trigger = TriggerBuilder.Create().
+              WithCronSchedule(_230dailyTradeDataTaskCron).StartNow().Build();
+            TaskUtil.Scheduler.ScheduleJob(job, trigger);
+        }
 
         public DelegateCommand ClearMessageCommand { set; get; }
 

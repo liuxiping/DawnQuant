@@ -38,7 +38,9 @@
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
                 <StackPanel  Orientation="Horizontal" HorizontalAlignment="Right" Margin="5">
-                    <Button  x:Name="btnIndtd" Padding="3,0,3,0" Margin="0,0,10,0"  MinHeight="30" Command="{Binding StartIDTDTaskCommand}">开启日线增量数据任务</Button>
+                    <Button  x:Name="btnIns230dtd" Padding="3,0,3,0" Margin="0,0,10,0"  MinHeight="30" Command="{Binding StartI230DTDTaskCommand}">2:30更新当日增量数据任务</Button>
+
+                    <Button  x:Name="btnInsdtd" Padding="3,0,3,0" Margin="0,0,10,0"  MinHeight="30" Command="{Binding StartIDTDTaskCommand}">开启日线增量数据任务</Button>
                     <Button x:Name="btnInsdi" Padding="3,0,3,0" Margin="0,0,5,0" MinHeight="30" Command="{Binding StartIDITaskCommand}">开启每日指标增量数据任务</Button>
                 </StackPanel>
                 <StackPanel  Orientation="Horizontal"  HorizontalAlignment="Right"  Grid.Row="1" Margin="5">

@@ -65,6 +65,7 @@ namespace DawnQuant.DataCollector.Config
         /// 每日增量交易数据指标定时时间
         /// </summary>
         public string DailyTradeDataTaskCron { get; set; }
+        public string DailyTradeDataTask230Cron { get; set; }
         /// <summary>
         /// 每日增量m每日指标定时时间
         /// </summary>

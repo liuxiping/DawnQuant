@@ -9,7 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using TuShareHttpSDKLibrary;
 using TuShareHttpSDKLibrary.Model.MarketData;
@@ -41,6 +43,8 @@ namespace DawnQuant.DataCollector.Collectors.AShare
 
         //事件通知
         public event Action<string> CollectInDTDProgressChanged;
+        public event Action<string> CollectIn230DTDProgressChanged;
+
         public event Action<string> CollectInDIProgressChanged;
 
         protected void OnCollectInDTDProgressChanged(string msg)
@@ -48,10 +52,17 @@ namespace DawnQuant.DataCollector.Collectors.AShare
             CollectInDTDProgressChanged?.Invoke(msg);
         }
 
+        protected void OnCollectIn230DTDProgressChanged(string msg)
+        {
+            CollectIn230DTDProgressChanged?.Invoke(msg);
+        }
+
         protected void OnCollectInDIProgressChanged(string msg)
         {
             CollectInDIProgressChanged?.Invoke(msg);
         }
+
+       
 
         private Dictionary<string, StockTradeDataDto> CollectIncrementDailyTradeData(DateTime date, GrpcChannel channel)
         {
@@ -91,6 +102,135 @@ namespace DawnQuant.DataCollector.Collectors.AShare
             }
             return stockTradeDatas;
         }
+
+
+        #region  2:30 从新浪获取实时数据
+        const string DTDUrlPart1FromSina =
+           @"http://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData?page=";
+        const string DTDUrlPart2FromSina =
+            @"&num=80&sort=symbol&asc=1&node=hs_a";
+
+        /// <summary>
+        /// 获取新浪所有A股实时数据分页地址
+        /// </summary>
+        /// <param name="page"></param>
+        /// <returns></returns>
+        private string GetDTDPagedUrl(int page)
+        {
+            return DTDUrlPart1FromSina + page.ToString() + DTDUrlPart2FromSina;
+        }
+
+
+        /// <summary>
+        /// 2:30从新浪获取实时数据
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="channel"></param>
+        /// <returns></returns>
+        private  Dictionary<string, StockTradeDataDto> CollectIncrement230DailyTradeData(DateTime date, GrpcChannel channel)
+        {
+
+            Dictionary<string, StockTradeDataDto> stockTradeDatas = new Dictionary<string, StockTradeDataDto>();
+
+            if (IsOpen(date, channel))
+            {
+                //读取增量数据
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    int page = 1;
+                    while (true)
+                    {
+                        var tStream =  httpClient.GetStreamAsync(GetDTDPagedUrl(page));
+
+                        tStream.Wait();
+                        var tJsonDocument =  JsonDocument.Parse(tStream.Result);
+
+
+                        if (tJsonDocument != null && tJsonDocument.RootElement.GetArrayLength() > 0)
+                        {
+                            foreach (JsonElement e in tJsonDocument.RootElement.EnumerateArray())
+                            {
+
+                                StockTradeDataDto tradeData = new StockTradeDataDto();
+                                DateTimeFormatInfo dtFormat = new DateTimeFormatInfo();
+
+                                tradeData.TradeDateTime = Timestamp.FromDateTime(DateTime.SpecifyKind(
+                                    date, DateTimeKind.Utc));
+
+                                tradeData.Open = double.Parse( e.GetProperty("open").GetString());
+                                tradeData.Close = double.Parse(e.GetProperty("trade").GetString());
+                                tradeData.High = double.Parse(e.GetProperty("high").GetString());
+                                tradeData.Low = double.Parse(e.GetProperty("low").GetString());
+                                tradeData.Amount = e.GetProperty("amount").GetDouble()/1000;
+                                tradeData.Volume = e.GetProperty("volume").GetDouble()/100;
+                                tradeData.PreClose = double.Parse(e.GetProperty("settlement").GetString());
+
+                                string symbol = e.GetProperty("symbol").GetString().ToUpper();
+                                string tsCode = symbol.Substring(2, 6)+"."+ symbol.Substring(0, 2);
+                                stockTradeDatas.Add(tsCode, tradeData);
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
+                        page++;
+                    }
+
+                }
+
+            }
+
+            return stockTradeDatas;
+        }
+
+        /// <summary>
+        /// 2:30从新浪更新实时数据
+        /// </summary>
+        /// <param name="date"></param>
+        public void CollectIncrement230DailyTradeData(DateTime date)
+        {
+            string msg;
+
+            GrpcChannel channel = GrpcChannel.ForAddress(_apiUrl);
+
+            try
+            {
+                var datas =   CollectIncrement230DailyTradeData(date, channel);
+                int allCount = datas.Count;
+                int complete = 0;
+
+                var client = new StockTradeDataApi.StockTradeDataApiClient(channel);
+
+                Metadata meta = new Metadata();
+                meta.AddAuthorization(_passportProvider.AccessToken);
+
+                foreach (var d in datas)
+                {
+                    var request = new SaveStockTradeDataRequest { TSCode = d.Key, KCycle = KCycleDto.Day };
+                    request.Entities.Add(d.Value);
+
+                    client.SaveStockTradeData(request, meta);
+                    complete++;
+                    msg = $"2:30从新浪采集增量日线数据已经成功采集{complete}个股票，总共{allCount}个股票";
+                    OnCollectIn230DTDProgressChanged(msg);
+                }
+
+                msg = $"已经成功采集{complete}个股票，总共{allCount}个股票，正在更新复权因子...";
+                OnCollectIn230DTDProgressChanged(msg);
+                var sclient = new StockTradeDataApi.StockTradeDataApiClient(channel);
+                sclient.CalculateInsAdjustFactor(new CalculateInsAdjustFactorRequest { KCycle = KCycleDto.Day }, meta);
+                msg = $"已经成功采集{complete}个股票，总共{allCount}个股票，更新复权因子已完成";
+                OnCollectIn230DTDProgressChanged(msg);
+
+            }
+            finally
+            {
+                channel?.Dispose();
+            }
+        }
+
+        #endregion
 
         private bool IsOpen(DateTime date, GrpcChannel channel)
         {
@@ -192,11 +332,11 @@ namespace DawnQuant.DataCollector.Collectors.AShare
                     OnCollectInDTDProgressChanged(msg);
                 }
 
-                msg = $"正在更新复权因子...";
+                msg = $"已经成功采集{complete}个股票，总共{allCount}个股票，正在更新复权因子...";
                 OnCollectInDTDProgressChanged(msg);
                 var sclient = new StockTradeDataApi.StockTradeDataApiClient(channel);
                 sclient.CalculateInsAdjustFactor(new CalculateInsAdjustFactorRequest { KCycle = KCycleDto.Day }, meta);
-                msg = $"更新复权因子已完成";
+                msg = $"已经成功采集{complete}个股票，总共{allCount}个股票，更新复权因子已完成";
                 OnCollectInDTDProgressChanged(msg);
 
             }
@@ -205,6 +345,8 @@ namespace DawnQuant.DataCollector.Collectors.AShare
                 channel?.Dispose();
             }
         }
+
+       
 
         public void CollectIncrementStockDailyIndicator(DateTime date)
         {

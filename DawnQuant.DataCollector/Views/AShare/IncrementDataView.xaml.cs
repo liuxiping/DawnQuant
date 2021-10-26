@@ -48,7 +48,7 @@ namespace DawnQuant.DataCollector.Views.AShare
             var model = (IncrementDataViewModel)DataContext;
             model.StartIDITaskCommand.Execute(null);
             model.StartIDTDTaskCommand.Execute(null);
-
+            model.StartI230DTDTaskCommand.Execute(null);
         }
     }
 }

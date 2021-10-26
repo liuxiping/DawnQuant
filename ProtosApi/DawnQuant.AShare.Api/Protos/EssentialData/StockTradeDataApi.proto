@@ -87,7 +87,7 @@ message StockTradeDataDto
          double Close =2;
 
         /// 昨日收盘价
-         google.protobuf.FloatValue PreClose =3;
+         double PreClose =3;
 
         /// 最高价
          double High =4;

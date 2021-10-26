@@ -73,6 +73,8 @@ namespace DawnQuant.DataCollector.Utils
             config.Scope = ConfigurationManager.AppSettings["Scope"];
 
             config.DailyTradeDataTaskCron = ConfigurationManager.AppSettings["DailyTradeDataTaskCron"];
+            config.DailyTradeDataTask230Cron = ConfigurationManager.AppSettings["230DailyTradeDataTaskCron"];
+
             config.StockDailyIndicatorTaskCron = ConfigurationManager.AppSettings["StockDailyIndicatorTaskCron"];
             builder.RegisterInstance(config).SingleInstance();
 
