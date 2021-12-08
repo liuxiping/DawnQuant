@@ -41,6 +41,8 @@ namespace DawnQuant.AShare.Api.Utils
                   config.CreateMap<IndustryDto, Industry>().ReverseMap();
                   config.CreateMap<StockTradeDataDto, StockTradeData>().ReverseMap();
                   config.CreateMap<StockDailyIndicatorDto, StockDailyIndicator>().ReverseMap();
+                  config.CreateMap<HolderNumberDto, HolderNumber>().ReverseMap();
+                  config.CreateMap<Top10FloatHolder, Top10FloatHolderDto>().ReverseMap();
 
 
                   config.CreateMap<FactorMetadataDto, FactorMetadata>().ReverseMap();
@@ -48,6 +50,7 @@ namespace DawnQuant.AShare.Api.Utils
                   config.CreateMap<SelectScopeMetadataDto, SelectScopeMetadata>().ReverseMap();
                   config.CreateMap<SelectScopeMetadataCategoryDto, SelectScopeMetadataCategory>().ReverseMap();
 
+                  config.CreateMap<Setting, SettingDto>().ReverseMap();
 
 
                   config.CreateMap<DateTime, Timestamp>().ConvertUsing(new DateTimeToGrpcTimestampConverter());
@@ -65,6 +68,13 @@ namespace DawnQuant.AShare.Api.Utils
 
                   config.CreateMap<SelfSelectStockCategory, SelfSelectStockCategoryDto>().ReverseMap();
                   config.CreateMap<SelfSelectStock, SelfSelectStockDto>().ReverseMap();
+                  config.CreateMap<BellwetherStockCategory, BellwetherStockCategoryDto>().ReverseMap();
+                  config.CreateMap<BellwetherStock, BellwetherStockDto>().ReverseMap();
+
+                  config.CreateMap<SubjectAndHotStockCategory, SubjectAndHotStockCategoryDto>().ReverseMap();
+                  config.CreateMap<SubjectAndHotStock, SubjectAndHotStockDto>().ReverseMap();
+
+
                   config.CreateMap<ExecuteStrategyResult, SelfSelectStock>().ReverseMap();
 
 

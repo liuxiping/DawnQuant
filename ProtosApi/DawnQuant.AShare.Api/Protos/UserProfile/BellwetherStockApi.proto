@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "Protos/UserProfile/Common.proto";
+option csharp_namespace = "DawnQuant.AShare.Api.UserProfile";
+
+package DawnQuant.AShare.Api.UserProfile;
+
+
+//龙头股票
+service BellwetherStockApi {
+  
+//根据分类获取所有龙头股
+  rpc GetBellwetherStocksByCategory(GetBellwetherStocksByCategoryRequest) returns (GetBellwetherStocksByCategoryResponse);
+
+  //根据用户获取龙头股
+  rpc GetBellwetherStocksByUser(GetBellwetherStocksByUserRequest) returns (GetBellwetherStocksByUserResponse);
+
+  //保存龙头股
+  rpc SaveBellwetherStocks(SaveBellwetherStocksRequest) returns ( SaveBellwetherStocksResponse);
+
+  //删除龙头股
+  rpc DelBellwetherStockById(DelBellwetherStockByIdRequest) returns ( google.protobuf.Empty);
+  rpc DelBellwetherStocksByCategory(DelBellwetherStocksByCategoryRequest) returns ( google.protobuf.Empty);
+  rpc DelBellwetherStocksByUser(DelBellwetherStocksByUserRequest) returns ( google.protobuf.Empty);
+
+  //导入自选股
+  rpc ImportBellwetherStocks(ImportBellwetherStocksRequest) returns (ImportBellwetherStocksResponse);
+
+}
+
+message DelBellwetherStockByIdRequest
+{
+int64 Id=1;
+}
+
+message DelBellwetherStocksByCategoryRequest
+{
+int64 CategoryId=1;
+}
+
+message DelBellwetherStocksByUserRequest
+{
+int64 UserId=1;
+}
+
+message GetBellwetherStocksByCategoryRequest
+{
+int64 CategoryId=1;
+}
+message GetBellwetherStocksByCategoryResponse
+{
+ repeated BellwetherStockDto Entities=1;
+}
+
+
+message GetBellwetherStocksByUserRequest
+{
+int64 UserId=1;
+}
+message GetBellwetherStocksByUserResponse
+{
+ repeated BellwetherStockDto Entities=1;
+}
+
+message SaveBellwetherStocksRequest
+{
+repeated BellwetherStockDto Entities=1;
+}
+
+message SaveBellwetherStocksResponse
+{
+repeated BellwetherStockDto Entities=1;
+}
+
+
+message ImportBellwetherStocksRequest
+{
+	int64 UserId=1;
+	repeated string StocksId=2;
+	int64 CategoryId=3;
+}
+
+message ImportBellwetherStocksResponse
+{
+repeated BellwetherStockDto Entities=1;
+}
+
+
+
+
+
+
+

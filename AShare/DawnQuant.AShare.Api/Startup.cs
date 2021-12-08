@@ -118,6 +118,9 @@ namespace DawnQuant.AShare.Api
                 endpoints.MapGrpcService<IndustryService>();
                 endpoints.MapGrpcService<StockTradeDataService>();
                 endpoints.MapGrpcService<StockDailyIndicatorService>();
+                endpoints.MapGrpcService<HolderNumberService>();
+                endpoints.MapGrpcService<Top10FloatHolderService>();
+
 
                 //策略服务基础数据
                 endpoints.MapGrpcService<SelectScopeMetadataService>();
@@ -129,13 +132,18 @@ namespace DawnQuant.AShare.Api
                  endpoints.MapGrpcService<StrategyExecutorService>();
 
 
-
                 //用户配置相关服务
                 endpoints.MapGrpcService<SelfSelectStockCategoryService>();
                 endpoints.MapGrpcService<SelfSelectStockService>();
+                endpoints.MapGrpcService<BellwetherStockCategoryService>();
+                endpoints.MapGrpcService<BellwetherStockService>();
+                endpoints.MapGrpcService<SubjectAndHotStockCategoryService>();
+                endpoints.MapGrpcService<SubjectAndHotStockService>();
                 endpoints.MapGrpcService<StockStrategyCategoryService>();
                 endpoints.MapGrpcService<StrategyScheduledTaskService>();
                 endpoints.MapGrpcService<StockStrategyService>();
+                endpoints.MapGrpcService<SettingApiService>();
+
 
                 endpoints.MapGet("/", async context =>
                 {

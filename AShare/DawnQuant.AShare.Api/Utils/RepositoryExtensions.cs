@@ -45,11 +45,22 @@ namespace DawnQuant.AShare.Api.Utils
             services.AddScoped<ISelfSelectStockCategoryRepository, EFSelfSelectStockCategoryRepository>();
             services.AddScoped<ISelfSelectStockRepository, EFSelfSelectStockRepository>();
 
+            services.AddScoped<IBellwetherStockCategoryRepository, EFBellwetherStockCategoryRepository>();
+            services.AddScoped<IBellwetherStockRepository, EFBellwetherStockRepository>();
+
+
+            services.AddScoped<ISubjectAndHotStockCategoryRepository, EFSubjectAndHotStockCategoryRepository>();
+            services.AddScoped<ISubjectAndHotStockRepository, EFSubjectAndHotStockRepository>();
+
+
             services.AddScoped<IStockStrategyCategoryRepository, EFStockStrategyCategoryRepository>();
             services.AddScoped<IStockStrategyRepository, EFStockStrategyRepository>();
 
             services.AddScoped<IStrategyScheduledTaskRepository, EFStrategyScheduledTaskRepository>();
-          
+
+            services.AddScoped<ISettingRepository, EFSettingRepository>();
+
+
         }
 
 
@@ -109,8 +120,9 @@ namespace DawnQuant.AShare.Api.Utils
             services.AddScoped<IBasicStockInfoRepository, EFBasicStockInfoRepositoy>();
             services.AddScoped<ICompanyRepository, EFCompanyRepository>();
             services.AddScoped<IIndustryRepository, EFIndustryRepository>();
-            services.AddScoped<IStockFormerNameRepository, EFStockFormerNameRepository>();
             services.AddScoped<ITradingCalendarRepository, EFTradingCalendarRepository>();
+            services.AddScoped<IHolderNumberRepository, EFHolderNumberRepository>();
+            services.AddScoped<ITop10FloatHolderRepository, EFTop10FloatHolderRepository>();
 
             //注册交易数据DBContext创建函数
             services.AddSingleton(provider =>

@@ -1,0 +1,157 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\Icons\app.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Converter\SelStockInfosConverter.cs" />
+    <Compile Remove="Models\AShare\Strategy\Executor\Factor\Exclusive\ExcludeCategories.cs" />
+    <Compile Remove="Models\AShare\Strategy\Executor\Factor\Technical\HardenCountFactorParameter.cs" />
+    <Compile Remove="Services\AShare\SelfSelStockItemService.cs" />
+    <Compile Remove="Services\AShare\StockDailyIndicatorService.cs" />
+    <Compile Remove="ViewModels\AShare\SelfSelStock\SelfSelStockContainerViewModel.cs" />
+    <Compile Remove="ViewModels\AShare\SelfSelStock\SelfSelStockContentViewModel.cs" />
+    <Compile Remove="Views\AShare\SelfSelStock\SelfSelStockContainerView.xaml.cs" />
+    <Compile Remove="Views\AShare\SelfSelStock\SelfSelStockContentView.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\Fonts\iconfont.ttf" />
+    <None Remove="Assets\Icons\app.ico" />
+    <None Remove="Assets\Icons\app.png" />
+    <None Remove="Assets\Icons\history.png" />
+    <None Remove="Assets\Images\add.png" />
+    <None Remove="Assets\Images\bellwether.png" />
+    <None Remove="Assets\Images\board.jpg" />
+    <None Remove="Assets\Images\categorymgr.png" />
+    <None Remove="Assets\Images\douyin.png" />
+    <None Remove="Assets\Images\exit.png" />
+    <None Remove="Assets\Images\group.png" />
+    <None Remove="Assets\Images\loading.gif" />
+    <None Remove="Assets\Images\loading1.gif" />
+    <None Remove="Assets\Images\loadsplash.gif" />
+    <None Remove="Assets\Images\loadsplash1.gif" />
+    <None Remove="Assets\Images\loadsplash2.gif" />
+    <None Remove="Assets\Images\loadsplash3.gif" />
+    <None Remove="Assets\Images\qq.png" />
+    <None Remove="Assets\Images\refresh.png" />
+    <None Remove="Assets\Images\scheduledtask.png" />
+    <None Remove="Assets\Images\setting.png" />
+    <None Remove="Assets\Images\show.png" />
+    <None Remove="Assets\Images\strategy.png" />
+    <None Remove="Assets\Images\subjectandhot.png" />
+    <None Remove="Assets\Images\sun.png" />
+    <None Remove="Assets\Images\weibo.png" />
+    <None Remove="Assets\Images\weixin.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Views\AShare\SelfSelStock\SelfSelStockContainerView.xaml" />
+    <Page Remove="Views\AShare\SelfSelStock\SelfSelStockContentView.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Images\add.png" />
+    <Resource Include="Assets\Images\bellwether.png" />
+    <Resource Include="Assets\Images\categorymgr.png" />
+    <Resource Include="Assets\Images\douyin.png" />
+    <Resource Include="Assets\Images\exit.png" />
+    <Resource Include="Assets\Images\group.png" />
+    <Resource Include="Assets\Images\qq.png" />
+    <Resource Include="Assets\Images\refresh.png" />
+    <Resource Include="Assets\Images\scheduledtask.png" />
+    <Resource Include="Assets\Images\setting.png" />
+    <Resource Include="Assets\Images\show.png" />
+    <Resource Include="Assets\Images\strategy.png" />
+    <Resource Include="Assets\Images\subjectandhot.png" />
+    <Resource Include="Assets\Images\weibo.png" />
+    <Resource Include="Assets\Images\weixin.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.3.0" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="DevExpress.Wpf.Accordion" Version="21.2.3" />
+    <PackageReference Include="DevExpress.Wpf.Charts" Version="21.2.3" />
+    <PackageReference Include="DevExpress.Wpf.Grid" Version="21.2.3" />
+    <PackageReference Include="DevExpress.Wpf.Themes.Win10Light" Version="21.2.3" />
+    <PackageReference Include="Google.Protobuf" Version="3.19.1" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.40.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.42.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="IdentityModel" Version="5.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <PackageReference Include="Quartz" Version="3.3.3" />
+    <PackageReference Include="Serilog" Version="2.10.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="TALib.NETCore" Version="0.4.4" />
+    <PackageReference Include="TextCopy" Version="4.3.1" />
+    <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Fonts\iconfont.ttf" />
+    <Resource Include="Assets\Icons\app.ico" />
+    <Resource Include="Assets\Icons\app.png" />
+    <Resource Include="Assets\Icons\history.png" />
+    <Resource Include="Assets\Images\board.jpg" />
+    <Resource Include="Assets\Images\loading.gif" />
+    <Resource Include="Assets\Images\loading1.gif" />
+    <Resource Include="Assets\Images\loadsplash.gif" />
+    <Resource Include="Assets\Images\loadsplash3.gif" />
+    <Resource Include="Assets\Images\loadsplash2.gif" />
+    <Resource Include="Assets\Images\loadsplash1.gif" />
+    <Resource Include="Assets\Images\sun.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\AShare\Strategy\Executor\SelectScope\Index\" />
+    <Folder Include="Models\AShare\Strategy\Executor\SelectScope\MarketType\" />
+    <Folder Include="ViewModels\AShare\Setting\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\DawnQuant.AMConverter\DawnQuant.AMConverter.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\DawnQuant.Passport\DawnQuant.Passport.csproj" />
+    <ProjectReference Include="..\..\ProtosApi\DawnQuant.AShare.Api\DawnQuant.AShare.Api.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\AShare\SubjectAndHot\SubjectAndHotView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\AShare\Bellwether\AddBellwetherStockWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Views\AShare\Bellwether\BellwetherStockCategoryMgrWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Views\AShare\SubjectAndHot\AddSubjectAndHotStockWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\AShare\SubjectAndHot\SubjectAndHotStockCategoryMgrWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\AShare\SubjectAndHot\SubjectAndHotView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+</Project>

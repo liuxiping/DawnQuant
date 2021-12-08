@@ -55,7 +55,6 @@ message BasicStockInfoDto {
 
         /// 是否沪深港通标的，N否 H沪股通 S深股通
          string StockConnect=15;
-
        
 }
 
@@ -135,6 +134,45 @@ message IndustryDto
 }
 
 
+message HolderNumberDto
+{
+
+         int64 Id =1;
+
+         string TSCode =2;
+
+        // 报告期
+         google.protobuf.Timestamp ReportingPeriod =3;
+
+        // 股东人数(单位万)
+         double HolderNum =4;
+
+         //较上期变化
+         double Change =5;
+
+}
+
+
+    
+message  Top10FloatHolderDto
+{
+         int64 Id =1;
+
+         string TSCode =2;
+
+        // 公告日期
+         google.protobuf.Timestamp AnnDate =3;
+
+
+        // 报告期
+         google.protobuf.Timestamp EndDate =4;
+
+        // 股东名称
+         string HolderName =5;
+
+        // 持股数量
+         double HoldAmount =6;
+}
 
 // K线周期
  enum KCycleDto

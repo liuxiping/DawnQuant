@@ -1,7 +1,6 @@
 syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
-import "google/protobuf/wrappers.proto";
 import "Protos/EssentialData/Common.proto";
 import "google/protobuf/empty.proto";
 
@@ -21,10 +20,10 @@ service StockTradeDataApi {
  rpc GetLatestTradeData(GetLatestTradeDataRequest) returns (GetLatestTradeDataResponse);
 
  //计算全部股票复权因子
- rpc CalculateAllAdjustFactor(CalculateAllAdjustFactorRequest) returns (google.protobuf.Empty);
+ rpc CalculateAllAdjustFactor(CalculateAllAdjustFactorRequest) returns (stream CalculateAllAdjustFactorResponse);
 
  //增量计算股票复权因子
- rpc CalculateInsAdjustFactor(CalculateInsAdjustFactorRequest) returns (google.protobuf.Empty);
+ rpc CalculateInsAdjustFactor(CalculateInsAdjustFactorRequest) returns (stream CalculateInsAdjustFactorResponse);
 
 
 }
@@ -106,4 +105,14 @@ message StockTradeDataDto
 
          ///复权因子
         double AdjustFactor =9;
+}
+
+message CalculateInsAdjustFactorResponse
+{
+    string Message=1;
+}
+
+message CalculateAllAdjustFactorResponse
+{
+    string Message=1;
 }

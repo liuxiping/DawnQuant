@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+import "Protos/EssentialData/Common.proto";
+import "google/protobuf/timestamp.proto";
+
+
+option csharp_namespace = "DawnQuant.AShare.Api.EssentialData";
+
+package DawnQuant.AShare.Api.EssentialData;
+
+
+//10大流通股
+service Top10FloatHolderApi {
+  
+  rpc GetTop10FloatHolder(GetTop10FloatHolderRequest) returns (GetTop10FloatHolderResponse);
+
+  rpc SaveTop10FloatHolder(SaveTop10FloatHolderRequest) returns (SaveTop10FloatHolderResponse);
+
+}
+
+
+message GetTop10FloatHolderRequest
+{
+ string TSCode = 1;
+ //开始日期
+ google.protobuf.Timestamp SartDate  =2;
+ //结束日期
+ google.protobuf.Timestamp EndDate  =3;
+
+}
+
+message GetTop10FloatHolderResponse
+{
+  repeated  Top10FloatHolderDto Entities=1;
+}
+
+
+message SaveTop10FloatHolderRequest
+{
+   repeated  Top10FloatHolderDto Entities=1;
+}
+
+message SaveTop10FloatHolderResponse
+{
+   repeated  Top10FloatHolderDto Entities=1;
+}
+

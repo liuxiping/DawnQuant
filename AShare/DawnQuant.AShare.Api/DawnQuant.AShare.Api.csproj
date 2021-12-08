@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <StartupObject>DawnQuant.AShare.Api.Program</StartupObject>
   </PropertyGroup>
 
@@ -17,9 +17,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Protos\EssentialData\HolderNumberApi.proto" />
     <None Remove="Protos\EssentialData\ReversionFactorApi.proto" />
+    <None Remove="Protos\EssentialData\Top10FloatHolderApi.proto" />
     <None Remove="Protos\SyncToy_a74b51fc-14e0-4c1f-8048-92502a6d3f82.dat" />
+    <None Remove="Protos\UserProfile\BellwetherStockApi.proto" />
+    <None Remove="Protos\UserProfile\BellwetherStockCategoryApi.proto" />
+    <None Remove="Protos\UserProfile\SettingApi.proto" />
     <None Remove="Protos\UserProfile\StrategyApi.proto" />
+    <None Remove="Protos\UserProfile\SubjectAndHotStockApi.proto" />
+    <None Remove="Protos\UserProfile\SubjectAndHotStockCategoryApi.proto" />
   </ItemGroup>
 
 
@@ -27,22 +34,21 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
-    <PackageReference Include="Grpc.AspNetCore" Version="2.38.0" />
-    <PackageReference Include="Grpc.Tools" Version="2.38.1">
+    <PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.42.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.7">
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0" />
-    <PackageReference Include="Quartz" Version="3.3.2" />
+    <PackageReference Include="Quartz" Version="3.3.3" />
     <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
-    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
   </ItemGroup>
 
@@ -54,6 +60,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Protobuf Include="Protos\EssentialData\HolderNumberApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\EssentialData\Top10FloatHolderApi.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\EssentialData\BasicStockInfoApi.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\EssentialData\Common.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\EssentialData\CompanyApi.proto" GrpcServices="Server" />
@@ -66,9 +74,14 @@
     <Protobuf Include="Protos\StrategyMetadata\FactorMetadataCategoryApi.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\StrategyMetadata\SelectScopeMetadataApi.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\StrategyMetadata\SelectScopeMetadataCategoryApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\UserProfile\SettingApi.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\UserProfile\Common.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\UserProfile\ExclusionStockApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\UserProfile\BellwetherStockApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\UserProfile\SubjectAndHotStockApi.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\UserProfile\SelfSelectStockApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\UserProfile\BellwetherStockCategoryApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\UserProfile\SubjectAndHotStockCategoryApi.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\UserProfile\SelfSelectStockCategoryApi.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\UserProfile\StockStrategyApi.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\UserProfile\StockStrategyCategoryApi.proto" GrpcServices="Server" />
@@ -80,6 +93,11 @@
     <None Update="Config\FinancialDbSql.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\StrategyDb\" />
+    <Folder Include="Migrations\UserProfileDb\" />
   </ItemGroup>
 
 </Project>

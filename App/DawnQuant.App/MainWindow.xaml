@@ -1,0 +1,39 @@
+﻿<dx:DXTabbedWindow  
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+        x:Class="DawnQuant.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:AShareViews="clr-namespace:DawnQuant.App.Views.AShare"
+        xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
+        xmlns:local="clr-namespace:DawnQuant.App"  ShowInTaskbar="True"
+        xmlns:dxb="http://schemas.devexpress.com/winfx/2008/xaml/bars"
+        xmlns:LayoutView="clr-namespace:DawnQuant.App.Views.Layout"
+        ShowIcon="True"  Closing="_mainWindow_Closing" ShowTitle="False" Unloaded="_mainWindow_Unloaded"
+        mc:Ignorable="d" Name="_mainWindow"  WindowState="Maximized"
+        Loaded="_mainWindow_Loaded" Icon="/Assets/Icons/app.ico"
+        Title="DawnQuant" Height="450" Width="800">
+    <dx:DXWindow.HeaderItems>
+        <LayoutView:HeaderView></LayoutView:HeaderView>
+    </dx:DXWindow.HeaderItems>
+    <dxmvvm:Interaction.Behaviors>
+        <dxmvvm:CurrentWindowService/>
+        <dx:DXMessageBoxService/>
+        <dx:NotifyIconService  ThemeName="Win10Light" LeftClickCommand="{Binding ActivateMainWindowCommand}"
+                               Tooltip="DawnQuant.App"  Icon="/Assets/Icons/app.ico"  >
+            <dx:NotifyIconService.ContextMenu>
+                <dxb:PopupMenu>
+                    <dxb:BarButtonItem Content="显示主界面" Name="_biShowMainWindow"  ItemClick="_biShowMainWindow_ItemClick" Glyph="/Assets/Images/show.png" />
+                    <dxb:BarButtonItem Content="退出系统"  Name="_biExit" ItemClick="_biExit_ItemClick" Glyph="/Assets/Images/exit.png"/>
+                </dxb:PopupMenu>
+            </dx:NotifyIconService.ContextMenu>
+        </dx:NotifyIconService>
+    </dxmvvm:Interaction.Behaviors>
+
+    <dx:DXTabControl TabContentCacheMode="CacheAllTabs" Padding="0" Margin="0">
+        <dx:DXTabItem FontSize="15" Header="沪深股市" >
+            <AShareViews:AShareMainView></AShareViews:AShareMainView>
+        </dx:DXTabItem>
+    </dx:DXTabControl>
+</dx:DXTabbedWindow>

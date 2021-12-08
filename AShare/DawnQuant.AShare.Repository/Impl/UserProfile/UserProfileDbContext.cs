@@ -24,17 +24,34 @@ namespace DawnQuant.AShare.Repository.Impl.UserProfile
 
         }
 
-        public DbSet<SelfSelectStockCategory> SelfSelectStockCategorys { get; set; }
-
+        //自选
+        public DbSet<SelfSelectStockCategory> SelfSelectStockCategories { get; set; }
         public DbSet<SelfSelectStock> SelfSelectStocks { get; set; }
 
-        public DbSet<StockStrategy>  StockStrategies { get; set; }
 
+        //龙头
+        public DbSet<BellwetherStockCategory> BellwetherStockCategories { get; set; }
+        public DbSet<BellwetherStock> BellwetherStocks { get; set; }
+
+        //题材热点
+        public DbSet<SubjectAndHotStockCategory> SubjectAndHotStockCategories { get; set; }
+        public DbSet<SubjectAndHotStock> SubjectAndHotStocks { get; set; }
+
+        //策略
+        public DbSet<StockStrategy>  StockStrategies { get; set; }
         public DbSet<StockStrategyCategory>  StockStrategyCategories { get; set; }
 
+
+        //计划任务
         public DbSet<StrategyScheduledTask>  StrategyScheduledTasks { get; set; }
 
+
+        //配置信息
+        public DbSet<Setting> Settings { get; set; }
+
+
         public DbSet<ExclusionStock>  ExclusionStocks { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -75,6 +92,12 @@ namespace DawnQuant.AShare.Repository.Impl.UserProfile
             {
                 en.HasIndex(p => p.Id);
                 en.HasIndex(p => p.UserId);
+            });
+
+            //用户 键值 联合唯一索引
+            modelBuilder.Entity<Setting>(en => 
+            {
+                en.HasIndex(p => new { p.UserId, p.Key }).IsUnique();
             });
         }
 

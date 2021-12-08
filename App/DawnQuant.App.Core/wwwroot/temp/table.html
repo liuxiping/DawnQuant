@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/app.css">
+
+    <script>
+        document.onkeydown = function(e) {
+            var ev = window.event || e;
+            var code = ev.keyCode || ev.which;
+            if ((ev.ctrlKey) && (ev.keyCode == 70)) {
+                ev.preventDefault();
+            }
+        }
+
+        function onStockListSelChange(originStock, newStock) {
+
+            let o = document.getElementById(originStock);
+            if (o != null) {
+                o.classList.remove("active-row")
+            }
+            let n = document.getElementById(newStock);
+            if (n != null) {
+                n.classList.add("active-row")
+            }
+
+        }
+
+        function stockListSort(th) {
+            //清除其他排序
+            let asc = "header-col-asc";
+            let desc = "header-col-desc"
+
+            let ath = th.parentNode.children;
+
+            for (i = 0; i < ath.length; i++) {
+
+                if (ath[i] != th) {
+                    let ls = ath[i].children[0];
+                    ls.classList.remove(asc);
+                    ls.classList.remove(desc);
+                }
+
+            }
+
+            let s = th.children[0];
+            if (!s.classList.contains(asc) && !s.classList.contains(desc)) {
+                s.classList.add(asc);
+            } else if (s.classList.contains(asc)) {
+                s.classList.remove(asc)
+                s.classList.add(desc);
+            } else if (s.classList.contains(desc)) {
+                s.classList.remove(desc)
+                s.classList.add(asc);
+            }
+
+        }
+    </script>
+    <style>
+        .stocklist-table {
+            table-layout: fixed;
+            text-align: center;
+            border: 0px;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.15); */
+        }
+        
+        .stocklist-table thead tr {
+            background-color: #f4f4f4;
+            text-align: left;
+        }
+        
+        .stocklist-table thead tr th {
+            position: relative;
+            text-align: left;
+            border-top: 0px;
+            cursor: default;
+        }
+        
+        .stocklist-table thead tr th:hover {
+            background-color: #e5f1fb;
+        }
+        
+        .stocklist-table th,
+        .stocklist-table td {
+            padding: 5px 5px;
+            border: 1px solid #dddddd;
+        }
+        
+        .stocklist-table th:first-child,
+        .stocklist-table td:first-child {
+            border-left: none;
+            text-align: right;
+        }
+        
+        .stocklist-table th:nth-child(4),
+        .stocklist-table td:nth-child(4) {
+            text-align: left;
+        }
+        
+        .stocklist-table th:nth-child(4) span,
+        .stocklist-table td:nth-child(4) span {
+            text-align: left;
+            display: inline-block;
+            vertical-align: middle;
+            width: 100px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        
+        .stocklist-table tbody tr {
+            border-bottom: 1px solid #dddddd;
+            cursor: default;
+        }
+        
+        .stocklist-table tbody tr.active-row {
+            font-weight: bold;
+            color: #0d6efd;
+            background-color: #cce8ff;
+        }
+        
+        .stocklist {
+            border: 1px solid #ddd;
+            /* width: 370px; */
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            margin: 0 auto;
+        }
+        
+        .stocklist .header {
+            height: 30px;
+            line-height: 30px;
+            background-color: #f3f3f3;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #dddddd;
+        }
+        
+        .stocklist .header label {
+            font-weight: 700;
+            margin-left: 5px;
+            color: #0d6efd;
+        }
+        
+        .stocklist .header ul li {
+            float: left;
+            margin-right: 5px;
+        }
+        
+        .stocklist .header ul li img {
+            margin-top: -2px;
+            height: 20px;
+            width: 20px;
+        }
+        
+        .stocklist .header ul li img:hover {
+            opacity: 0.8;
+        }
+        
+        .stocklist .content {
+            overflow-y: scroll;
+            overflow-x: hidden;
+            flex: 1;
+        }
+        
+        .stocklist .footer {
+            height: 30px;
+            line-height: 30px;
+            background-color: #f3f3f3;
+            display: flex;
+            justify-content: space-between;
+            padding-left: 10px;
+        }
+        
+        .stocklist-table .header-col-asc::after {
+            position: absolute;
+            top: 8px;
+            right: 5px;
+            font-family: 'dawnquant';
+            content: "\e661";
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .stocklist-table .header-col-desc::after {
+            position: absolute;
+            top: 8px;
+            right: 5px;
+            font-family: 'dawnquant';
+            content: "\e65f";
+            opacity: 0.9;
+            /* color: #0d6efd; */
+            font-weight: 300;
+        }
+        
+        .search-show {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .search-hide {
+            display: none;
+        }
+        
+        .search-input {
+            display: flex;
+            justify-content: space-between;
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 3px 5px 3px 5px;
+            padding: 0px 5px 0px 5px;
+            height: 28x;
+        }
+        
+        .search-input:focus {
+            border: 1px solid #0d6efd;
+        }
+        
+        .search-input input {
+            margin-right: 10px;
+            border: none;
+            height: 25px;
+            flex: 1;
+            height: 100%;
+        }
+        
+        .search-input img {
+            margin-top: 3px;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+        
+        .search-input img:hover {
+            opacity: 0.8;
+        }
+        
+        .search-show .menu ul li {
+            font-family: "dawnquant";
+            line-height: 35px;
+            margin-right: 5px;
+            float: right;
+            cursor: pointer;
+            color: red;
+            font-weight: 700;
+        }
+        
+        .search-show .menu ul li:hover {
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="stocklist">
+        <div class="header">
+            <label>股票列表</label>
+            <ul>
+                <li><img src="../images/add.svg"></li>
+            </ul>
+        </div>
+
+        <div class="content">
+            <div class="search-show">
+                <div class="search-input">
+                    <input type="search" placeholder="搜索">
+                    <img src="../images/search.svg">
+                </div>
+
+                <div class="menu">
+                    <ul>
+                        <li>&#xeb6a;</li>
+                    </ul>
+                </div>
+            </div>
+            <table class="stocklist-table">
+                <thead>
+                    <tr>
+                        <th style="width: 40px;"><span>序号</span></th>
+                        <th onclick="stockListSort(this)" style="width: 65px;"><span>代码</span></th>
+                        <th onclick="stockListSort(this)" style="width: 70px;"> <span>名称</span> </th>
+                        <th onclick="stockListSort(this)" style="width: 100px;"> <span>行业</span> </th>
+                        <th onclick="stockListSort(this)" style="width: 85px;"><span>添加时间</span> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="tt" onclick="onStockListSelChange(null,'tt')">
+                        <td>1</td>
+                        <td>666666</td>
+                        <td>又有视频</td>
+                        <td><span title="食品饮料白酒"><span>食品饮料白酒计算机</span></span>
+                        </td>
+                        <td>2021-12-4</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>666366</td>
+                        <td>又有视频</td>
+                        <td>老婆安用</td>
+                        <td>2021-12-4</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>666363</td>
+                        <td>又有视频</td>
+                        <td>安自己用</td>
+                        <td>2021-12-4</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>666368</td>
+                        <td>又有视频</td>
+                        <td>自己用</td>
+                        <td>2021-12-4</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="footer">
+            <label>总计：100条</label>
+        </div>
+    </div>
+
+</body>
+
+</html>

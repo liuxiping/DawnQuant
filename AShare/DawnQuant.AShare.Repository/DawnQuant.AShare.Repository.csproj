@@ -1,12 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.7" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.0" />
+    <Compile Remove="Abstract\EssentialData\IReversionFactorRepository.cs" />
+    <Compile Remove="Impl\EssentialData\EFReversionFactorRepository.cs" />
+    <Compile Remove="Impl\EssentialData\EFStockFormerNameRepository.cs" />
+    <Compile Remove="Impl\EssentialData\ReversionFactorDbContext.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>

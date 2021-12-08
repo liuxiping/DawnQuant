@@ -1,0 +1,23 @@
+﻿ @using DawnQuant.DataCollector.Core.Views.AShare
+ @using DawnQuant.DataCollector.Core.Views.DDNS
+  
+  
+ <main id="main">
+        <div id="tab-content">
+            <section id="tab-content-ashare" class="@TCAShareCss">
+               <AShareMainView></AShareMainView>
+            </section>
+
+            <section id="tab-content-ddns" class="@TCDDNSCss">
+                <DDNSView></DDNSView>
+            </section>
+        </div>
+        <div id="tab-header">
+            <label class="@THAShareCss" id="tab-header-ashare" @onclick="OnClickAShare">沪深股市</label>
+            <label class="@THDDNSCss" id="tab-header-ddns" @onclick="OnClickDDNS">DDNS</label>
+        </div>
+    </main>
+
+
+ 
+ 

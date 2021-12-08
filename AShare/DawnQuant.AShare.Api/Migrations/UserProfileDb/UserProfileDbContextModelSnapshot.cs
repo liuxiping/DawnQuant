@@ -61,6 +61,67 @@ namespace DawnQuant.AShare.Api.Migrations.UserProfileDb
                     b.ToTable("StrategyScheduledTasks");
                 });
 
+            modelBuilder.Entity("DawnQuant.AShare.Entities.UserProfile.BellwetherStock", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("CategoryId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("SortNum")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TSCode")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("BellwetherStocks");
+                });
+
+            modelBuilder.Entity("DawnQuant.AShare.Entities.UserProfile.BellwetherStockCategory", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Desc")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("SortNum")
+                        .HasColumnType("int");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BellwetherStockCategories");
+                });
+
             modelBuilder.Entity("DawnQuant.AShare.Entities.UserProfile.ExclusionStock", b =>
                 {
                     b.Property<long>("Id")
@@ -161,6 +222,9 @@ namespace DawnQuant.AShare.Api.Migrations.UserProfileDb
                     b.Property<int>("SortNum")
                         .HasColumnType("int");
 
+                    b.Property<int>("StockSortFiled")
+                        .HasColumnType("int");
+
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
@@ -170,7 +234,7 @@ namespace DawnQuant.AShare.Api.Migrations.UserProfileDb
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("SelfSelectStockCategorys");
+                    b.ToTable("SelfSelectStockCategories");
                 });
 
             modelBuilder.Entity("DawnQuant.AShare.Entities.UserProfile.StockStrategy", b =>
@@ -245,6 +309,80 @@ namespace DawnQuant.AShare.Api.Migrations.UserProfileDb
                     b.ToTable("StockStrategyCategories");
                 });
 
+            modelBuilder.Entity("DawnQuant.AShare.Entities.UserProfile.SubjectAndHotStock", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("CategoryId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Industry")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("SortNum")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TSCode")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("SubjectAndHotStocks");
+                });
+
+            modelBuilder.Entity("DawnQuant.AShare.Entities.UserProfile.SubjectAndHotStockCategory", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Desc")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
+
+                    b.Property<int>("SortNum")
+                        .HasColumnType("int");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SubjectAndHotStockCategories");
+                });
+
+            modelBuilder.Entity("DawnQuant.AShare.Entities.UserProfile.BellwetherStock", b =>
+                {
+                    b.HasOne("DawnQuant.AShare.Entities.UserProfile.BellwetherStockCategory", null)
+                        .WithMany("BellwetherStocks")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("DawnQuant.AShare.Entities.UserProfile.SelfSelectStock", b =>
                 {
                     b.HasOne("DawnQuant.AShare.Entities.UserProfile.SelfSelectStockCategory", null)
@@ -263,6 +401,20 @@ namespace DawnQuant.AShare.Api.Migrations.UserProfileDb
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("DawnQuant.AShare.Entities.UserProfile.SubjectAndHotStock", b =>
+                {
+                    b.HasOne("DawnQuant.AShare.Entities.UserProfile.SubjectAndHotStockCategory", null)
+                        .WithMany("SubjectAndHotStocks")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DawnQuant.AShare.Entities.UserProfile.BellwetherStockCategory", b =>
+                {
+                    b.Navigation("BellwetherStocks");
+                });
+
             modelBuilder.Entity("DawnQuant.AShare.Entities.UserProfile.SelfSelectStockCategory", b =>
                 {
                     b.Navigation("SelfSelectStocks");
@@ -271,6 +423,11 @@ namespace DawnQuant.AShare.Api.Migrations.UserProfileDb
             modelBuilder.Entity("DawnQuant.AShare.Entities.UserProfile.StockStrategyCategory", b =>
                 {
                     b.Navigation("StockStrategies");
+                });
+
+            modelBuilder.Entity("DawnQuant.AShare.Entities.UserProfile.SubjectAndHotStockCategory", b =>
+                {
+                    b.Navigation("SubjectAndHotStocks");
                 });
 #pragma warning restore 612, 618
         }

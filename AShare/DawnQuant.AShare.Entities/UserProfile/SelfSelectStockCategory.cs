@@ -54,6 +54,11 @@ namespace DawnQuant.AShare.Entities.UserProfile
         public bool IsGroupByIndustry { get; set; }
 
         /// <summary>
+        /// 分类列表默认排序字段   1 加入时间   2 行业
+        /// </summary>
+        public int StockSortFiled { get; set; }
+
+        /// <summary>
         /// 创建时间
         /// </summary>
         public DateTime CreateTime { get; set; }

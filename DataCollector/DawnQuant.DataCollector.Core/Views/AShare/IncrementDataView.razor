@@ -1,0 +1,39 @@
+﻿
+
+  <div id="incrementdata">
+        <div id="incrementdata-header">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>沪深股市增量数据采集</td>
+                        <td> <button  @onclick="ClearMessage" class="btn-blue">清空日志</button></td>
+                    </tr>
+                    <tr>
+                        <td colspan=2>@ViewModel.DailyTradeDataProgress</td>
+                    </tr>
+                    <tr>
+                        <td colspan=2>@ViewModel.StockDailyIndicatorProgress</td>
+                    </tr>
+                   
+                </tbody>
+            </table>
+        </div>
+        <div id="incrementdata-log">
+            <textarea value="@ViewModel.Message" readonly>
+            </textarea>
+        </div>
+        <div>
+            <div>
+                <button disabled="@ViewModel.IsStartInStockDailyIndicator" @onclick="StartIDITask" class="btn-blue">开启每日指标增量数据任务</button>
+                <button disabled="@ViewModel.IsStartInDailyTradeData" @onclick="StartIDTDTask"  class="btn-blue">开启日线增量数据任务</button>
+                <button disabled="@ViewModel.IsStartInDailyTradeDataFromSina" @onclick="StartIDTDFromSinaTask"  class="btn-blue">从新浪更新当日增量数据任务</button>
+            </div>
+        </div>
+        <div>
+            <div>
+                <button disabled="@ViewModel.IsStartAllTask" @onclick="StartAllTask"  class="btn-green">开启所有数据采集任务</button>
+            </div>
+        </div>
+
+    </div>
+

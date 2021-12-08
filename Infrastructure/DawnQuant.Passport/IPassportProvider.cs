@@ -12,10 +12,13 @@ namespace DawnQuant.Passport
     /// </summary>
     public interface IPassportProvider
     {
-         string AccessToken {  get; }
-         IEnumerable<Claim> Claims { get;  }
-         bool Login(string name, string pwd);
-         long UserId { get; }
+        string AccessToken { get; }
+        IEnumerable<Claim> Claims { get; }
+        bool Login(string name, string pwd);
+        long UserId { get; }
+        string UserName { get; }
+        string Error { get; }
+
 
     }
 }

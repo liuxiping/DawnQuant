@@ -281,42 +281,48 @@ namespace DawnQuant.AShare.Api.EssentialData
 
         #endregion
 
-
         /// <summary>
         /// 全量计算复权因子
         /// </summary>
         /// <param name="request"></param>
+        /// <param name="responseStream"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Task<Empty> CalculateAllAdjustFactor(CalculateAllAdjustFactorRequest request, ServerCallContext context)
+        /// <exception cref="NotSupportedException"></exception>
+        public override Task CalculateAllAdjustFactor(CalculateAllAdjustFactorRequest request, IServerStreamWriter<CalculateAllAdjustFactorResponse> responseStream, ServerCallContext context)
         {
 
             return Task.Run(() =>
             {
                 if (request.KCycle == KCycleDto.Day)
                 {
-                    CalculateAllAdjustFactorOnDailyData();
-                }
-                else if (request.KCycle == KCycleDto.Minute5)
-                {
-                    CalculateAllAdjustFactorOn5MData();
+                    CalculateAllAdjustFactorOnDailyData( responseStream);
                 }
                 else
                 {
-                    throw new NotSupportedException("只支持日线和5分钟数据");
+                    throw new NotSupportedException("只支持日线数据");
                 }
-                return new Empty();
+               
             });
+
 
         }
 
-        private void CalculateAllAdjustFactorOnDailyData()
+
+
+
+        private void CalculateAllAdjustFactorOnDailyData(IServerStreamWriter<CalculateAllAdjustFactorResponse> responseStream)
         {
+
             List<string> tsCodes = _basicStockInfoRepository.Entities.Where(p => p.ListedStatus == StockEssentialDataConst.Listing
             || p.ListedStatus== StockEssentialDataConst.PauseListing).Select(p => p.TSCode).ToList();
+
+
             object lockObj = new object();
 
             int allCount = tsCodes.Count;
+            int complete = 0;
+
             //分片分别开启多个线程更新数据
             int length = (int)Math.Ceiling(tsCodes.Count / _threadCount);
 
@@ -326,6 +332,7 @@ namespace DawnQuant.AShare.Api.EssentialData
             {
                 lists.Add(tsCodes.Skip(i * length).Take(length).ToList());
             }
+
             List<Task> tasks = new List<Task>();
 
             //开启多个线程计算复权因子
@@ -341,14 +348,22 @@ namespace DawnQuant.AShare.Api.EssentialData
                             var datas = tdr.Entities.OrderBy(p => p.TradeDateTime).ToList();
                             AdjustCalculator.CalculateAllAdjustFactor(datas);
                             tdr.Save(datas);
+
+                            lock (lockObj)
+                            {
+                                complete++;
+                            }
+
+                            CalculateAllAdjustFactorResponse response = new CalculateAllAdjustFactorResponse();
+                            response.Message = $"全量计算复权因子已经成功完成{complete}个股票，总共{allCount}个股票";
+                            responseStream.WriteAsync(response);
+                            
                         }
                     }
                     
                 });
                 tasks.Add(task);
             }
-
-
             Task.WaitAll(tasks.ToArray());
         }
 
@@ -357,47 +372,46 @@ namespace DawnQuant.AShare.Api.EssentialData
             throw new NotImplementedException();
         }
 
+
         /// <summary>
         /// 增量更新复权因子
         /// </summary>
         /// <param name="request"></param>
+        /// <param name="responseStream"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public override Task<Empty> CalculateInsAdjustFactor(CalculateInsAdjustFactorRequest request, ServerCallContext context)
+        /// <exception cref="NotSupportedException"></exception>
+        public override Task CalculateInsAdjustFactor(CalculateInsAdjustFactorRequest request, IServerStreamWriter<CalculateInsAdjustFactorResponse> responseStream, ServerCallContext context)
         {
-
             return Task.Run(() =>
             {
                 if (request.KCycle == KCycleDto.Day)
                 {
-                    CalculateInsAdjustFactorOnDailyData();
+                    CalculateInsAdjustFactorOnDailyData(responseStream);
                 }
-                else if (request.KCycle == KCycleDto.Minute5)
-                {
-                    CalculateInsAdjustFactorOn5MData();
-                }
+                
                 else
                 {
-                    throw new NotSupportedException("只支持日线和5分钟数据");
+                    throw new NotSupportedException("只支持日线数据");
                 }
-                return new Empty();
             });
-
-           
         }
+
+        
 
 
         /// <summary>
         /// 增量更新日线复权因子
         /// </summary>
-        private void CalculateInsAdjustFactorOnDailyData()
+        private void CalculateInsAdjustFactorOnDailyData(IServerStreamWriter<CalculateInsAdjustFactorResponse> responseStream)
         {
             List<string> tsCodes = _basicStockInfoRepository.Entities.Where(p=>p.ListedStatus== StockEssentialDataConst.Listing ||
             p.ListedStatus == StockEssentialDataConst.PauseListing).Select(p => p.TSCode).ToList();
            
-           // object lockObj = new object();
+            object lockObj = new object();
 
             int allCount = tsCodes.Count;
+            int complete = 0;
             //分片分别开启多个线程更新数据
             int length = (int)Math.Ceiling(tsCodes.Count / _threadCount);
 
@@ -426,6 +440,15 @@ namespace DawnQuant.AShare.Api.EssentialData
                                 double gain = (datas[1].Close - datas[1].PreClose) / datas[1].PreClose;
                                 datas[1].AdjustFactor = datas[0].AdjustFactor * (1 + gain);
                                 tdr.Save(datas[1]);
+
+                                lock (lockObj)
+                                {
+                                    complete++;
+                                }
+
+                                CalculateInsAdjustFactorResponse response = new CalculateInsAdjustFactorResponse();
+                                response.Message = $"增量计算复权因子已经成功完成{complete}个股票，总共{allCount}个股票";
+                                responseStream.WriteAsync(response);
                             }
                         }
                     }

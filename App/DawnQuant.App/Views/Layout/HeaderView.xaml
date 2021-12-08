@@ -1,0 +1,84 @@
+﻿<UserControl x:Class="DawnQuant.App.Views.Layout.HeaderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             FontSize="20"
+             mc:Ignorable="d"  IsHitTestVisible="True"
+             d:DesignHeight="30" d:DesignWidth="800">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="TextBox.Static.Border" Color="#FFABAdB3"/>
+        <SolidColorBrush x:Key="TextBox.MouseOver.Border" Color="#FF7EB4EA"/>
+        <SolidColorBrush x:Key="TextBox.Focus.Border" Color="#FF569DE5"/>
+        <Style x:Key="SearchTextBoxStyle" TargetType="{x:Type TextBox}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TextBox.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="KeyboardNavigation.TabNavigation" Value="None"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="AllowDrop" Value="true"/>
+            <Setter Property="ScrollViewer.PanningMode" Value="VerticalFirst"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <dx:ThemedBorder x:Name="border" Background="{TemplateBinding Background}" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" SnapsToDevicePixels="True">
+                            <Grid VerticalAlignment="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Margin="3,0,3,0" FontSize="15"  VerticalAlignment="Center" Foreground="Gray" Text="&#xe634;" FontFamily="../../Assets/Fonts/#iconfont" ></TextBlock>
+                                <ScrollViewer Grid.Column="1" x:Name="PART_ContentHost"  Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                            </Grid>
+                        </dx:ThemedBorder>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="border" Value="0.56"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource TextBox.Focus.Border}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsInactiveSelectionHighlightEnabled" Value="true"/>
+                        <Condition Property="IsSelectionActive" Value="false"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="SelectionBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                </MultiTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <StackPanel  HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True"
+                 VerticalAlignment="Center" Orientation="Horizontal">
+        <Menu >
+            <MenuItem  Padding="2" Name="_miUpdateData"  ToolTip="下载交易数据" Click="_miUpdateData_Click" >
+                <MenuItem.Header>
+                    <TextBlock  Margin="0 1 0 0" FontSize="18" Padding="0 0 0 1" HorizontalAlignment="Center" Text="&#xe619;"  
+                                Foreground="#1296db" FontFamily="../../Assets/Fonts/#iconfont" ></TextBlock>
+                </MenuItem.Header>
+            </MenuItem>
+        </Menu>
+        <Menu  >
+            <MenuItem   ToolTip="设置" Padding="2" Margin="6 0 0 0" >
+                <MenuItem.Header >
+                    <TextBlock FontSize="20"  Padding="0" Foreground="#1296db" 
+                               Text="&#xeec9;" FontFamily="../../Assets/Fonts/#iconfont" ></TextBlock>
+                </MenuItem.Header>
+                <MenuItem FontSize="15" Header="系统设置"/>
+                <MenuItem FontSize="15" Header="关于"/>
+            </MenuItem>
+        </Menu>
+    </StackPanel>
+</UserControl>

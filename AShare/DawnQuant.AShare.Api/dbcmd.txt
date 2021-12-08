@@ -3,9 +3,12 @@ Add-Migration InitUserProfileDbContext -c UserProfileDbContext -o Migrations/Use
 Add-Migration InitStrategyDbContext -c StrategyDbContext -o Migrations/StrategyDb
 
 
+
 Update-Database -Context StockEDDbContext
 Update-Database -Context UserProfileDbContext
 Update-Database -Context StrategyDbContext
+
+
 
 
 

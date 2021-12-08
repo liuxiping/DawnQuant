@@ -1,0 +1,92 @@
+syntax = "proto3";
+import "Protos/UserProfile/Common.proto";
+import "google/protobuf/empty.proto";
+option csharp_namespace = "DawnQuant.AShare.Api.UserProfile";
+
+package DawnQuant.AShare.Api.UserProfile;
+
+
+//配置信息
+service SettingApi
+{
+//所有配置
+  rpc GetSettingsByUser(GetSettingsByUserRequest) returns (GetSettingsByUserResponse);
+  rpc SaveSettings(SaveSettingsRequest) returns (SaveSettingsResponse);
+  rpc DelSettingsByUser(DelSettingsByUserRequest) returns (google.protobuf.Empty);
+
+
+  //特定配置信息
+  rpc GetSpecifySetting(GetSpecifySettingRequest) returns (GetSpecifySettingResponse);
+  rpc SaveSpecifySetting(SaveSpecifySettingRequest) returns (SaveSpecifySettingResponse);
+  rpc DelSpecifySetting(DelSpecifySettingRequest) returns (google.protobuf.Empty);
+
+}
+
+message GetSettingsByUserRequest
+{
+    int64 UserId=1;
+}
+
+message GetSettingsByUserResponse
+{
+     repeated SettingDto Entities=1;
+}
+
+message SaveSettingsRequest
+{
+     repeated SettingDto Entities=1;
+}
+
+message SaveSettingsResponse
+{
+     repeated SettingDto Entities=1;
+}
+
+message DelSettingsByUserRequest
+{
+     int64 UserId=1;
+}
+
+message GetSpecifySettingRequest
+{
+ int64 UserId=1;
+ string Key=2;
+}
+
+message GetSpecifySettingResponse
+{
+ SettingDto Setting=1;
+}
+
+
+
+message SaveSpecifySettingRequest
+{
+ SettingDto Setting=1;
+ }
+
+message SaveSpecifySettingResponse
+{
+ SettingDto Setting=1;
+}
+
+message DelSpecifySettingRequest
+{
+     int64 UserId=1;
+     string Key=2;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

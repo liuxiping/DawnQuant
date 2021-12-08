@@ -1,0 +1,174 @@
+﻿<UserControl xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"  
+             x:Class="DawnQuant.App.Views.AShare.Bellwether.BellwetherView"
+             xmlns:lccom="clr-namespace:DawnQuant.App.Views.AShare.Common"
+             xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol" 
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+             xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid" 
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DawnQuant.App.Views.AShare.Bellwether"
+             mc:Ignorable="d"  Loaded="UserControl_Loaded"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition ></ColumnDefinition>
+            <ColumnDefinition  Width="auto"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <dxlc:GroupBox  Padding="0" BorderThickness="0,0,1,1">
+            <dxlc:GroupBox.Header>
+                <Grid Height="23">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock  VerticalAlignment="Center"  Text="龙头股分类" Margin="-5,0,0,0"></TextBlock>
+                    <StackPanel Grid.Column="1"  HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,0,-5,0">
+                        <Button  x:Name="_btnAddBellwetherStockCategoryMgr" Background="{Binding ElementName=_gcStockList,Path=Background}" BorderThickness="0" Padding="0"   Margin="0" ToolTip="龙头股分类管理"  
+                                 Click="_btnAddBellwetherStockCategoryMgr_Click">
+                            <Button.Content>
+                                <TextBlock  FontSize="19" Foreground="#1296db" Text="&#xe62f;"   FontFamily="/Assets/Fonts/#iconfont"></TextBlock>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </dxlc:GroupBox.Header>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition ></RowDefinition>
+                </Grid.RowDefinitions>
+                <dxe:SearchControl  NullText="搜索" Margin="3" Name="_scBellwetherStockCategory" ></dxe:SearchControl>
+                <dxg:GridControl   CustomUnboundColumnData="_gcBellwetherStockCategoryList_CustomUnboundColumnData"   Grid.Row="1"    Name="_gcBellwetherStockCategoryList"  SelectedItem="{Binding  CurSelCategory, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"
+                                ItemsSource="{Binding Categories}"  ShowBorder="False">
+                    <dxg:GridControl.Columns>
+                        <dxg:GridColumn Header="序号" FieldName="#" Width="40" UnboundType="Integer"></dxg:GridColumn>
+                        <dxg:GridColumn Header="分类名称" FieldName="Name"  Width="100"></dxg:GridColumn>
+                    </dxg:GridControl.Columns>
+                  
+                    <dxg:GridControl.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="删除" Command="{Binding DeleteBellwetherStockCategoryCommand}"></MenuItem>
+                        </ContextMenu>
+                    </dxg:GridControl.ContextMenu>
+
+                    <dxg:GridControl.View >
+                        <dxg:TableView  ShowIndicator="False"     Name="_tvBellwetherStockCategoryList"   AllowEditing="False" FadeSelectionOnLostFocus="False"
+                               AllowPerPixelScrolling="True" ShowGroupPanel="False" AllowGrouping="True" 
+                               AutoWidth="False" HorizontalAlignment="Center" UseLayoutRounding="True"   
+                               ShowSearchPanelMode="Never" SearchString="{Binding ElementName=_scBellwetherStockCategory, Path=SearchText}"
+                               ShowHorizontalLines="True"   BorderThickness="0"
+                               ShowVerticalLines="True" >
+
+                            <dxg:TableView.RowIndicatorContentTemplate>
+                                <DataTemplate>
+                                    <TextBox  Text="{Binding RowData.ControllerVisibleIndex  }"></TextBox>
+                                </DataTemplate>
+                            </dxg:TableView.RowIndicatorContentTemplate>
+                        </dxg:TableView>
+                    </dxg:GridControl.View>
+                </dxg:GridControl>
+
+            </Grid>
+        </dxlc:GroupBox>
+        <dxlc:GroupBox  Padding="0" BorderThickness="0,0,1,1" Grid.Column="1" >
+            <dxlc:GroupBox.Header>
+                <Grid    Height="23" VerticalAlignment="Top" >
+                    <TextBlock  VerticalAlignment="Center"  Text="龙头股" Margin="-5,0,0,0"></TextBlock>
+                    <StackPanel Grid.Column="1"  HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,0,-5,0">
+                        <Button  Template="{StaticResource ImageButton}" x:Name="_btnAddStock" Background="{Binding ElementName=_gcBellwetherStockList,Path=Background}" BorderThickness="0" Padding="0"   Margin="0" ToolTip="添加股票"  Click="_btnAddStock_Click" >
+                            <Button.Content>
+                                <Image  Height="20" Width="20" Source="pack://application:,,,/Assets/Images/add.png"></Image>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+            </dxlc:GroupBox.Header>
+           
+                <dxg:GridControl  CustomUnboundColumnData="_gcBellwetherStockList_CustomUnboundColumnData"   Name="_gcBellwetherStockList"  SelectedItem="{Binding  CurSelStock, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"
+                                  ItemsSource="{Binding Stocks}"  ShowBorder="False">
+                    <dxg:GridControl.Columns>
+                    <dxg:GridColumn Header="序号" FieldName="#" Width="40" UnboundType="Integer"></dxg:GridColumn>
+                    <dxg:GridColumn Header="代码" FieldName="TSCode"  Width="70">
+                        <dxg:GridColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock HorizontalAlignment="Center" Text="{Binding RowData.Row.TSCode ,Converter={StaticResource stockCodeConverter}}"  ></TextBlock>
+                            </DataTemplate>
+                        </dxg:GridColumn.CellTemplate>
+                    </dxg:GridColumn>
+                    <dxg:GridColumn Header="名称" FieldName="Name"  Width="90"></dxg:GridColumn>
+                    </dxg:GridControl.Columns>
+                    <dxg:GridControl.View>
+                        <dxg:TableView  AllowEditing="False" FadeSelectionOnLostFocus="False"
+                               AllowPerPixelScrolling="True" ShowGroupPanel="False" AllowGrouping="True"
+                               AutoWidth="False" HorizontalAlignment="Center" UseLayoutRounding="True"
+                               ShowIndicator="False" ShowHorizontalLines="True"   BorderThickness="0"
+                               ShowVerticalLines="True">
+                            <dxg:TableView.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="复制股票代码" Command="{Binding CopyStockCodeCommand}"></MenuItem>
+                                    <MenuItem Header="复制股票名称" Command="{Binding CopyStockNameCommand}"></MenuItem>
+                                    <Separator></Separator>
+                                    <MenuItem Header="删除" Command="{Binding DelStockItemCommand}"></MenuItem>
+
+                            </ContextMenu>
+                            </dxg:TableView.ContextMenu>
+                        </dxg:TableView>
+                    </dxg:GridControl.View>
+                </dxg:GridControl>
+
+           
+        </dxlc:GroupBox>
+
+        <dx:ThemedBorder BorderThickness="0,0,0,1" Grid.Column="2">
+            <lccom:StockChartView DataContext="{Binding StockChartViewModel}"></lccom:StockChartView>
+        </dx:ThemedBorder>
+
+    
+        <dxlc:GroupBox  Grid.Column="3" Padding="0" BorderThickness="1,0,0,1" >
+                <dxlc:GroupBox.Header>
+                    <Grid   Height="23" VerticalAlignment="Top" >
+                        <TextBlock  VerticalAlignment="Center"  Text="相关股票" Margin="-5,0,0,0"></TextBlock>
+                    </Grid>
+
+                </dxlc:GroupBox.Header>
+                <dx:ThemedBorder >
+                    <dxg:GridControl  CustomUnboundColumnData="_gcRelateStockList_CustomUnboundColumnData"   Name="_gcRelateStockList"  SelectedItem="{Binding  CurSelRelateStock, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"
+                                  ItemsSource="{Binding RelateStocks}"  ShowBorder="False">
+                        <dxg:GridControl.Columns>
+                        <dxg:GridColumn Header="序号" FieldName="#" Width="40" UnboundType="Integer"></dxg:GridColumn>
+                        <dxg:GridColumn Header="代码" FieldName="TSCode"    Width="70">
+                            <dxg:GridColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock HorizontalAlignment="Center" Text="{Binding RowData.Row.TSCode ,Converter={StaticResource stockCodeConverter}}"  ></TextBlock>
+                                </DataTemplate>
+                            </dxg:GridColumn.CellTemplate>
+                        </dxg:GridColumn>
+                         <dxg:GridColumn Header="名称" FieldName="Name"  Width="90"></dxg:GridColumn>
+                        </dxg:GridControl.Columns>
+                        <dxg:GridControl.View>
+                            <dxg:TableView x:Name="_watchRelateStockList" AllowEditing="False" FadeSelectionOnLostFocus="False"
+                               AllowPerPixelScrolling="True" ShowGroupPanel="False" AllowGrouping="True"
+                               AutoWidth="False" HorizontalAlignment="Center" UseLayoutRounding="True"
+                               ShowIndicator="False" ShowHorizontalLines="True"   BorderThickness="0"
+                               ShowVerticalLines="True">
+                                <dxg:TableView.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="复制股票代码" Command="{Binding CopyRelateStockCodeCommand}"></MenuItem>
+                                        <MenuItem Header="复制股票名称" Command="{Binding CopyRelateStockNameCommand}"></MenuItem>
+                                    </ContextMenu>
+                                </dxg:TableView.ContextMenu>
+                            </dxg:TableView>
+                        </dxg:GridControl.View>
+                    </dxg:GridControl>
+
+                </dx:ThemedBorder>
+            </dxlc:GroupBox>
+
+       
+    </Grid>
+</UserControl>

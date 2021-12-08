@@ -1,0 +1,70 @@
+﻿#asharemainview {
+    display: flex;
+    height: 100%;
+}
+
+#asharemainview-sidebar {
+    height: 100%;
+    border-right: 1px solid #ddd;
+    text-align: center;
+}
+
+    #asharemainview-sidebar ul li {
+        margin: 25px 10px;
+    }
+
+        #asharemainview-sidebar ul li a {
+            height: 35px;
+            line-height: 20px;
+            padding: 10px 10px;
+            border-radius: 5px;
+            color: #0d6efd;
+            cursor: pointer;
+        }
+
+            #asharemainview-sidebar ul li a:visited {
+                color: #0d6efd;
+            }
+
+            #asharemainview-sidebar ul li a:hover {
+                color: #fff;
+                background-color: #0d6efd;
+            }
+
+        #asharemainview-sidebar ul li:first-child {
+            margin-top: 20px;
+        }
+
+.asharemainview-sidebar-selected {
+    color: #fff !important;
+    background-color: #0d6efd !important;
+}
+/* 设置图标 */
+
+#asharemainview-sidebar ul a:before {
+    font-family: "dawnquant" !important;
+    font-weight: normal;
+    margin-right: 5px;
+}
+
+#asharemainview-sidebar ul :first-child a:before {
+    content: '\e61c';
+}
+
+#asharemainview-sidebar ul :last-child a:before {
+    content: '\e608';
+}
+
+#asharemainview-content {
+    flex: 1;
+}
+
+    #asharemainview-content > div {
+        height: 100%;
+        display: none;
+    }
+
+.asharemainview-content-selected {
+    display: block !important;
+}
+

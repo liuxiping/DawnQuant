@@ -69,6 +69,17 @@ namespace DawnQuant.AShare.Entities
         /// </summary>
         public bool IsJoinServerScheduleTask { get; set; }
 
+
+        /// <summary>
+        /// 是否加入客户端服务器执行计划
+        /// </summary>
+        public bool IsJoinClientScheduleTask { get; set; }
+
+        /// <summary>
+        /// 客户端定时执行时间
+        /// </summary>
+        public DateTime? ClientScheduleTime { get; set; }
+
         /// <summary>
         /// 创建时间
         /// </summary>

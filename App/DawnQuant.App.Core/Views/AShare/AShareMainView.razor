@@ -1,0 +1,24 @@
+﻿
+@using DawnQuant.App.Core.Views.AShare.SelfSelStock 
+
+ <div class="container">
+        <div class="sidebar" id="ashare-sidebar">
+            <ul>
+                <li id="menu-group"  @onclick="@(()=>{OnModuleSelChange("group");})"  class="@GetMenuItemCssClass("group")"> <img src="_content/DawnQuant.App.Core/images/group.svg" alt="自选分类" title="自选分类"></li>
+                <li id="menu-strategy" @onclick="@(()=>{OnModuleSelChange("strategy");})" class="@GetMenuItemCssClass("strategy")" > <img src="_content/DawnQuant.App.Core/images/strategy.svg" alt="策略管理" title="策略管理"></li>
+                <li id="menu-scheduledtask" @onclick="@(()=>{OnModuleSelChange("scheduledtask");})" class="@GetMenuItemCssClass("scheduledtask")"> <img src="_content/DawnQuant.App.Core/images/scheduledtask.svg" alt="任务计划" title="任务计划"></li>
+                <li id="menu-bellwether" @onclick="@(()=>{OnModuleSelChange("bellwether");})" class="@GetMenuItemCssClass("bellwether")"> <img src="_content/DawnQuant.App.Core/images/bellwether.svg" alt="龙头股" title="龙头股"></li>
+                <li id="menu-subjectandhot" @onclick="@(()=>{OnModuleSelChange("subjectandhot");})" class="@GetMenuItemCssClass("subjectandhot")"> <img src="_content/DawnQuant.App.Core/images/subjectandhot.svg" alt="题材热点" title="题材热点"></li>
+            </ul>
+
+        </div>
+        <div class="content" id="ashare-content">
+            <div id="content-group" class="@GetContentCssClass("group")">
+               <SelfSelStockView></SelfSelStockView>    
+            </div>
+            <div id="content-strategy" class="@GetContentCssClass("strategy")">strategy</div>
+            <div id="content-scheduledtask" class="@GetContentCssClass("scheduledtask")">scheduledtask</div>
+            <div id="content-bellwether" class="@GetContentCssClass("bellwether")">bellwether</div>
+            <div id="content-subjectandhot" class="@GetContentCssClass("subjectandhot")">subjectandhot</div>
+        </div>
+    </div>

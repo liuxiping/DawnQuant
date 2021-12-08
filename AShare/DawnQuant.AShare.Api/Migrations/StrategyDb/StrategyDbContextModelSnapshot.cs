@@ -16,7 +16,7 @@ namespace DawnQuant.AShare.Api.Migrations.StrategyDb
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.7");
 
-            modelBuilder.Entity("DawnQuant.AShare.Entities.Strategy.FactorMetadata", b =>
+            modelBuilder.Entity("DawnQuant.AShare.Entities.StrategyMetadata.FactorMetadata", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,7 +53,7 @@ namespace DawnQuant.AShare.Api.Migrations.StrategyDb
                     b.ToTable("FactorMetadatas");
                 });
 
-            modelBuilder.Entity("DawnQuant.AShare.Entities.Strategy.FactorMetadataCategory", b =>
+            modelBuilder.Entity("DawnQuant.AShare.Entities.StrategyMetadata.FactorMetadataCategory", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -75,7 +75,7 @@ namespace DawnQuant.AShare.Api.Migrations.StrategyDb
                     b.ToTable("FactorMetadataCategories");
                 });
 
-            modelBuilder.Entity("DawnQuant.AShare.Entities.Strategy.SelectScopeMetadata", b =>
+            modelBuilder.Entity("DawnQuant.AShare.Entities.StrategyMetadata.SelectScopeMetadata", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -112,7 +112,7 @@ namespace DawnQuant.AShare.Api.Migrations.StrategyDb
                     b.ToTable("SelectScopeMetadatas");
                 });
 
-            modelBuilder.Entity("DawnQuant.AShare.Entities.Strategy.SelectScopeMetadataCategory", b =>
+            modelBuilder.Entity("DawnQuant.AShare.Entities.StrategyMetadata.SelectScopeMetadataCategory", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -134,9 +134,9 @@ namespace DawnQuant.AShare.Api.Migrations.StrategyDb
                     b.ToTable("SelectScopeMetadataCategories");
                 });
 
-            modelBuilder.Entity("DawnQuant.AShare.Entities.Strategy.FactorMetadata", b =>
+            modelBuilder.Entity("DawnQuant.AShare.Entities.StrategyMetadata.FactorMetadata", b =>
                 {
-                    b.HasOne("DawnQuant.AShare.Entities.Strategy.FactorMetadataCategory", "Category")
+                    b.HasOne("DawnQuant.AShare.Entities.StrategyMetadata.FactorMetadataCategory", "Category")
                         .WithMany("FactorMetadatas")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -145,10 +145,10 @@ namespace DawnQuant.AShare.Api.Migrations.StrategyDb
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("DawnQuant.AShare.Entities.Strategy.SelectScopeMetadata", b =>
+            modelBuilder.Entity("DawnQuant.AShare.Entities.StrategyMetadata.SelectScopeMetadata", b =>
                 {
-                    b.HasOne("DawnQuant.AShare.Entities.Strategy.SelectScopeMetadataCategory", "Category")
-                        .WithMany("StockSelectScopeMetadatas")
+                    b.HasOne("DawnQuant.AShare.Entities.StrategyMetadata.SelectScopeMetadataCategory", "Category")
+                        .WithMany("SelectScopeMetadatas")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -156,14 +156,14 @@ namespace DawnQuant.AShare.Api.Migrations.StrategyDb
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("DawnQuant.AShare.Entities.Strategy.FactorMetadataCategory", b =>
+            modelBuilder.Entity("DawnQuant.AShare.Entities.StrategyMetadata.FactorMetadataCategory", b =>
                 {
                     b.Navigation("FactorMetadatas");
                 });
 
-            modelBuilder.Entity("DawnQuant.AShare.Entities.Strategy.SelectScopeMetadataCategory", b =>
+            modelBuilder.Entity("DawnQuant.AShare.Entities.StrategyMetadata.SelectScopeMetadataCategory", b =>
                 {
-                    b.Navigation("StockSelectScopeMetadatas");
+                    b.Navigation("SelectScopeMetadatas");
                 });
 #pragma warning restore 612, 618
         }

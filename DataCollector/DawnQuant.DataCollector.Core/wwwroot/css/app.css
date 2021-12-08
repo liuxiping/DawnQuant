@@ -1,0 +1,160 @@
+﻿
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+em,
+i {
+    font-style: normal
+}
+
+li {
+    list-style: none
+}
+
+img {
+    border: 0;
+    vertical-align: middle
+}
+
+a {
+    text-decoration: none
+}
+
+:focus {
+    outline: 0;
+}
+
+.hide,
+.none {
+    display: none
+}
+
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+.clearfix {
+    *zoom: 1;
+}
+
+html,
+body,
+#app {
+    font-family: 'Microsoft YaHei','Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    width: 100%;
+    height: 100%;
+}
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
+
+@font-face {
+    font-family: 'dawnquant';
+    src: url('../fonts/iconfont.woff2') format('woff2'), url('../fonts/iconfont.woff') format('woff'), url('../fonts/iconfont.ttf') format('truetype');
+}
+
+.btn-blue {
+    background-color: #0d6efd;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-blue:hover {
+    opacity: 0.9;
+}
+
+.btn-blue:disabled {
+    opacity: 0.6;
+}
+
+.btn-green {
+    background-color: green;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-green:hover {
+    opacity: 0.9;
+}
+
+.btn-green:disabled {
+    opacity: 0.6;
+}
+
+.btn-orange {
+    background-color: orange;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-orange:hover {
+    opacity: 0.9;
+}
+
+.btn-orange:disabled {
+    opacity: 0.6;
+}
+
+.btn-purple {
+    background-color: purple;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-purple:hover {
+    opacity: 0.9;
+}
+
+.btn-purple:disabled {
+    opacity: 0.6;
+}

@@ -1,13 +1,10 @@
 ﻿using IdentityModel.Client;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DawnQuant.Passport
 {
@@ -23,9 +20,9 @@ namespace DawnQuant.Passport
         string _name;
         string _pwd;
 
-        string _identityUrl;
-        string _clientId;
-        string _scope;
+        private readonly string _identityUrl;
+        private readonly string _clientId;
+        private readonly string _scope;
 
         TokenResponse _tokenResponse;
         UserInfoResponse _userInfoResponse;
@@ -35,20 +32,25 @@ namespace DawnQuant.Passport
         {
             _name = name;
             _pwd = pwd;
+
             return Login();
+          
         }
 
         private bool Login(  )
         {
             var client = new HttpClient();
-            var discTask = client.GetDiscoveryDocumentAsync(_identityUrl);
+            var discTask =   client.GetDiscoveryDocumentAsync(_identityUrl);
             discTask.Wait();
             var disc = discTask.Result;
 
             if (disc.IsError)
             {
-                throw new Exception(disc.Error);
+                Error+= disc.Error;
+                return false;
+                
             }
+
             var tokenResponseTask = client.RequestPasswordTokenAsync(new PasswordTokenRequest
             {
                 Address = disc.TokenEndpoint,
@@ -59,9 +61,11 @@ namespace DawnQuant.Passport
             });
             tokenResponseTask.Wait();
             _tokenResponse = tokenResponseTask.Result;
+
             if (_tokenResponse.IsError)
             {
-                throw _tokenResponse.Exception;
+                Error += _tokenResponse.ErrorDescription;
+                return false;
             }
             _acquisitionDateTime = DateTime.Now;
 
@@ -72,14 +76,16 @@ namespace DawnQuant.Passport
                 Address = disc.UserInfoEndpoint,
                 Token = _tokenResponse.AccessToken
             }); 
-
             userInfoTask.Wait();
+
             _userInfoResponse = userInfoTask.Result;
             if (_userInfoResponse.IsError)
             {
-                throw _userInfoResponse.Exception;
+                Error += _userInfoResponse.Error;
+                return false;
             }
-         
+
+            UserName = _name;
             return true;
         }
 
@@ -128,7 +134,7 @@ namespace DawnQuant.Passport
         public long UserId {
             get
             {
-                if (Claims == null || Claims.Count() <= 0)
+                if (Claims == null || !Claims.Any())
                 {
                     throw new Exception("请先登录系统");
                 }
@@ -137,6 +143,9 @@ namespace DawnQuant.Passport
             }
         }
 
-    }
+        public string UserName { private set; get; }
+
+        public string Error  { private set; get; }
+}
 }
 

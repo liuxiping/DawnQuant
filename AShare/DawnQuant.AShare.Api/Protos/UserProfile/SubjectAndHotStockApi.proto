@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "Protos/UserProfile/Common.proto";
+option csharp_namespace = "DawnQuant.AShare.Api.UserProfile";
+
+package DawnQuant.AShare.Api.UserProfile;
+
+
+//题材热点股票API
+service SubjectAndHotStockApi {
+  
+//根据分类获取题材热点股
+  rpc GetSubjectAndHotStocksByCategory(GetSubjectAndHotStocksByCategoryRequest) returns (GetSubjectAndHotStocksByCategoryResponse);
+
+  rpc GetSubjectAndHotStocksByUser(GetSubjectAndHotStocksByUserRequest) returns (GetSubjectAndHotStocksByUserResponse);
+
+  //保存题材热点股
+  rpc SaveSubjectAndHotStocks(SaveSubjectAndHotStocksRequest) returns ( SaveSubjectAndHotStocksResponse);
+
+  //删除题材热点股票
+  rpc DelSubjectAndHotStockById(DelSubjectAndHotStockByIdRequest) returns ( google.protobuf.Empty);
+  rpc DelSubjectAndHotStocksByCategory(DelSubjectAndHotStocksByCategoryRequest) returns ( google.protobuf.Empty);
+  rpc DelSubjectAndHotStocksByUser(DelSubjectAndHotStocksByUserRequest) returns ( google.protobuf.Empty);
+
+}
+
+message DelSubjectAndHotStockByIdRequest
+{
+int64 Id=1;
+}
+
+message DelSubjectAndHotStocksByCategoryRequest
+{
+int64 CategoryId=1;
+}
+
+message DelSubjectAndHotStocksByUserRequest
+{
+int64 UserId=1;
+}
+
+message GetSubjectAndHotStocksByCategoryRequest
+{
+int64 CategoryId=1;
+}
+message GetSubjectAndHotStocksByCategoryResponse
+{
+ repeated SubjectAndHotStockDto Entities=1;
+}
+
+
+message GetSubjectAndHotStocksByUserRequest
+{
+int64 UserId=1;
+}
+message GetSubjectAndHotStocksByUserResponse
+{
+ repeated SubjectAndHotStockDto Entities=1;
+}
+
+message SaveSubjectAndHotStocksRequest
+{
+repeated SubjectAndHotStockDto Entities=1;
+}
+
+message SaveSubjectAndHotStocksResponse
+{
+repeated SubjectAndHotStockDto Entities=1;
+}
+
+
+
+
+
+
+
+

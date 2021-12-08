@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<SupportedPlatform Include="browser" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="BootstrapBlazor" Version="6.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.0" />
+	</ItemGroup>
+
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="xcopy &quot;$(ProjectDir)wwwroot&quot; &quot;$(ProjectDir)..\DawnQuant.DataCollector.WinFormHost\bin\Debug\net6.0-windows&quot; /y " />
+	</Target>
+
+</Project>

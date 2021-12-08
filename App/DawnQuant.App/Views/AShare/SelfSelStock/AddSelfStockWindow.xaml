@@ -1,0 +1,52 @@
+﻿<dx:DXWindow  xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+              x:Class="DawnQuant.App.Views.AShare.SelfSelStock.AddSelfStockWindow"
+               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+               xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+               mc:Ignorable="d" WindowStyle="ToolWindow" 
+              ResizeMode="NoResize"  Name="_addSelfSelectStockWindow"
+              WindowStartupLocation="CenterScreen" Loaded="_addSelfSelectStockWindow_Loaded"
+        Title="添加自选股票" Height="600" Width="450">
+    <dx:DXWindow.Resources>
+        <DataTemplate x:Key="btnAddStock">
+            <Button  Background="Transparent" Click="Button_Click" BorderBrush="Transparent"  >
+                <Button.Content>
+                    <TextBlock FontFamily="../../../Assets/Fonts/#iconfont"  Foreground="Blue"  Text="&#xe7c4;"></TextBlock>
+                </Button.Content>
+            </Button>
+        </DataTemplate>
+    </dx:DXWindow.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition  Height="auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBox   x:Name="_txtPattern" Height="25"   KeyDown="_txtPattern_KeyDown"  TextChanged="_txtPattern_TextChanged"
+                   HorizontalAlignment="Stretch"    VerticalAlignment="Bottom"
+                   FontSize="15">
+        </TextBox>
+        <dxg:GridControl    Grid.Row="1"  Name="_gcStockList"   
+                                  ItemsSource="{Binding Stocks}"   ItemsSourceChanged="_gcStockList_ItemsSourceChanged">
+            <dxg:GridControl.Columns>
+                <dxg:GridColumn Header="代码" FieldName="TSCode"    Width="100"></dxg:GridColumn>
+                <dxg:GridColumn Header="名称" FieldName="Name"  Width="100"></dxg:GridColumn>
+                <dxg:GridColumn Header="行业" FieldName="Industry"  Width="150"></dxg:GridColumn>
+                <dxg:GridColumn Header="操作" Width="80"     CellDisplayTemplate="{StaticResource btnAddStock}">
+                </dxg:GridColumn>
+            </dxg:GridControl.Columns>
+            <dxg:GridControl.View>
+                <dxg:TableView x:Name="_watchStockList" AllowEditing="False" FadeSelectionOnLostFocus="False" AllowFilterEditor="false"
+                               AllowPerPixelScrolling="True" ShowGroupPanel="False" AllowGrouping="False"
+                               AutoWidth="True" HorizontalAlignment="Center" UseLayoutRounding="True"
+                               ShowIndicator="False"  HorizontalScrollbarVisibility="Hidden"  VerticalScrollbarVisibility="Auto"
+                               ShowHorizontalLines="True"   FontSize="15"  BorderThickness="0" Padding="0" Margin="0"
+                               ShowVerticalLines="True">
+                </dxg:TableView>
+            </dxg:GridControl.View>
+        </dxg:GridControl>
+
+    </Grid>
+</dx:DXWindow>

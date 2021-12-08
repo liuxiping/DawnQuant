@@ -1,0 +1,86 @@
+﻿<div class="stocklist" tabindex=0 @onkeydown=KeyDown @onkeydown:stopPropagation>
+    <div class="header">
+        <label>@HeaderCaption</label>
+        <ul class="@GetHeaderMenuCssClass()">
+            <li><img src="_content/DawnQuant.App.Core/images/add.svg"></li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <div class="@GetSearchPanelCssClass()">
+            <div class="search-input">
+                <input type="search" placeholder="搜索">
+                <img src="_content/DawnQuant.App.Core/images/search.svg">
+            </div>
+
+            <div class="menu">
+                <ul>
+                    <li @onclick="HideSearchPanel">&#xeb6a;</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="stocklist-table-column-wrap" >
+            <table class="stocklist-table-column">
+                <thead>
+                    <tr>
+                        <th ><span>序号</span></th>
+                        <th @onclick=@(()=>{HeaderSortChanged("tscode");}) class=@GetHeaderSortCssClass("tscode")><span>代码</span></th>
+                        <th @onclick=@(()=>{HeaderSortChanged("name");}) class=@GetHeaderSortCssClass("name")> <span>名称</span> </th>
+                        @{
+                            if (ShowIndustryColumn)
+                            {
+                                <th @onclick=@(()=>{HeaderSortChanged("industry");}) class=@GetHeaderSortCssClass("industry")> <span>行业</span> </th>
+
+                            }
+                        }
+                        @{
+                            if (ShowAddDateColumn)
+                            {
+                                <th @onclick=@(()=>{HeaderSortChanged("addDate");}) class=@GetHeaderSortCssClass("addDate")><span>添加时间</span> </th>
+
+                            }
+                        }
+                    </tr>
+                </thead>
+            </table>
+        </div>
+     
+        <div  class="stocklist-table-wrap">
+        <table class="stocklist-table">
+            <tbody>
+                @{
+                    int num = 1;
+                    foreach (var s in GetStocks())
+                    {
+                        <tr @onclick="@(()=>{ StockListSelChanged(s);})" class="@GetTableRowCssClass(s)">
+                            <td>@num</td>
+                            <td>@s.Code</td>
+                            <td>@s.Name</td>
+                            @{
+                                if (ShowIndustryColumn)
+                                {
+                                    <td><span title="@s.Industry"><span>@s.Industry</span></span></td>
+                                }
+                            }
+
+                            @{
+                                if (ShowAddDateColumn)
+                                {
+                                    <td>@s.AddDate</td>
+                                }
+                            }
+
+                        </tr>
+                        num++;
+                    }
+                }
+
+            </tbody>
+        </table>
+        </div>
+    </div>
+    <div class="footer">
+        <label>总计：@Stocks.Count()条</label>
+    </div>
+</div>

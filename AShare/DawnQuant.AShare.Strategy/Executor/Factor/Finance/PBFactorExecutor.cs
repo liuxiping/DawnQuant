@@ -41,24 +41,14 @@ namespace DawnQuant.AShare.Strategy.Executor.Factor
             PBFactorExecutorParameter p = (PBFactorExecutorParameter)Parameter;
             List<string> meet = new List<string>();
             DateTime adt = DateTime.Now.Date;
-            if (p.TradeDate == null)
-            {
-                //获取最新交易日期
-                adt = LatestTradingDateUtil.GetLatestTradingDate(_tcRepository, _stdrFunc, _bsinfoRepository);
-
-            }
-            else
-            {
-                adt = p.TradeDate.Value.Date;
-            }
-
+      
             if (tsCodes != null && tsCodes.Count > 0)
             {
                 foreach (string tscode in tsCodes)
                 {
                     IStockDailyIndicatorRepository repository = _sdirFunc(tscode);
 
-                    var indicator = repository.Entities.Where(p => p.TradeDate == adt)
+                    var indicator = repository.Entities.OrderByDescending(p => p.TradeDate)
                       .FirstOrDefault();
 
                     if (indicator != null)

@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+import "Protos/EssentialData/Common.proto";
+
+
+option csharp_namespace = "DawnQuant.AShare.Api.EssentialData";
+
+package DawnQuant.AShare.Api.EssentialData;
+
+
+//股东人数
+service HolderNumberApi {
+  
+//获取股东人数
+  rpc GetHolderNumber(GetHolderNumberRequest) returns (GetHolderNumberResponse);
+
+  //保存股东人数数据
+  rpc SaveHolderNumber(SaveHolderNumberRequest) returns (SaveHolderNumberResponse);
+
+}
+
+
+message GetHolderNumberRequest
+{
+ string TSCode = 1;
+ //开始日期
+ google.protobuf.Timestamp SartDate  =2;
+ //结束日期
+ google.protobuf.Timestamp EndDate  =3;
+
+}
+
+message GetHolderNumberResponse
+{
+  repeated  HolderNumberDto Entities=1;
+}
+
+
+message SaveHolderNumberRequest
+{
+   repeated  HolderNumberDto Entities=1;
+}
+
+message SaveHolderNumberResponse
+{
+   repeated  HolderNumberDto Entities=1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

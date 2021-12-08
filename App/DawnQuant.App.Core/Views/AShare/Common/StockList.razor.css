@@ -1,0 +1,257 @@
+﻿.stocklist {
+    border: none;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
+}
+
+.stocklist .header {
+    height: 25px;
+    line-height: 25px;
+    background-color: #f3f3f3;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #dddddd;
+}
+
+.stocklist .header label {
+    font-weight: 700;
+    margin-left: 5px;
+    color: #0d6efd;
+}
+
+.stocklist .header ul li {
+    float: left;
+    margin-right: 5px;
+}
+
+.stocklist .header ul li img {
+    margin-top: -3px;
+    height: 20px;
+    width: 20px;
+    cursor: pointer;
+}
+
+.stocklist .header ul li img:hover {
+    opacity: 0.8;
+}
+
+.stocklist .footer {
+    height: 30px;
+    line-height: 30px;
+    background-color: #f3f3f3;
+    padding-left: 10px;
+    font-weight: 700;
+    color: #0d6efd;
+}
+
+.stocklist .content {
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
+    flex: 1;
+    overflow: hidden;
+}
+
+
+/* 搜索面板 */
+
+.search-show {
+    display: flex;
+    border-right: 1px solid #f3f3f3;
+    justify-content: space-between;
+}
+
+.search-hide {
+    display: none;
+}
+
+.search-input {
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 3px 5px 3px 5px;
+    padding: 0px 5px 0px 5px;
+    height: 25px;
+}
+
+.search-input:focus {
+    border: 1px solid #0d6efd;
+}
+
+.search-input input {
+    margin-right: 10px;
+    border: none;
+    height: 25px;
+    flex: 1;
+    height: 100%;
+}
+
+.search-input img {
+    margin-top: 5px;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.search-input img:hover {
+    opacity: 0.8;
+}
+
+.search-show .menu ul li {
+    font-family: "dawnquant";
+    line-height: 31px;
+    margin-right: 5px;
+    float: right;
+    cursor: pointer;
+    color: red;
+    font-weight: 700;
+}
+
+.search-show .menu ul li:hover {
+    opacity: 0.7;
+}
+
+
+/* 表头表格 */
+
+.stocklist-table-column-wrap {
+    background-color: #f4f4f4;
+}
+
+.stocklist-table-column {
+    /* table-layout: fixed; */
+    height: 25px;
+    border-collapse: collapse;
+}
+
+.stocklist-table-column thead tr {
+    background-color: #f4f4f4;
+    text-align: left;
+}
+
+.stocklist-table-column thead tr th {
+    position: relative;
+    text-align: left;
+    border: 1px solid #dddddd;
+    border-top: none;
+    border-bottom: none;
+    padding: 3px 3px;
+    cursor: default;
+}
+
+.stocklist-table-column thead tr th:first-child {
+    border-left: none;
+    width: 40px;
+}
+
+.stocklist-table-column thead tr th:nth-child(2) {
+    width: 65px;
+}
+
+.stocklist-table-column thead tr th:nth-child(3) {
+    width: 75px;
+}
+
+.stocklist-table-column thead tr th:nth-child(4) {
+    width: 107px;
+}
+
+.stocklist-table-column thead tr th:nth-child(5) {
+    width: 80px;
+}
+
+.stocklist-table-column thead tr th:hover {
+    background-color: #e5f1fb;
+}
+
+.stocklist-table-column .header-col-asc::after {
+    position: absolute;
+    top: 8px;
+    right: 5px;
+    font-family: 'dawnquant';
+    content: "\e661";
+    opacity: 0.9;
+    font-weight: 300;
+}
+
+.stocklist-table-column .header-col-desc::after {
+    position: absolute;
+    top: 8px;
+    right: 5px;
+    font-family: 'dawnquant';
+    content: "\e65f";
+    opacity: 0.9;
+    /* color: #0d6efd; */
+    font-weight: 300;
+}
+
+.stocklist-table-wrap {
+    flex: 1;
+    overflow-y: scroll;
+}
+
+
+/* 表格主体 */
+
+.stocklist-table {
+    text-align: center;
+    border: 0px;
+    border-collapse: collapse;
+    /* font-size: 0.9em; */
+    /* height: 100%; */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.stocklist-table th,
+.stocklist-table td {
+    padding: 3px 3px;
+    border: 1px solid #dddddd;
+}
+
+.stocklist-table td:first-child {
+    border-left: none;
+    text-align: right;
+    width: 40px;
+}
+
+.stocklist-table td:nth-child(2) {
+    width: 65px;
+}
+
+.stocklist-table td:nth-child(3) {
+    width: 75px;
+}
+
+.stocklist-table td:nth-child(4) {
+    width: 100px;
+}
+
+.stocklist-table td:nth-child(5) {
+    width: 80px;
+}
+
+.stocklist-table td:nth-child(4) span {
+    text-align: left;
+    display: inline-block;
+    vertical-align: middle;
+    width: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.stocklist-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+    cursor: default;
+}
+
+.stocklist-table tbody tr.active-row {
+    font-weight: bold;
+    color: #0d6efd;
+    background-color: #cce8ff;
+}

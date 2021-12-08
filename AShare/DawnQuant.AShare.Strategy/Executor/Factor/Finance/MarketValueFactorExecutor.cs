@@ -39,19 +39,6 @@ namespace DawnQuant.AShare.Strategy.Executor.Factor
         {
             MarketValueFactorExecutorParameter p = (MarketValueFactorExecutorParameter)Parameter;
             List<string> meet = new List<string>();
-            DateTime adt = DateTime.Now.Date;
-            if (p.TradeDate == null)
-            {
-                //获取最新交易日期
-                adt = LatestTradingDateUtil.GetLatestTradingDate(_tcRepository, _stdrFunc, _bsinfoRepository);
-            }
-            else
-            {
-                adt = p.TradeDate.Value.Date;
-            }
-            //检测数据是否已经更新
-
-
 
             if (tsCodes != null && tsCodes.Count > 0)
             {
@@ -60,7 +47,7 @@ namespace DawnQuant.AShare.Strategy.Executor.Factor
                     IStockDailyIndicatorRepository repository = _sdirFunc(tscode);
 
                     //最新市值
-                    var indicator = repository.Entities.Where(p => p.TradeDate == adt)
+                    var indicator = repository.Entities.OrderByDescending(p => p.TradeDate)
                       .FirstOrDefault();
 
                     if (indicator != null)

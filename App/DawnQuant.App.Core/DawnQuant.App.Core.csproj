@@ -1,0 +1,70 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\temp\**" />
+    <Content Remove="wwwroot\temp\**" />
+    <EmbeddedResource Remove="wwwroot\temp\**" />
+    <None Remove="wwwroot\temp\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="ViewModels\AShare\SelfSelStock\SelfSelStockContainerViewModel.cs" />
+    <Compile Remove="ViewModels\AShare\SelfSelStock\SelfSelStockContentViewModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\images\loadsplash.gif" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.19.1" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.40.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.42.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="IdentityModel" Version="5.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.0" />
+    <PackageReference Include="Quartz" Version="3.3.3" />
+    <PackageReference Include="TALib.NETCore" Version="0.4.4" />
+    <PackageReference Include="TextCopy" Version="4.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\AShare\Strategy\Executor\SelectScope\Index\" />
+    <Folder Include="Models\AShare\Strategy\Executor\SelectScope\MarketType\" />
+    <Folder Include="ViewModels\AShare\Setting\" />
+    <Folder Include="Views\Common\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\DawnQuant.AMConverter\DawnQuant.AMConverter.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\DawnQuant.Passport\DawnQuant.Passport.csproj" />
+    <ProjectReference Include="..\..\ProtosApi\DawnQuant.AShare.Api\DawnQuant.AShare.Api.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="wwwroot\images\board-bak.jpg" />
+    <Resource Include="wwwroot\images\loadsplash.gif" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\css\app.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

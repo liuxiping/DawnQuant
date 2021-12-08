@@ -19,6 +19,7 @@ message SelfSelectStockDto{
          google.protobuf.Timestamp CreateTime=8 ;
 }
 
+
 message SelfSelectStockCategoryDto{
      int64 Id=1;
      int64 UserId =2;
@@ -26,8 +27,53 @@ message SelfSelectStockCategoryDto{
      string Name =4;
      string  Desc =5;
      bool IsGroupByIndustry=6;
-     repeated SelfSelectStockDto SelfSelectStocks=7;
-     google.protobuf.Timestamp CreateTime=8 ;
+     int32 StockSortFiled=7;
+     repeated SelfSelectStockDto SelfSelectStocks=8;
+     google.protobuf.Timestamp CreateTime=9 ;
+}
+
+message BellwetherStockCategoryDto{
+     int64 Id=1;
+     int64 UserId =2;
+     int32 SortNum =3;
+     string Name =4;
+     string  Desc =5;
+     repeated BellwetherStockDto BellwetherStocks=6;
+     google.protobuf.Timestamp CreateTime=7 ;
+}
+
+message BellwetherStockDto{
+         int64 Id =1;
+         string TSCode =2;
+         int64 UserId =3;
+         int64 CategoryId =4;
+         string Name =5;
+         int32 SortNum =6;
+         google.protobuf.Timestamp CreateTime=7 ;
+
+}
+
+
+message SubjectAndHotStockDto{
+         int64 Id =1;
+         string TSCode =2;
+         int64 UserId =3;
+         int64 CategoryId =4;
+         string Name =5;
+         string Industry =6;
+         int32 SortNum =7;
+         google.protobuf.Timestamp CreateTime=8 ;
+}
+
+
+message SubjectAndHotStockCategoryDto{
+     int64 Id=1;
+     int64 UserId =2;
+     int32 SortNum =3;
+     string Name =4;
+     string  Desc =5;
+     repeated SubjectAndHotStockDto SubjectAndHotStocks=6;
+     google.protobuf.Timestamp CreateTime=7 ;
 }
 
 message StockStrategyDto{
@@ -50,4 +96,13 @@ message StockStrategyCategoryDto{
      string Desc =5;
      repeated StockStrategyDto  StockStrategies=6;
      google.protobuf.Timestamp CreateTime=7 ;
+}
+
+
+message SettingDto {
+
+     int64 Id=1;
+     int64 UserId =2;
+     string Key =3;
+     string Content =4;
 }

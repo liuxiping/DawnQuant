@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>disable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="wwwroot\temp\**" />
+	  <Content Remove="wwwroot\temp\**" />
+	  <EmbeddedResource Remove="wwwroot\temp\**" />
+	  <None Remove="wwwroot\temp\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<SupportedPlatform Include="browser" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="DynamicDns.TencentCloud" Version="1.0.1" />
+		<PackageReference Include="Google.Protobuf" Version="3.19.1" />
+		<PackageReference Include="Grpc.Net.Client" Version="2.40.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.42.0">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="HtmlAgilityPack" Version="1.11.38" />
+		<PackageReference Include="IdentityModel" Version="5.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.0" />
+		<PackageReference Include="Quartz" Version="3.3.3" />
+		<PackageReference Include="TuShareHttpSDKLibrary" Version="1.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Infrastructure\DawnQuant.Passport\DawnQuant.Passport.csproj" />
+	  <ProjectReference Include="..\..\ProtosApi\DawnQuant.AShare.Api\DawnQuant.AShare.Api.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\Images\" />
+	</ItemGroup>
+
+</Project>

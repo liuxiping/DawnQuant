@@ -33,7 +33,13 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
 
         public DbSet<BasicStockInfo > BasicStockInfos { get; set; }
 
-        public DbSet<StockFormerName> StockFormerNames { get; set; }
+  
+        //股东人数
+        public DbSet<HolderNumber> HolderNumbers { get; set; }
+
+        //十大流通股
+        public DbSet<Top10FloatHolder> Top10FloatHolders { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

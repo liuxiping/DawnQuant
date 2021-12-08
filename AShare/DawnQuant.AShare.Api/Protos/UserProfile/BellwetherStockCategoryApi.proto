@@ -1,0 +1,56 @@
+syntax = "proto3";
+import "Protos/UserProfile/Common.proto";
+import "google/protobuf/empty.proto";
+option csharp_namespace = "DawnQuant.AShare.Api.UserProfile";
+
+package DawnQuant.AShare.Api.UserProfile;
+
+
+//龙头股分类
+service BellwetherStockCategoryApi
+{
+//获取龙头股分类
+  rpc GetBellwetherStockCategoriesByUser(GetBellwetherStockCategoriesByUserRequest) returns (GetBellwetherStockCategoriesByUserResponse);
+
+  //保存龙头股分类
+  rpc SaveBellwetherStockCategories(SaveBellwetherStockCategoriesRequest) returns (SaveBellwetherStockCategoriesResponse);
+
+  //删除龙头股分类
+  rpc DelBellwetherStockCategory(DelBellwetherStockCategoryRequest) returns (google.protobuf.Empty);
+}
+
+message GetBellwetherStockCategoriesByUserRequest
+{
+    int64 UserId=1;
+}
+
+message GetBellwetherStockCategoriesByUserResponse
+{
+     repeated BellwetherStockCategoryDto Entities=1;
+}
+
+message SaveBellwetherStockCategoriesRequest
+{
+repeated BellwetherStockCategoryDto Entities=1;
+}
+
+message SaveBellwetherStockCategoriesResponse
+{
+repeated BellwetherStockCategoryDto Entities=1;
+}
+
+
+message DelBellwetherStockCategoryRequest
+{
+    int64  CategoryId=1;
+}
+
+
+
+
+
+
+
+
+
+

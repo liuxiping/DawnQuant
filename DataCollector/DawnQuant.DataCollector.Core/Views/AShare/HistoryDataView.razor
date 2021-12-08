@@ -1,0 +1,50 @@
+﻿    <div id="historydata">
+        <div id="historydata-header">
+            <table >
+                <tbody>
+                    <tr>
+                        <td >沪深股市基本数据采集</td>
+                        <td > <button @onclick="ClearMessage" class="btn-blue">清空日志</button></td>
+                    </tr>
+                    <tr>
+                        <td  colspan=2> @ViewModel.IndustryProgress</td>
+                    </tr>
+                    <tr>
+                        <td  colspan=2>@ViewModel.DailyTradeDataProgress</td>
+                    </tr>
+                    <tr>
+                        <td  colspan=2>@ViewModel.StockDailyIndicatorProgress</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="historydata-log">
+            <textarea value="@ViewModel.Message"  readonly>
+            </textarea>
+        </div>
+        <div>
+            <div>
+                <button @onclick="CollectTC"  disabled="@ViewModel.IsCollectTradingCalendar" class="btn-blue">采集交易日历</button>
+                <button @onclick="CollectCompany" disabled="@ViewModel.IsCollectCompany"class="btn-blue">采集所有公司基本信息</button>
+                <button @onclick="CollectBSInfo"   disabled="@ViewModel.IsCollectBasicStockInfo"  class="btn-blue">采集所有股票基本信息</button>
+
+            </div>
+        </div>
+        <div>
+            <div>
+             <button @onclick="RestoreCollectIndustry" disabled="@ViewModel.IsRestoreIndustry" class="btn-green">采集行业分类(继续)</button>
+             <button @onclick="CollectIndustry" disabled="@ViewModel.IsCollectIndustry" class="btn-green">采集行业分类</button>
+            </div>
+        </div>
+        <div>
+            <button @onclick="CalculateAllAdjustFactor" disabled="@ViewModel.IsCalculateAllAdjustFactor" class="btn-orange">计算复权因子</button>
+            <button @onclick="RestoreDTD" disabled="@ViewModel.IsRestoreDailyStockTradeData" class="btn-orange">采集日线数据(继续)</button>
+            <button @onclick="CollectDTD" disabled="@ViewModel.IsCollectDailyStockTradeData" class="btn-orange">采集日线数据</button>
+
+        </div>
+        <div>
+           <button @onclick="RestoreDI"  disabled="@ViewModel.IsRestoreStockDailyIndicator" class="btn-purple">采集每日指标(继续)</button>
+            <button @onclick="CollectDI"  disabled="@ViewModel.IsCollectStockDailyIndicator" class="btn-purple">采集每日指标</button>
+        </div>
+    </div>
+

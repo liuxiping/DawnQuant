@@ -1,0 +1,54 @@
+syntax = "proto3";
+import "Protos/UserProfile/Common.proto";
+import "google/protobuf/empty.proto";
+option csharp_namespace = "DawnQuant.AShare.Api.UserProfile";
+
+package DawnQuant.AShare.Api.UserProfile;
+
+
+//股票基本信息服务.
+service SubjectAndHotStockCategoryApi
+{
+  
+//获取所有自定义分类
+  rpc GetSubjectAndHotStockCategoriesByUser(GetSubjectAndHotStockCategoriesByUserRequest) returns (GetSubjectAndHotStockCategoriesByUserResponse);
+  //保存自定义分类
+  rpc SaveSubjectAndHotStockCategories(SaveSubjectAndHotStockCategoriesRequest) returns (SaveSubjectAndHotStockCategoriesResponse);
+  rpc DelSubjectAndHotStockCategory(DelSubjectAndHotStockCategoryRequest) returns (google.protobuf.Empty);
+}
+
+message GetSubjectAndHotStockCategoriesByUserRequest
+{
+    int64 UserId=1;
+}
+
+message GetSubjectAndHotStockCategoriesByUserResponse
+{
+     repeated SubjectAndHotStockCategoryDto Entities=1;
+}
+
+message SaveSubjectAndHotStockCategoriesRequest
+{
+repeated SubjectAndHotStockCategoryDto Entities=1;
+}
+
+message SaveSubjectAndHotStockCategoriesResponse
+{
+repeated SubjectAndHotStockCategoryDto Entities=1;
+}
+
+
+message DelSubjectAndHotStockCategoryRequest
+{
+    int64  CategoryId=1;
+}
+
+
+
+
+
+
+
+
+
+

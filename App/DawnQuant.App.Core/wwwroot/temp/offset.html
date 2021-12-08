@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+        }
+        
+        .father {
+            position: relative;
+            margin: 100px;
+            height: 300px;
+            width: 300px;
+            background-color: pink;
+            /* border: 1px solid blue; */
+        }
+        
+        .son {
+            height: 100px;
+            width: 100px;
+            margin-top: 45px;
+            margin-left: 45px;
+            background-color: purple;
+        }
+        
+        .w {
+            width: 200px;
+            height: 200px;
+            border: 1px solid #ffd;
+            padding: 10px;
+            margin: 50px;
+        }
+    </style>
+    <script>
+    </script>
+</head>
+
+<body>
+    <div class="father">
+        <div class="son"></div>
+    </div>
+    <div class="w"></div>
+    <script>
+        let f = document.querySelector(".father");
+        let s = document.querySelector(".son");
+        console.log(f.offsetTop);
+        console.log(f.offsetLeft);
+
+        console.log(s.offsetTop);
+        console.log(s.offsetLeft);
+
+        let w = document.querySelector(".w");
+        console.log(w.offsetWidth);
+        console.log(w.offsetHeight);
+    </script>
+</body>
+
+</html>

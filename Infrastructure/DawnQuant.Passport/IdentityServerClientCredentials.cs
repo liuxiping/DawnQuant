@@ -1,13 +1,9 @@
 ﻿using IdentityModel.Client;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DawnQuant.Passport
 {
@@ -31,10 +27,10 @@ namespace DawnQuant.Passport
 
 
 
-        string _identityUrl;
-        string _clientId;
-        string _clientSecret;
-        string _scope;
+        private readonly string _identityUrl;
+        private readonly string _clientId;
+        private readonly string _clientSecret;
+        private readonly string _scope;
 
         TokenResponse _tokenResponse;
         DateTime _acquisitionDateTime = DateTime.Now;
@@ -94,6 +90,10 @@ namespace DawnQuant.Passport
         }
 
         public long UserId => throw new NotImplementedException();
+
+        public string UserName => throw new NotImplementedException();
+
+        public string Error => throw new NotImplementedException();
     }
 }
 

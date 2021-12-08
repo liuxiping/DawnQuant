@@ -1,0 +1,8 @@
+<ItemGroup>
+		<Content Update="wwwroot\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+</ItemGroup>
+
+
+xcopy "$(ProjectDir)wwwroot" "$(ProjectDir)..\DawnQuant.DataCollector.WinFormHost\bin\Debug\net6.0-windows\wwwroot\" /y /e 

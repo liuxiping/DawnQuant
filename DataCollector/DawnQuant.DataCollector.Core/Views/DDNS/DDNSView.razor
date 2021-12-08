@@ -1,0 +1,19 @@
+﻿  <div id="ddns">
+        <div id="ddns-header">
+            <table>
+                <tbody>
+                    <tr>
+                        <td><span>动态DNS</span></td>
+                        <td><button @onclick="ClearMessage" class="btn-blue">清空日志</button></td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div id="ddns-log">
+            <textarea  value="@Message" readonly>
+            </textarea>
+        </div>
+
+    </div>
+

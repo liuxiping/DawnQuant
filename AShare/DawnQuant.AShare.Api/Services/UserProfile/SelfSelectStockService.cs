@@ -18,18 +18,22 @@ namespace DawnQuant.AShare.Api.UserProfile
     {
         private readonly ILogger<SelfSelectStockService> _logger;
         private readonly ISelfSelectStockRepository _selfSelectStockRepository;
+        private readonly ISelfSelectStockCategoryRepository _selfSelectStockCategoryRepository;
+
         private readonly IBasicStockInfoRepository _basicStockInfoRepository;
         private readonly IIndustryRepository _industryRepository;
         private readonly IMapper _mapper;
 
         public SelfSelectStockService(ILogger<SelfSelectStockService> logger, IMapper mapper,
         ISelfSelectStockRepository selfSelfSelStockItemRepository,
+        ISelfSelectStockCategoryRepository selfSelectStockCategoryRepository,
         IBasicStockInfoRepository basicStockInfoRepository,
          IIndustryRepository industryRepository)
         {
             _logger = logger;
             _mapper = mapper;
             _selfSelectStockRepository = selfSelfSelStockItemRepository;
+            _selfSelectStockCategoryRepository = selfSelectStockCategoryRepository;
             _basicStockInfoRepository = basicStockInfoRepository;
             _industryRepository = industryRepository;
         }
@@ -40,8 +44,28 @@ namespace DawnQuant.AShare.Api.UserProfile
             return Task.Run(() =>
             {
                 GetSelfSelectStocksByCategoryResponse response = new GetSelfSelectStocksByCategoryResponse();
-                var data = _selfSelectStockRepository.Entities.OrderByDescending(p => p.CreateTime).Where(p => p.CategoryId == request.CategoryId)
-               .Select(p => p);
+
+                //获取排序字段
+                var category = _selfSelectStockCategoryRepository.Entities.Where(p => p.Id == request.CategoryId).FirstOrDefault();
+
+                IQueryable<SelfSelectStock> data = null;
+
+                if (category != null)
+                {
+                    //加入时间
+                    if (category.StockSortFiled == 1)
+                    {
+                        data = _selfSelectStockRepository.Entities.OrderByDescending(p => p.CreateTime).Where(p => p.CategoryId == request.CategoryId)
+                                   .Select(p => p);
+                    }
+                    //行业
+                    else if (category.StockSortFiled == 2)
+                    {
+                        data = _selfSelectStockRepository.Entities.OrderByDescending(p => p.Industry).Where(p => p.CategoryId == request.CategoryId)
+                                   .Select(p => p);
+                    }
+
+                }
 
                 response.Entities.AddRange(_mapper.Map<IEnumerable<SelfSelectStockDto>>(data));
 
