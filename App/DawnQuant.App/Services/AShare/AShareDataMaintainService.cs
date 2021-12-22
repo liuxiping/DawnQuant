@@ -26,23 +26,49 @@ namespace DawnQuant.App.Services.AShare
         private readonly IMapper _mapper;
         private readonly SelfSelService _selfSelService;
 
+        private readonly BellwetherService _bellwetherService;
+        private readonly SubjectAndHotService _subjectAndHotService;
+
 
         public AShareDataMaintainService()
         {
             _grpcChannelSet = IOCUtil.Container.Resolve< GrpcChannelSet>();
             _passportProvider = IOCUtil.Container.Resolve<IPassportProvider>();
             _mapper = IOCUtil.Container.Resolve<IMapper>(); ;
-            _selfSelService = IOCUtil.Container.Resolve<SelfSelService>(); 
+            _selfSelService = IOCUtil.Container.Resolve<SelfSelService>();
+
+            _bellwetherService = IOCUtil.Container.Resolve<BellwetherService>();
+            _subjectAndHotService = IOCUtil.Container.Resolve<SubjectAndHotService>();
         }
 
+        /// <summary>
+        /// 下载进度事件
+        /// </summary>
+        public    event Action<string> DownLoadStockDataProgress;
+        protected void OnDownLoadStockDataProgress(string msg)
+        {
+            DownLoadStockDataProgress?.Invoke(msg);
+        }
 
         /// <summary>
         /// 下载股票相关数据
         /// </summary>
         public void DownLoadStockData()
         {
+            //自选股
             var items = _selfSelService.GetSelfSelectStocksByUser(_passportProvider.UserId);
             var tsCodes = items.Select(p => p.TSCode).ToList<string>();
+
+            //龙头股和题材热点
+            var bellwethers = _bellwetherService.GetBellwetherStocksByUser(_passportProvider.UserId);
+
+            var subjectAndHots= _subjectAndHotService.GetSubjectAndHotStocksByUser(_passportProvider.UserId);
+
+            tsCodes.AddRange(bellwethers.Select(p => p.TSCode));
+            tsCodes.AddRange(subjectAndHots.Select(p => p.TSCode));
+
+            tsCodes=tsCodes.Distinct().ToList();
+
             DownLoadStockData(tsCodes);
 
         }
@@ -50,6 +76,11 @@ namespace DawnQuant.App.Services.AShare
         public void DownLoadStockData(List<string> tsCodes)
         {
             tsCodes = tsCodes.Distinct().ToList();
+
+            int allCount=tsCodes.Count;
+            int completeCount = 0;
+            object lockObj=new object();
+
 
             //下载交易数据
             List<Task> tasks = new List<Task>();
@@ -64,6 +95,13 @@ namespace DawnQuant.App.Services.AShare
                     tasks.Add(Task.Run(() =>
                     {
                         DownLoadStockData(s);
+                        lock(lockObj)
+                        {
+                            ++completeCount;
+                            
+                        }
+                        string msg = $"正在下载交易数据，已经完成{completeCount}个，总共{allCount}个";
+                        OnDownLoadStockDataProgress(msg);
                     }));
                 }
             }
@@ -83,6 +121,13 @@ namespace DawnQuant.App.Services.AShare
                         foreach (var s in l)
                         {
                             DownLoadStockData(s);
+                            lock (lockObj)
+                            {
+                                ++completeCount;
+                            }
+                            
+                            string msg = $"正在下载交易数据，已经完成{completeCount}个，总共{allCount}个";
+                            OnDownLoadStockDataProgress(msg);
                         }
                     }));
                 }
@@ -302,6 +347,8 @@ namespace DawnQuant.App.Services.AShare
                 bw.Write(d.Volume);
                 bw.Write(d.Amount);
                 bw.Write(d.PreClose);
+                bw.Write(d.Turnover);
+                bw.Write(d.TurnoverFree);
                 bw.Write(d.AdjustFactor);
                 bw.Write(d.TradeDateTime.ToBinary());
               

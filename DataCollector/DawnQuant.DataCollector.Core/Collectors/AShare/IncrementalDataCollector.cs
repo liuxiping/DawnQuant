@@ -159,6 +159,7 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
                                 tradeData.Amount = e.GetProperty("amount").GetDouble()/1000;
                                 tradeData.Volume = e.GetProperty("volume").GetDouble()/100;
                                 tradeData.PreClose = double.Parse(e.GetProperty("settlement").GetString());
+                                tradeData.Turnover = e.GetProperty("turnoverratio").GetDouble();
 
                                 string symbol = e.GetProperty("symbol").GetString().ToUpper();
                                 string tsCode = symbol.Substring(2, 6)+"."+ symbol.Substring(0, 2);
@@ -438,6 +439,38 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
             finally
             {
                 channel?.Dispose();
+            }
+        }
+
+
+        /// <summary>
+        /// 同步换手率
+        /// </summary>
+        public async Task InSyncTurnoverAsync()
+        {
+            GrpcChannel channel = GrpcChannel.ForAddress(_apiUrl);
+            try
+            {
+                Metadata meta = new Metadata();
+                meta.AddAuthorization(_passportProvider.AccessToken);
+
+                var sclient = new StockTradeDataApi.StockTradeDataApiClient(channel);
+
+                using (var call = sclient.InSyncTurnover(new Empty(), meta))
+                {
+                    while (await call.ResponseStream.MoveNext())
+                    {
+                       var  msg = call.ResponseStream.Current.Message;
+                        _jobMessageUtil.OnInSyncTrunoverJobProgressChanged(msg);
+                    }
+                }
+            }
+            finally
+            {
+                if (channel != null)
+                {
+                    channel.Dispose();
+                }
             }
         }
     }

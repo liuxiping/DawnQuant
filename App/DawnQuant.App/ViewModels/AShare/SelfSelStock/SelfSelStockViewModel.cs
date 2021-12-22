@@ -195,6 +195,7 @@ namespace DawnQuant.App.ViewModels.AShare.SelfSelStock
                 {
                     model.VA = StockChartViewModel.VA;
                     model.KCycle = StockChartViewModel.KCycle;
+                    model.AdjustedState = StockChartViewModel.AdjustedState;
                 }
 
                 await model.InitPlotContext().ConfigureAwait(true);
@@ -261,6 +262,7 @@ namespace DawnQuant.App.ViewModels.AShare.SelfSelStock
         public DelegateCommand<SelfSelectStockCategory> MoveToOtherCategoryCommand { set; get; }
         private void MoveToOtherCategory(SelfSelectStockCategory category)
         {
+           
             SelfSelectStock curPlotStock = null;
 
             if (CurSelStock.TSCode == StockChartViewModel.PlotContext.TSCode)
@@ -276,7 +278,12 @@ namespace DawnQuant.App.ViewModels.AShare.SelfSelStock
                 return;
             }
 
-            SelfSelectStock stockItem = new SelfSelectStock
+            if (curPlotStock.CategoryId== category.Id)
+            {
+                return;
+            }
+
+             SelfSelectStock stockItem = new SelfSelectStock
             {
                 CategoryId = category.Id,
                 Industry = curPlotStock.Industry,
@@ -295,12 +302,16 @@ namespace DawnQuant.App.ViewModels.AShare.SelfSelStock
                  sstock = _selfSelService.SaveSelfSelectStock(stockItem);
             }).ConfigureAwait(true);
 
-            //删除股票
-            DelStockItem();
+
+            //当前移动的股票为自选股分类中的股票 则 删除股票
+            if (CurSelStock.TSCode == StockChartViewModel.PlotContext.TSCode)
+            {
+                DelStockItem();
+            }
 
 
             //更新当前
-            if (CurSelCategory.Id == category.Id)
+            if (CurSelCategory.Id == category.Id && sstock!=null)
             {
                 if (!Stocks.Any(p => p.Id == sstock.Id))
                 {
@@ -341,18 +352,17 @@ namespace DawnQuant.App.ViewModels.AShare.SelfSelStock
         public DelegateCommand DelStockItemCommand { set; get; }
         private async void DelStockItem()
         {
-            if(CurSelStock!=null)
+            if (CurSelStock != null)
             {
-                if (CurSelStock.TSCode == StockChartViewModel.PlotContext.TSCode)
+
+                await Task.Run(() =>
                 {
-                    await Task.Run(() =>
-                    {
-                        _selfSelService.DelSelfSelectStock(CurSelStock);
+                    _selfSelService.DelSelfSelectStock(CurSelStock);
 
-                    }).ConfigureAwait(true);
+                }).ConfigureAwait(true);
 
-                    Stocks.Remove(CurSelStock);
-                }
+                Stocks.Remove(CurSelStock);
+
             }
         }
 

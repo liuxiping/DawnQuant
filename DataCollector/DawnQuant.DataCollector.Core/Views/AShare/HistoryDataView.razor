@@ -12,8 +12,14 @@
                     <tr>
                         <td  colspan=2>@ViewModel.DailyTradeDataProgress</td>
                     </tr>
-                    <tr>
+                     <tr>
                         <td  colspan=2>@ViewModel.StockDailyIndicatorProgress</td>
+                    </tr>
+                    <tr>
+                        <td  colspan=2>@ViewModel.SyncTurnoverProgress</td>
+                    </tr>
+                     <tr>
+                        <td  colspan=2>@ViewModel.DataCleaningProgress</td>
                     </tr>
                 </tbody>
             </table>
@@ -38,13 +44,16 @@
         </div>
         <div>
             <button @onclick="CalculateAllAdjustFactor" disabled="@ViewModel.IsCalculateAllAdjustFactor" class="btn-orange">计算复权因子</button>
+            <button @onclick="DataCleaning" disabled="@ViewModel.IsDataCleaning" class="btn-orange">数据清洗</button>
             <button @onclick="RestoreDTD" disabled="@ViewModel.IsRestoreDailyStockTradeData" class="btn-orange">采集日线数据(继续)</button>
             <button @onclick="CollectDTD" disabled="@ViewModel.IsCollectDailyStockTradeData" class="btn-orange">采集日线数据</button>
 
         </div>
         <div>
+           <button @onclick="SyncTurnover"  disabled="@ViewModel.IsSyncTurnover" class="btn-purple">同步换手率数据</button>
            <button @onclick="RestoreDI"  disabled="@ViewModel.IsRestoreStockDailyIndicator" class="btn-purple">采集每日指标(继续)</button>
-            <button @onclick="CollectDI"  disabled="@ViewModel.IsCollectStockDailyIndicator" class="btn-purple">采集每日指标</button>
+           <button @onclick="CollectDI"  disabled="@ViewModel.IsCollectStockDailyIndicator" class="btn-purple">采集每日指标</button>
+
         </div>
     </div>
 

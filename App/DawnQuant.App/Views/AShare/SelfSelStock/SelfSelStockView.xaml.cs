@@ -174,14 +174,24 @@ namespace DawnQuant.App.Views.AShare.SelfSelStock
 
             }
 
-            if (e.Key == Key.W || e.Key == Key.Up)
+            if (e.Key == Key.W )
             {
                 _gcStockList.View.MovePrevRow();
             }
 
-            if (e.Key == Key.S || e.Key == Key.Down)
+            if (e.Key == Key.S )
             {
                 _gcStockList.View.MoveNextRow();
+            }
+
+            if(e.Key==Key.NumPad2||e.Key==Key.NumPad0)
+            {
+                _gcRelateStockList.View.MoveNextRow();
+            }
+
+            if (e.Key == Key.NumPad8 || e.Key == Key.NumPad1)
+            {
+                _gcRelateStockList.View.MovePrevRow();
             }
         }
 

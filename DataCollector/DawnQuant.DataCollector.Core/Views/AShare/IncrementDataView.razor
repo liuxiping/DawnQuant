@@ -14,6 +14,9 @@
                     <tr>
                         <td colspan=2>@ViewModel.StockDailyIndicatorProgress</td>
                     </tr>
+                     <tr>
+                        <td colspan=2>@ViewModel.InSyncTurnoverProgress</td>
+                    </tr>
                    
                 </tbody>
             </table>
@@ -24,6 +27,7 @@
         </div>
         <div>
             <div>
+                <button disabled="@ViewModel.IsInSyncTrunover" @onclick="StartInSyncTurnover"  class="btn-blue">开启增量同步换手率数据</button>
                 <button disabled="@ViewModel.IsStartInStockDailyIndicator" @onclick="StartIDITask" class="btn-blue">开启每日指标增量数据任务</button>
                 <button disabled="@ViewModel.IsStartInDailyTradeData" @onclick="StartIDTDTask"  class="btn-blue">开启日线增量数据任务</button>
                 <button disabled="@ViewModel.IsStartInDailyTradeDataFromSina" @onclick="StartIDTDFromSinaTask"  class="btn-blue">从新浪更新当日增量数据任务</button>

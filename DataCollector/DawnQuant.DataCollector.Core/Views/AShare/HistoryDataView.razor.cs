@@ -16,12 +16,15 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
             await base.OnInitializedAsync();
 
             //绑定事件
-            ViewModel.IndustryProgressChange += ViewModel_IndustryProgressChange;
-            ViewModel.DailyTradeDataProgressChange += ViewModel_DailyTradeDataProgressChange;
-            ViewModel.StockDailyIndicatorProgressChange += ViewModel_StockDailyIndicatorProgressChange;
+            ViewModel.IndustryProgressChange += UpdateNotifyMessage;
+            ViewModel.DailyTradeDataProgressChange += UpdateNotifyMessage;
+            ViewModel.StockDailyIndicatorProgressChange += UpdateNotifyMessage;
+            ViewModel.SyncTurnoverProgressChange += UpdateNotifyMessage;
+            ViewModel.DataCleaningProgressChange += UpdateNotifyMessage;
         }
 
-        private void ViewModel_StockDailyIndicatorProgressChange()
+
+        private void UpdateNotifyMessage()
         {
             InvokeAsync(() =>
             {
@@ -29,22 +32,8 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
             });
         }
 
-        private void ViewModel_DailyTradeDataProgressChange()
-        {
-            InvokeAsync(() =>
-            {
-                StateHasChanged();
-            });
-        }
 
-        private void ViewModel_IndustryProgressChange()
-        {
-            InvokeAsync(() =>
-            {
-                StateHasChanged();
-            });
-
-        }
+       
 
         [Inject]
         private HistoryDataViewModel ViewModel { get; set; }
@@ -55,6 +44,7 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
             ViewModel.DailyTradeDataProgress = "";
             ViewModel.IndustryProgress = "";
             ViewModel.StockDailyIndicatorProgress = "";
+            ViewModel.DataCleaningProgress = "";
         }
 
         private async void CollectBSInfo()
@@ -100,6 +90,15 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
             StateHasChanged();
         }
 
+        /// <summary>
+        /// 数据清洗
+        /// </summary>
+        private async void DataCleaning()
+        {
+            await ViewModel.DataCleaning();
+            StateHasChanged();
+        }
+
         private async void CalculateAllAdjustFactor()
         {
             await ViewModel.CalculateAllAdjustFactor();
@@ -116,6 +115,12 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
         private async void RestoreDI()
         {
             await ViewModel.RestoreDI();
+            StateHasChanged();
+        }
+
+        private async void SyncTurnover()
+        {
+            await ViewModel.SyncTurnover();
             StateHasChanged();
         }
     }

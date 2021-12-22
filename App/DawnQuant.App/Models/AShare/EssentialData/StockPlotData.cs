@@ -60,16 +60,37 @@ namespace DawnQuant.App.Models.AShare.EssentialData
         public double Amount { get; set; }
 
         /// <summary>
-        /// 涨幅
+        /// 涨幅 
         /// </summary>
-        public double Gain { get { return (Close - PreClose) / PreClose; } }
+        public double Gain { get { return (Close - PreClose) / (PreClose*100); } }
         /// <summary>
         /// 振幅
         /// </summary>
-        public double AM { get { return (High - Low) / PreClose; } }
+        public double AM { get { return (High - Low) / (PreClose*100); } }
 
 
         public bool IsRise { get { return Close>= Open; } }
+
+
+        /// <summary>
+        /// 换手率
+        /// </summary>
+        public double Turnover { get; set; }
+
+
+        public double ScaleDownTurnoverFree
+        {
+            get
+            {
+                return TurnoverFree / 10000;
+            }
+        }
+
+        /// <summary>
+        /// 换手率（自由流通股）
+        /// </summary>
+        public double TurnoverFree { get; set; }
+
 
         //均线
         public double MA5 { get; set; }
@@ -79,6 +100,26 @@ namespace DawnQuant.App.Models.AShare.EssentialData
         public double MA60 { get; set; }
         public double MA120 { get; set; }
         public double MA250 { get; set; }
+
+
+        //MACD
+        /// <summary>
+        /// 快线
+        /// </summary>
+        public double MACD { get; set; }
+
+        /// <summary>
+        /// 慢线
+        /// </summary>
+        public double MacdSignal { get; set; }
+
+
+        /// <summary>
+        /// 柱子
+        /// </summary>
+        public double MacdHist { get; set; }
+      
+
 
     }
 }

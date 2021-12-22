@@ -22,9 +22,9 @@
                     <ColumnDefinition Width="auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" x:Name="_spCategory" DataContext="{Binding Categories}" DataContextChanged="_spCategory_DataContextChanged">
-                    <ToggleButton Margin="3,3,10,3"  Padding="5,3,5,3" Name="btnDay"  IsChecked="True">自选1</ToggleButton>
+                    <!--<ToggleButton Margin="3,3,10,3"  Padding="5,3,5,3" Name="btnDay"  IsChecked="True">自选1</ToggleButton>
                     <ToggleButton Margin="0,3,10,3"  Padding="5,3,5,3" Name="btnWeek" >自选</ToggleButton>
-                    <ToggleButton Margin="0,3,10,3"  Padding="5,3,5,3" Name="btnWe1ek" >自选</ToggleButton>
+                    <ToggleButton Margin="0,3,10,3"  Padding="5,3,5,3" Name="btnWe1ek" >自选</ToggleButton>-->
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
                     <Button  Background="{Binding ElementName=_gcStockList,Path=Background}" ToolTip="分类管理" BorderThickness="0"  Padding="3"   VerticalAlignment="Center" Name="_btnCategoryMgr" 

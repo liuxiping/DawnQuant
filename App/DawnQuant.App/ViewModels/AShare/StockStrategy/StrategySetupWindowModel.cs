@@ -65,19 +65,26 @@ namespace DawnQuant.App.ViewModels.AShare.StockStrategy
 
             var scopeModel = new SelectScopeViewModel(instance?.SelectScopeInsDescriptors);
             var factorModel = new FactorViewModel(instance?.FactorInsDescriptors);
-            var basicInfoModel = new StrategyBasicInfoViewModel();
+
+            ScopeViewModel = scopeModel;
+            FactorViewModel = factorModel;
 
 
             if (_strategy != null)
             {
-                basicInfoModel.Name = _strategy.Name;
-                basicInfoModel.Desc = _strategy.Desc;
-                basicInfoModel.InitCategory(_strategy.CategoryId);
+                var basicInfoModel = new StrategyBasicInfoViewModel(
+                    new Tuple<string, string, long>(_strategy.Name, _strategy.Desc, _strategy.CategoryId));
+
+                BasicInfoViewModel = basicInfoModel;
+
+            }
+            else
+            {
+                BasicInfoViewModel=new StrategyBasicInfoViewModel(null);
             }
 
-            ScopeViewModel = scopeModel;
-            FactorViewModel = factorModel;
-            BasicInfoViewModel = basicInfoModel;
+           
+          
 
         }
 

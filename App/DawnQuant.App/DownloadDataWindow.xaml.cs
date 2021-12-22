@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using DawnQuant.App.Services.AShare;
 using DawnQuant.App.Utils;
+using DevExpress.Mvvm;
 using DevExpress.Xpf.Core;
 using System;
 using System.Collections.Generic;
@@ -26,11 +27,23 @@ namespace DawnQuant.App
     /// </summary>
     public partial class DownloadDataWindow : Window
     {
+        AShareDataMaintainService _aShareDataMaintainService;
         public DownloadDataWindow()
         {
             InitializeComponent();
             IsCreateFromLogin = true;
             IsDownloadAllData = false;
+
+            _aShareDataMaintainService = IOCUtil.Container.Resolve<AShareDataMaintainService>();
+            _aShareDataMaintainService.DownLoadStockDataProgress += _aShareDataMaintainService_DownLoadStockDataProgress;
+
+            DataContext = new DownloadDataWindowModel();
+
+        }
+
+        DownloadDataWindowModel Model
+        {
+            get { return (DownloadDataWindowModel)DataContext; }
         }
         private void _downloadDataWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -43,7 +56,7 @@ namespace DawnQuant.App
         /// <summary>
         /// 时候是登录窗体创建的
         /// </summary>
-        public bool  IsCreateFromLogin { get; set; }
+        public bool IsCreateFromLogin { get; set; }
 
         /// <summary>
         /// 时候是登录窗体创建的
@@ -52,10 +65,17 @@ namespace DawnQuant.App
 
         private async void _downloadDataWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            if (IsCreateFromLogin)
+            {
+                this.ShowInTaskbar = true;
+            }
+            else
+            {
+                this.ShowInTaskbar = false;
+            }
             await Task.Run(() =>
             {
                 //更新数据自选股数据
-                AShareDataMaintainService _aShareDataMaintainService = IOCUtil.Container.Resolve<AShareDataMaintainService>();
 
                 //删除数据
                 if (IsDownloadAllData)
@@ -65,7 +85,7 @@ namespace DawnQuant.App
                 }
 
                 _aShareDataMaintainService.DownLoadStockData();
-              
+
 
             }).ConfigureAwait(true);
 
@@ -74,14 +94,41 @@ namespace DawnQuant.App
                 var mainWindow = new MainWindow();
 
                 this.ShowInTaskbar = false;
-                Height = 0;
-                Width = 0;
                 Visibility = Visibility.Hidden;
                 mainWindow.Show();
             }
             Close();
+        }
+
+        private void _aShareDataMaintainService_DownLoadStockDataProgress(string msg)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                Model.Progress = msg;
+            });
+
+        }
+
+        private void _downloadDataWindow_Closed(object sender, EventArgs e)
+        {
+            _aShareDataMaintainService.DownLoadStockDataProgress -= _aShareDataMaintainService_DownLoadStockDataProgress;
+        }
+    }
 
 
+    public class DownloadDataWindowModel : ViewModelBase
+    {
+        string _progress = "正在下载交易数据,请稍后...";
+        public string Progress
+        {
+            get
+            {
+                return _progress;
+            }
+            set
+            {
+                SetProperty(ref _progress, value, nameof(Progress));
+            }
         }
     }
 }

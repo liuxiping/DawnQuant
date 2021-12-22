@@ -48,7 +48,7 @@ namespace DawnQuant.App.ViewModels.AShare.StrategyScheduledTask
         /// <summary>
         /// 加载任务计划列表和自选股列表
         /// </summary>
-        public async void LoadStrategyCategoriesAndSelectStockCategories()
+        public async Task LoadStrategyCategoriesAndSelectStockCategories()
         {
 
             ObservableCollection<StockStrategyCategory> stockStrategyCategories = null;
@@ -64,6 +64,8 @@ namespace DawnQuant.App.ViewModels.AShare.StrategyScheduledTask
 
             StockStrategyCategories = stockStrategyCategories;
             SelfSelectStockCategorys = selfSelectStockCategories;
+
+          
         }
 
         /// <summary>
@@ -416,9 +418,15 @@ namespace DawnQuant.App.ViewModels.AShare.StrategyScheduledTask
 
 
         public DelegateCommand RefreshCommand { set; get; }
-        private void  Refresh()
+        private async void  Refresh()
         {
-            LoadStrategyCategoriesAndSelectStockCategories();
+          await  LoadStrategyCategoriesAndSelectStockCategories();
+
+            if (CurSelStrategyScheduledTask != null)
+            {
+                CurSelStrategyScheduledTask = StrategyScheduledTasks
+                        .Where(p => p.Id == CurSelStrategyScheduledTask.Id).FirstOrDefault();
+            }
 
             UpdateStrategyScheduledTaskStatus();
         }

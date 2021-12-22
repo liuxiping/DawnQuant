@@ -69,7 +69,7 @@ namespace DawnQuant.App.Views.AShare.SubjectAndHot
             {
                 b.IsEnabled = true;
                 var textBlock = (TextBlock)((Button)b).Content;
-                textBlock.Text = "\ue61f";
+                textBlock.Text = "\ue7c4";
             }
 
         }

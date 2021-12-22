@@ -14,7 +14,7 @@ using System.Windows.Threading;
 
 namespace DawnQuant.App.ViewModels.AShare.Common
 {
-    public class StockChartViewModel: ViewModelBase
+    public class StockChartViewModel : ViewModelBase
     {
         /// <summary>
         /// 显示区域
@@ -29,17 +29,17 @@ namespace DawnQuant.App.ViewModels.AShare.Common
 
         public string TSCode { get; set; }
         public string StockName { get; set; }
+
+        public string Industry { get; set; }
         public KCycle KCycle { get; set; }
 
         //页面数据大小
-        int _tradeDataPageSize = 250;
+        int _tradeDataPageSize = 500;
 
         public StockChartViewModel()
         {
 
             _stockPlotDataService = IOCUtil.Container.Resolve<StockPlotDataService>();
-
-            _adjustedState = AdjustedState.Pre;
 
             #region Command Init
             ShowDayCycleCommand = new DelegateCommand(ShowDayCycle);
@@ -50,7 +50,7 @@ namespace DawnQuant.App.ViewModels.AShare.Common
             ShowM120CycleCommand = new DelegateCommand(ShowM120Cycle);
             ShowStockInfoCommand = new DelegateCommand(ShowStockInfo);
             #endregion
-            
+
         }
 
 
@@ -93,17 +93,39 @@ namespace DawnQuant.App.ViewModels.AShare.Common
             set { SetProperty(ref _plotContext, value, nameof(PlotContext)); }
         }
 
-        VisibleArea  _va =  VisibleArea.Chart;
+        VisibleArea _va = VisibleArea.Chart;
         public VisibleArea VA//显示区域
         {
             get { return _va; }
             set { SetProperty(ref _va, value, nameof(VA)); }
         }
-       
+
         public string F10Url
         {
-            get { return "http://basic.10jqka.com.cn/" +TSCode.Substring(0,6) + "/"; }
-          
+            get { return "http://basic.10jqka.com.cn/" + TSCode.Substring(0, 6) + "/"; }
+
+        }
+
+
+        IList<StockPlotData> _selectedStockItems;
+        public IList<StockPlotData> SelectedStockItems
+        {
+            set
+            {
+                if (SetProperty(ref _selectedStockItems, value, nameof(SelectedStockItems)))
+                {
+                    OnSelectedStockItemsChange();
+                }
+              
+            }
+            get {
+                return _selectedStockItems;
+            }
+        }
+
+        private void OnSelectedStockItemsChange()
+        {
+
         }
 
         //当前节点交易信息
@@ -113,6 +135,8 @@ namespace DawnQuant.App.ViewModels.AShare.Common
             set { SetProperty(ref _curSelStockInfo, value, nameof(CurSelStockInfo)); }
             get { return _curSelStockInfo; }
         }
+
+
 
         //复权信息
         AdjustedState   _adjustedState= AdjustedState.None;

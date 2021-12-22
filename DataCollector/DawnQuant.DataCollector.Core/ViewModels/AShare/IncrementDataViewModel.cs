@@ -21,6 +21,7 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
 
             _jobMessageUtil.DailyTradeDataJobProgressChanged += _jobMessageUtility_DailyTradeDataJobProgressChanged;
             _jobMessageUtil.StockDailyIndicatorJobProgressChanged += _jobMessageUtility_StockDailyIndicatorJobProgressChanged;
+            _jobMessageUtil.InSyncTrunoverJobProgressChanged += _jobMessageUtil_InSyncTrunoverJobProgressChanged;
 
             _jobMessageUtil.InDailyTradeDataFromSinaJobStarted += _jobMessageUtil_InDailyTradeDataFromSinaJobStarted;
             _jobMessageUtil.InDailyTradeDataFromSinaJobCompleted += _jobMessageUtil_InDailyTradeDataFromSinaJobCompleted;
@@ -30,6 +31,35 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
 
             _jobMessageUtil.InStockDailyIndicatorJobStarted += _jobMessageUtil_InStockDailyIndicatorJobStarted;
             _jobMessageUtil.InStockDailyIndicatorJobCompleted += _jobMessageUtil_InStockDailyIndicatorJobCompleted;
+
+
+            _jobMessageUtil.InSyncTrunoverJobStarted += _jobMessageUtil_InSyncTrunoverJobStarted;
+            _jobMessageUtil.InSyncTrunoverJobCompleted += _jobMessageUtil_InSyncTrunoverJobCompleted;
+        }
+
+        private void _jobMessageUtil_InSyncTrunoverJobProgressChanged(string msg)
+        {
+            InSyncTurnoverProgress = msg;
+            OnViewNeedUpdate();
+
+        }
+
+        private void _jobMessageUtil_InSyncTrunoverJobCompleted()
+        {
+            lock (this)
+            {
+                Message += $"同步换手率已成功完成，{DateTime.Now}\r\n";
+                OnViewNeedUpdate();
+            }
+        }
+
+        private void _jobMessageUtil_InSyncTrunoverJobStarted()
+        {
+            lock (this)
+            {
+                Message += $"开始同步换手率数据，{DateTime.Now}\r\n";
+                OnViewNeedUpdate();
+            }
         }
 
         private void _jobMessageUtil_InStockDailyIndicatorJobCompleted()
@@ -122,6 +152,8 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
         public bool IsStartInDailyTradeDataFromSina { set; get; } = false;
         public bool IsStartAllTask { set; get; } = false;
 
+        public bool IsInSyncTrunover { set; get; } = false;
+
 
         /// <summary>
         /// 运行时消息
@@ -134,6 +166,12 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
         /// 采集增量日线历史数据进度
         /// </summary>
         public string DailyTradeDataProgress { set; get; }
+
+
+        /// <summary>
+        /// 同步换手率
+        /// </summary>
+        public string InSyncTurnoverProgress { set; get; }
 
 
         /// <summary>
@@ -237,14 +275,41 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
                 StartIDITask();
             }
 
+            if (!IsInSyncTrunover)
+            {
+                StartInSyncTrunover();
+            }
+
             IsStartInDailyTradeDataFromSina = true;
             IsStartInDailyTradeData = true;
             IsStartInStockDailyIndicator = true;
+            IsInSyncTrunover = true;
+        }
+
+        public void StartInSyncTrunover()
+        {
+            IsInSyncTrunover = true;
+
+            //任务
+            IJobDetail job = JobBuilder.Create<InSyncTrunoverJob>()
+                .WithIdentity("InSyncTurnoverTaskCron").Build();
+            job.JobDataMap.Add(Constant.ServiceProvider, _serviceProvider);
+
+            ITrigger trigger = TriggerBuilder.Create().
+              WithCronSchedule(_collectorConfig.InSyncTurnoverTaskCron).StartNow().Build();
+
+            TaskUtil.Scheduler.ScheduleJob(job, trigger);
+            Message += $"增量同步换手率数据任务计划已经启动，{DateTime.Now.ToString()}\r\n";
+
+            SetIsStartAllTask();
         }
 
         private void SetIsStartAllTask()
         {
-            if (IsStartInDailyTradeDataFromSina && IsStartInDailyTradeData && IsStartInStockDailyIndicator)
+            if (IsStartInDailyTradeDataFromSina && 
+                IsStartInDailyTradeData &&
+                IsStartInStockDailyIndicator&&
+                IsInSyncTrunover )
             {
                 IsStartAllTask = true;
             }

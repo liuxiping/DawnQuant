@@ -4,8 +4,8 @@
     xmlns:gif="http://wpfanimatedgif.codeplex.com"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    x:Class="DawnQuant.App.DownloadDataWindow"  
-    Height="430" Width="650"   Padding="0"  Margin="0" ShowInTaskbar="False"
+    x:Class="DawnQuant.App.DownloadDataWindow"   Closed="_downloadDataWindow_Closed"
+    Height="430" Width="650"   Padding="0"  Margin="0" ShowInTaskbar="True"
     WindowStyle="None" AllowsTransparency="True" Name="_downloadDataWindow" 
     MouseDown="_downloadDataWindow_MouseDown" Loaded="_downloadDataWindow_Loaded"
     mc:Ignorable="d"   WindowStartupLocation="CenterScreen"
@@ -20,7 +20,7 @@
             </Grid.RowDefinitions>
             <Image Grid.RowSpan="4" Stretch="Fill"  gif:ImageBehavior.AnimatedSource="Assets/Images/loadsplash.gif"  Opacity="0.9"/>
             <StackPanel Margin="10" Grid.Row="3" Orientation="Horizontal">
-                <TextBlock FontSize="12" Foreground="White"> 正在更新交易数据,请稍后...</TextBlock>
+                <TextBlock FontSize="12" Foreground="White" Text="{Binding  Progress,  Mode=TwoWay}"> 正在下载交易数据,请稍后...</TextBlock>
             </StackPanel>
         </Grid>
     </Border>

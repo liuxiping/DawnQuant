@@ -19,7 +19,7 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition  ></RowDefinition>
         </Grid.RowDefinitions>
-        <dx:ThemedBorder x:Name="bMenu" BorderThickness="0,0,0,1">
+        <dx:ThemedBorder x:Name="_bMenu" BorderThickness="0,0,0,1">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>
@@ -55,13 +55,15 @@
                 <WebBrowser Name="_wbStockInfo"    />
             </Grid>
             <Grid  Grid.Row="1" Name="_gdChart" Visibility="{Binding VA , ConverterParameter=Chart, Converter={StaticResource vaConverter}}">
-                <dxc:ChartControl x:Name="fchart"     
+                <dxc:ChartControl x:Name="_fchart"    CustomDrawCrosshair="_fchart_CustomDrawCrosshair"
                               DataSource="{Binding Path=PlotContext.PlotDatas}" 
-                              AutoLayout="True"  SelectionMode="Multiple"
-                              BorderThickness="0"  
+                              AutoLayout="True"  SelectionMode="Multiple"  
+                              MouseLeftButtonUp="_fchart_MouseLeftButtonUp"
+                              BorderThickness="0"   
                               Padding="0">
                     <dxc:ChartControl.CrosshairOptions >
-                        <dxc:CrosshairOptions    
+                        <dxc:CrosshairOptions   
+                            SnapMode="NearestArgument" HighlightPoints="False"
                                           ShowOnlyInFocusedPane="False"
                                           LinesMode="Free"
                                           ShowValueLine="True"
@@ -74,7 +76,15 @@
                                  EnableAxisXNavigation="True"
                                  DependentAxesYRange="True"
                                  Margin="0,0,-1,0"
-                                 BorderThickness="0,1,0,0"                                 >
+                                 BorderThickness="0,1,0,0">
+                        <dxc:XYDiagram2D.SelectionTemplate>
+                            <DataTemplate>
+                                <Border BorderThickness="1"    BorderBrush="SkyBlue">
+                                    <Rectangle Opacity="0.2" Fill="SkyBlue"/>
+                                </Border>
+                            </DataTemplate>
+                        </dxc:XYDiagram2D.SelectionTemplate>
+
                         <dxmvvm:Interaction.Behaviors>
                         </dxmvvm:Interaction.Behaviors>
                         <dxc:XYDiagram2D.PaneLayout>
@@ -98,12 +108,12 @@
                                     <dxc:ScrollBarOptions Visible="False"/>
                                 </dxc:Pane.AxisXScrollBarOptions>
                             </dxc:Pane>
-                            <dxc:Pane x:Name="_macdPane"   Margin="0,0,0,0" >
+                            <dxc:Pane x:Name="_macdPane"    Margin="0,0,0,0" >
                                 <dxc:Pane.AxisXScrollBarOptions>
                                     <dxc:ScrollBarOptions Visible="True"/>
                                 </dxc:Pane.AxisXScrollBarOptions>
-
                             </dxc:Pane>
+
                         </dxc:XYDiagram2D.Panes>
                         <dxc:XYDiagram2D.AxisX>
                             <dxc:AxisX2D  GridLinesVisible="False"  Visible="True">
@@ -126,6 +136,8 @@
                                 <dxc:AxisX2D.VisibilityInPanes>
                                     <dxc:VisibilityInPane Pane="{Binding ElementName=defaultPane}" Visible="False"/>
                                     <dxc:VisibilityInPane Pane="{Binding ElementName=_volumePane}" Visible="False"/>
+                                    <dxc:VisibilityInPane Pane="{Binding ElementName=_hidePane}" Visible="False"/>
+
                                 </dxc:AxisX2D.VisibilityInPanes>
                             </dxc:AxisX2D>
                         </dxc:XYDiagram2D.AxisX>
@@ -144,7 +156,7 @@
                             </dxc:AxisY2D>
                         </dxc:XYDiagram2D.AxisY>
                         <dxc:XYDiagram2D.SecondaryAxesY>
-                            <dxc:SecondaryAxisY2D x:Name="volumeAxis"
+                            <dxc:SecondaryAxisY2D x:Name="_volumeAxis"
                                               Alignment="Near"
                                               Brush="Transparent">
                                 <dxc:SecondaryAxisY2D.CrosshairAxisLabelOptions>
@@ -154,7 +166,8 @@
                                     <dxc:AxisLabel TextPattern="{}{V:0,,}M"/>
                                 </dxc:SecondaryAxisY2D.Label>
                             </dxc:SecondaryAxisY2D>
-                            <dxc:SecondaryAxisY2D x:Name="macdAxis"
+
+                            <dxc:SecondaryAxisY2D x:Name="_macdAxis"
                                               Alignment="Near"
                                               Brush="Transparent">
                                 <dxc:SecondaryAxisY2D.CrosshairAxisLabelOptions>
@@ -164,12 +177,15 @@
                                     <dxc:AxisLabel TextPattern="{}{V:f2}"/>
                                 </dxc:SecondaryAxisY2D.Label>
                             </dxc:SecondaryAxisY2D>
+
+
+
                         </dxc:XYDiagram2D.SecondaryAxesY>
                         <dxc:CandleStickSeries2D  Name="_csChart" 
                             ArgumentScaleType="Qualitative"  Brush="Red"   
                                                   CandleWidth="0.75"  
                             DisplayName="{Binding Path=PlotContext.Name}" 
-                                            CrosshairLabelPattern="{}{S}:&#x0a;开盘: {OV:.###}&#x0a;收盘: {CV:.###}&#x0a;最高: {HV:.###}&#x0a;最低: {LV:.###}"
+                                            CrosshairLabelPattern="{}{S}&#x0a;开盘: {OV:.###}&#x0a;收盘: {CV:.###}&#x0a;最高: {HV:.###}&#x0a;最低: {LV:.###}"
                                              OpenValueDataMember="Open"
                                              LowValueDataMember="Low" 
                                              HighValueDataMember="High"
@@ -187,22 +203,22 @@
                                 <dxc:ReductionStockOptions Brush="Green"
                                                        dxc:CandleStickSeries2D.FillMode="AlwaysFilled"/>
                             </dxc:CandleStickSeries2D.ReductionOptions>
-                            <dxc:CandleStickSeries2D.Indicators>
+                            <!--<dxc:CandleStickSeries2D.Indicators>
 
-                                <dxc:MovingAverageConvergenceDivergence Pane="{Binding ElementName=_macdPane}"  
-                                                                         AxisY="{Binding ElementName=macdAxis}">
+                                <dxc:MovingAverageConvergenceDivergence   Pane="{Binding ElementName=_macdPane}"  
+                                                                        AxisY="{Binding ElementName=_macdAxis}">
                                 </dxc:MovingAverageConvergenceDivergence>
 
-                            </dxc:CandleStickSeries2D.Indicators>
+                            </dxc:CandleStickSeries2D.Indicators>-->
                         </dxc:CandleStickSeries2D>
                         <dxc:BarSideBySideSeries2D ArgumentScaleType="Qualitative"  Name="_bssVol"
                                                Pane="{Binding ElementName=_volumePane}"
-                                               AxisY="{Binding ElementName=volumeAxis}"
-                                               DisplayName="Vol:" CrosshairLabelPattern="{}成交量: {V:F2}"
+                                               AxisY="{Binding ElementName=_volumeAxis}"
+                                               DisplayName="Vol:" CrosshairLabelPattern="{}成交量: {V:F1}万"
                                                ArgumentDataMember="FormatedTradeDateTime"
                                                ValueDataMember="Volume"
                                                ColorDataMember="IsRise"
-                                               BarWidth="0.75"                                              >
+                                               BarWidth="0.75" >
                             <dxc:BarSideBySideSeries2D.Model>
                                 <dxc:BorderlessSimpleBar2DModel />
                             </dxc:BarSideBySideSeries2D.Model>
@@ -264,24 +280,139 @@
                         <dxc:SplineSeries2D ArgumentScaleType="Qualitative" 
                                             CrosshairEnabled="{Binding Path=PlotContext.ShowMA250}"
                                             CrosshairLabelPattern="{}MA250: {V:F2}"
-                                           Visible="{Binding Path=PlotContext.ShowMA250}"  Name="_ssMA250"
+                                            Visible="{Binding Path=PlotContext.ShowMA250}"  Name="_ssMA250"
                                             ArgumentDataMember="FormatedTradeDateTime" 
                                             ValueDataMember="MA250" Brush="Red"  >
                             <dxc:SplineSeries2D.LineStyle>
                                 <dxc:LineStyle Thickness="2"></dxc:LineStyle>
                             </dxc:SplineSeries2D.LineStyle>
                         </dxc:SplineSeries2D>
-                        
-                        <dxc:SplineSeries2D ArgumentScaleType="Qualitative" 
-                                            CrosshairEnabled="{Binding Path=PlotContext.ShowMA250}"
-                                            CrosshairLabelPattern="{}换手率: {V:F2}"
-                                            Visible="True"   Name="_turnoverRate" 
+
+                        <dxc:SplineSeries2D Name="_turnoverRate"  ArgumentScaleType="Qualitative" 
+                                            CrosshairLabelPattern="{}换手率: {V:P2}"
                                             ArgumentDataMember="FormatedTradeDateTime" 
-                                            ValueDataMember="MA250" Brush="Transparent"   >
+                                            ValueDataMember="ScaleDownTurnoverFree" 
+                                            Pane="{Binding ElementName=_macdPane}"
+                                            AxisY="{Binding ElementName=_macdAxis}"
+                                            Brush="Transparent"   >
                             <dxc:SplineSeries2D.LineStyle>
-                                <dxc:LineStyle Thickness="3" ></dxc:LineStyle>
+                                <dxc:LineStyle Thickness="1" ></dxc:LineStyle>
                             </dxc:SplineSeries2D.LineStyle>
+                            <dxc:SplineSeries2D.LegendMarkerTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Grid Width="12"  Height="12">
+                                            <TextBlock FontSize="12"   Foreground="#1296db"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center" 
+                                                       Text="&#xe629;"  
+                                                       FontFamily="pack://application:,,,/Assets/Fonts/#iconfont">
+                                            </TextBlock>
+                                        </Grid>
+                                        <TextBlock Text="{Binding Path=Text}" Margin="4,0,0,0" 
+                                    VerticalAlignment="Center" Width="55"/>
+                                    </StackPanel>
+                                </DataTemplate>
+
+                            </dxc:SplineSeries2D.LegendMarkerTemplate>
                         </dxc:SplineSeries2D>
+                        <dxc:SplineSeries2D ArgumentScaleType="Qualitative"  Name="_bssGain"
+                                               Pane="{Binding ElementName=_macdPane}"
+                                               AxisY="{Binding ElementName=_macdAxis}"
+                                               DisplayName="涨幅:"  IsHitTestVisible="False"
+                                               ArgumentDataMember="FormatedTradeDateTime"
+                                               ValueDataMember="Gain"  Brush="Transparent"  >
+                            <dxc:SplineSeries2D.LineStyle>
+                                <dxc:LineStyle Thickness="1" ></dxc:LineStyle>
+                            </dxc:SplineSeries2D.LineStyle>
+                            <dxc:SplineSeries2D.LegendMarkerTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Grid Width="12"  Height="12">
+                                            <TextBlock FontSize="12"   Foreground="{Binding MarkerBrush}"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center" 
+                                                       Text="&#xe797;" 
+                                                       FontFamily="pack://application:,,,/Assets/Fonts/#iconfont">
+                                            </TextBlock>
+                                        </Grid>
+                                        <TextBlock Text="{Binding Path=Text}" Margin="4,0,0,0" 
+                                    VerticalAlignment="Center" Width="55"/>
+                                    </StackPanel>
+                                </DataTemplate>
+
+                            </dxc:SplineSeries2D.LegendMarkerTemplate>
+
+                        </dxc:SplineSeries2D>
+                        <dxc:SplineSeries2D ArgumentScaleType="Qualitative"  Name="_bssAM"
+                                               Pane="{Binding ElementName=_macdPane}"
+                                               AxisY="{Binding ElementName=_macdAxis}"
+                                               DisplayName="振幅:"   IsHitTestVisible="False"
+                                               ArgumentDataMember="FormatedTradeDateTime"
+                                               ValueDataMember="AM"  Brush="Transparent" 
+                                           >
+                            <dxc:SplineSeries2D.LineStyle>
+                                <dxc:LineStyle Thickness="1" ></dxc:LineStyle>
+                            </dxc:SplineSeries2D.LineStyle>
+                            <dxc:SplineSeries2D.LegendMarkerTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Grid Width="12"  Height="12">
+                                            <TextBlock FontSize="12"   Foreground="Orange"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center" 
+                                                       Text="&#xe678;" 
+                                                       FontFamily="pack://application:,,,/Assets/Fonts/#iconfont">
+                                            </TextBlock>
+                                        </Grid>
+                                        <TextBlock Text="{Binding Path=Text}" Margin="4,0,0,0" 
+                                    VerticalAlignment="Center" Width="55"/>
+                                    </StackPanel>
+                                </DataTemplate>
+
+                            </dxc:SplineSeries2D.LegendMarkerTemplate>
+
+                        </dxc:SplineSeries2D>
+
+                        <dxc:SplineSeries2D ArgumentScaleType="Qualitative"  Name="_bssMacd"
+                                               Pane="{Binding ElementName=_macdPane}"
+                                               AxisY="{Binding ElementName=_macdAxis}"  CrosshairEnabled="False"
+                                               DisplayName="Macd 快线:"   IsHitTestVisible="False"
+                                               ArgumentDataMember="FormatedTradeDateTime"
+                                               ValueDataMember="MACD"  Brush="Black" >
+
+                            <dxc:SplineSeries2D.LineStyle>
+                                <dxc:LineStyle Thickness="1" ></dxc:LineStyle>
+                            </dxc:SplineSeries2D.LineStyle>
+
+                        </dxc:SplineSeries2D>
+                        <dxc:SplineSeries2D ArgumentScaleType="Qualitative"  Name="_bssMacdSignal"
+                                               Pane="{Binding ElementName=_macdPane}"
+                                               AxisY="{Binding ElementName=_macdAxis}"  CrosshairEnabled="False"
+                                               DisplayName="Macd 快线:"   IsHitTestVisible="False"
+                                               ArgumentDataMember="FormatedTradeDateTime"
+                                               ValueDataMember="MacdSignal"  Brush="DarkOrange" >
+
+                            <dxc:SplineSeries2D.LineStyle>
+                                <dxc:LineStyle Thickness="1" ></dxc:LineStyle>
+                            </dxc:SplineSeries2D.LineStyle>
+
+                        </dxc:SplineSeries2D>
+                        <dxc:BarSideBySideSeries2D ArgumentScaleType="Qualitative"  Name="_macdHist"
+                                               Pane="{Binding ElementName=_macdPane}"
+                                               AxisY="{Binding ElementName=_macdAxis}"
+                                               DisplayName="Macd 柱子:" CrosshairEnabled="False"
+                                               ArgumentDataMember="FormatedTradeDateTime"
+                                               ValueDataMember="MacdHist"
+                                               ColorDataMember="IsRise"
+                                               BarWidth="0.01" >
+                            <dxc:BarSideBySideSeries2D.Model>
+                                <dxc:BorderlessSimpleBar2DModel />
+                            </dxc:BarSideBySideSeries2D.Model>
+                            <dxc:BarSideBySideSeries2D.Colorizer>
+                                <lColorizer:MacdHistPlotColorizer></lColorizer:MacdHistPlotColorizer>
+                            </dxc:BarSideBySideSeries2D.Colorizer>
+                        </dxc:BarSideBySideSeries2D>
 
                     </dxc:XYDiagram2D>
                 </dxc:ChartControl>

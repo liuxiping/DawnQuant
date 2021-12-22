@@ -25,6 +25,14 @@ service StockTradeDataApi {
  //增量计算股票复权因子
  rpc CalculateInsAdjustFactor(CalculateInsAdjustFactorRequest) returns (stream CalculateInsAdjustFactorResponse);
 
+ //同步换手率指标
+ rpc SyncTurnover(google.protobuf.Empty) returns (stream SyncTurnoverResponse);
+
+  //增量同步换手率指标
+ rpc InSyncTurnover(google.protobuf.Empty) returns (stream InSyncTurnoverResponse);
+
+   //数据清洗
+ rpc DataCleaning(google.protobuf.Empty) returns (stream DataCleaningResponse);
 
 }
 
@@ -100,11 +108,17 @@ message StockTradeDataDto
         /// 成交额
          double Amount =7;
 
-        /// 交易时间
-         google.protobuf.Timestamp TradeDateTime =8;
+         double Turnover=8;
 
-         ///复权因子
-        double AdjustFactor =9;
+         double TurnoverFree=9;
+
+          ///复权因子
+         double AdjustFactor =10;
+
+        /// 交易时间
+         google.protobuf.Timestamp TradeDateTime =11;
+
+        
 }
 
 message CalculateInsAdjustFactorResponse
@@ -116,3 +130,20 @@ message CalculateAllAdjustFactorResponse
 {
     string Message=1;
 }
+
+message SyncTurnoverResponse
+{
+    string Message=1;
+}
+
+
+message InSyncTurnoverResponse
+{
+    string Message=1;
+}
+
+message DataCleaningResponse
+{
+    string Message=1;
+}
+

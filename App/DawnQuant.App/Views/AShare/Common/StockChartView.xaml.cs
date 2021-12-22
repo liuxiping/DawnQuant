@@ -20,6 +20,7 @@ using System.Windows.Shapes;
 using DawnQuant.App.Models.AShare.UserProfile;
 using DawnQuant.App.Models.AShare.EssentialData;
 
+
 namespace DawnQuant.App.Views.AShare.Common
 {
     /// <summary>
@@ -30,19 +31,22 @@ namespace DawnQuant.App.Views.AShare.Common
         public StockChartView()
         {
             InitializeComponent();
+
+            _fchart.AddHandler(ChartControl.MouseLeftButtonUpEvent,
+                new MouseButtonEventHandler(_fchart_MouseLeftButtonUp), true);
         }
 
-        public StockChartViewModel Model 
+        public StockChartViewModel Model
         {
             get { return (StockChartViewModel)DataContext; }
-            set { DataContext = value; } 
+            set { DataContext = value; }
         }
 
-     
+
         private void btnMenu_Click(object sender, RoutedEventArgs e)
         {
-           ToggleButton btnCur=(ToggleButton)sender;
-           foreach (var ctrl in _spMenu.Children)
+            ToggleButton btnCur = (ToggleButton)sender;
+            foreach (var ctrl in _spMenu.Children)
             {
                 ToggleButton btn = (ToggleButton)ctrl;
                 btn.IsChecked = false;
@@ -62,7 +66,7 @@ namespace DawnQuant.App.Views.AShare.Common
         private void NavigateToF10()
         {
 
-            if (Model!=null && !string.IsNullOrEmpty(Model.F10Url))
+            if (Model != null && !string.IsNullOrEmpty(Model.F10Url))
             {
                 _wbStockInfo.Navigate(Model.F10Url);
             }
@@ -121,10 +125,10 @@ namespace DawnQuant.App.Views.AShare.Common
         }
 
 
-        private void fchart_MouseMove(object sender, MouseEventArgs e)
+        private void _fchart_MouseMove(object sender, MouseEventArgs e)
         {
             // Obtain hit information under the test point.
-            ChartHitInfo hitInfo = fchart.CalcHitInfo(e.GetPosition(fchart));
+            ChartHitInfo hitInfo = _fchart.CalcHitInfo(e.GetPosition(_fchart));
             StringBuilder builder = new StringBuilder();
 
             //hitInfo.
@@ -158,7 +162,7 @@ namespace DawnQuant.App.Views.AShare.Common
                 builder.AppendLine("Value: " + hitInfo.SeriesPoint.Value);
             }
 
-          
+
         }
 
         #region 复权操作
@@ -194,6 +198,112 @@ namespace DawnQuant.App.Views.AShare.Common
                 ((MenuItem)item).IsChecked = false;
             }
         }
+
         #endregion
+
+        private void _fchart_CustomDrawCrosshair(object sender, CustomDrawCrosshairEventArgs e)
+        {
+            if (e.CrosshairElementGroups.Count != 0)
+            {
+                foreach (CrosshairElement crosshairElement in e.CrosshairElementGroups[0].CrosshairElements)
+                {
+                    if (crosshairElement != null)
+                    {
+                        if (crosshairElement.Series.Name == "_bssGain")
+                        {
+                            crosshairElement.LabelElement.Text = string.Format("涨幅：{0:0.00%}", crosshairElement.SeriesPoint.Value*100);
+
+                            if (crosshairElement.SeriesPoint.Value>=0)
+                            {
+                                crosshairElement.LabelElement.MarkerFill = Brushes.Red;
+                            }
+                            else
+                            {
+                                crosshairElement.LabelElement.MarkerFill = Brushes.Green;
+                            }
+                          
+
+                        }
+                        if (crosshairElement.Series.Name == "_bssAM")
+                        {
+                            crosshairElement.LabelElement.Text = string.Format("振幅：{0:0.00%}", crosshairElement.SeriesPoint.Value * 100);
+
+                        }
+                        if (crosshairElement.Series.Name == "_bssVol")
+                        {
+                         
+                            crosshairElement.LabelElement.Text = $"成交量：{crosshairElement.SeriesPoint.Value /10000:F1}万";
+
+                        }
+                        if (crosshairElement.Series.Name == "_turnoverRate")
+                        {
+                            crosshairElement.LabelElement.Text = $"换手率(实)： {crosshairElement.SeriesPoint.Value * 100:P2}";
+                        }
+                    }
+                }
+            }
+        }
+
+
+        StatisticsWindowView _statisticsWindowView = null;
+
+        /// <summary>
+        /// 统计功能
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _fchart_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl))
+            {
+              
+
+                if (_fchart.SelectedItems?.Count > 0)
+                {
+                    var selectedItems = new List<StockPlotData>();
+                  
+                    for(int i=0;i< _fchart.SelectedItems.Count; i++)
+                    {
+                        selectedItems.Add((StockPlotData)_fchart.SelectedItems[i]);
+                    }
+
+                    Point rp = Mouse.GetPosition(e.Source as FrameworkElement);
+                    Point sp = (e.Source as FrameworkElement).PointToScreen(rp);
+
+                    if(_statisticsWindowView!=null)
+                    {
+                        _statisticsWindowView.Close();
+                    }
+
+                     _statisticsWindowView  = new StatisticsWindowView();
+
+                    //准备数据
+
+                    StatisticsWindowViewModel m = new StatisticsWindowViewModel();
+
+                    m.Title = $"{Model.StockName}  个股K线区间统计";
+
+                    m.Start = selectedItems.First().FormatedTradeDateTime;
+                    m.End = selectedItems.Last().FormatedTradeDateTime;
+                    m.CycleCount = selectedItems.Count;
+
+                    m.FirstPrice = selectedItems.First().Close;
+                    m.EndPrice = selectedItems.Last().Close;
+
+                    m.MaxPrice = selectedItems.Max(p=>p.Close);
+                    m.MinPrice = selectedItems.Min(p => p.Close);
+
+                    m.Turnover = selectedItems.Sum(p=>p.Turnover)/100;
+                    m.TurnoverFree= selectedItems.Sum(p=>p.TurnoverFree)/100;
+
+                    _statisticsWindowView.Model = m;
+
+                    _statisticsWindowView.Left = sp.X;
+                    _statisticsWindowView.Top = sp.Y;
+
+                    _statisticsWindowView.Show();
+                }
+            }
+        }
     }
 }

@@ -9,21 +9,23 @@
 	</IsDailyExistSql>
 
     <CreateSql type="string">
-      CREATE TABLE `tablename` (
-      `TradeDateTime` datetime(6) NOT NULL,
-      `Open` double NOT NULL,
-      `Close` double NOT NULL,
-      `PreClose` double DEFAULT NULL,
-      `High` double NOT NULL,
-      `Low` double NOT NULL,
-      `Volume` double NOT NULL,
-      `Amount` double NOT NULL,
-      `AdjustFactor` double NOT NULL,
-      PRIMARY KEY (`TradeDateTime`),
-      KEY `indexname` (`TradeDateTime`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+		CREATE TABLE `tablename` (
+		`TradeDateTime` datetime(6) NOT NULL,
+		`Open` double NOT NULL,
+		`Close` double NOT NULL,
+		`PreClose` double DEFAULT NULL,
+		`High` double NOT NULL,
+		`Low` double NOT NULL,
+		`Volume` double NOT NULL,
+		`Amount` double NOT NULL,
+		`Turnover` double NOT NULL,
+		`TurnoverFree` double NOT NULL,
+		`AdjustFactor` double NOT NULL,
+		PRIMARY KEY (`TradeDateTime`),
+		KEY `indexname` (`TradeDateTime`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-    </CreateSql>
+	</CreateSql>
  
   </StockTradeDataSql>
 

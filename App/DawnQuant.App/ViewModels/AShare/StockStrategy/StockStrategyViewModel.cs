@@ -226,7 +226,7 @@ namespace DawnQuant.App.ViewModels.AShare.StockStrategy
         /// 添加到其他分类
         /// </summary>
         public DelegateCommand<SelfSelectStockCategory> MoveToOtherCategoryCommand { set; get; }
-        private void MoveToOtherCategory(SelfSelectStockCategory category)
+        private async void MoveToOtherCategory(SelfSelectStockCategory category)
         {
             SelfSelectStock curPlotStock = null;
 
@@ -251,8 +251,12 @@ namespace DawnQuant.App.ViewModels.AShare.StockStrategy
 
             };
 
-            var sstock = _selfSelService.SaveSelfSelectStock(stockItem);
-
+            SelfSelectStock sstock = null;
+            await Task.Run(() => 
+            {
+                sstock = _selfSelService.SaveSelfSelectStock(stockItem);
+            }).ConfigureAwait(true);
+           
             //更新当前
             if (!Stocks.Any(p => p.Id == sstock.Id))
             {

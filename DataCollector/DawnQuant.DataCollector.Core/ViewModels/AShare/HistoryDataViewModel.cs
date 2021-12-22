@@ -39,10 +39,24 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
             };
 
             _dailyStockTradeDataCollector = dailyStockTradeDataCollector;
-            _dailyStockTradeDataCollector.ProgressChanged += () =>
+            _dailyStockTradeDataCollector.DailyStockTradeDataJobProgressChanged += (msg) =>
             {
-                DailyTradeDataProgress = _dailyStockTradeDataCollector.Msg;
+                DailyTradeDataProgress = msg;
                 OnDailyTradeDataProgressChange();
+            };
+
+
+
+            _dailyStockTradeDataCollector.SyncTurnoverJobProgressChanged += (msg) =>
+              {
+                  SyncTurnoverProgress = msg;
+                  OnSyncTurnoverChangeChange();
+              };
+
+            _dailyStockTradeDataCollector.DataCleaningJobProgressChanged += (msg) =>
+            {
+                DataCleaningProgress = msg;
+                OnDataCleaningProgressChange();
             };
 
             _stockDailyIndicatorCollector = stockDailyIndicatorCollector;
@@ -53,17 +67,26 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
             };
         }
 
+       
+
 
         #region  采集消息通知
         public event Action IndustryProgressChange;
         public event Action StockDailyIndicatorProgressChange;
         public event Action DailyTradeDataProgressChange;
+        public event Action SyncTurnoverProgressChange;
+
+        public event Action DataCleaningProgressChange;
+
+        protected void OnSyncTurnoverChangeChange()
+        {
+            SyncTurnoverProgressChange?.Invoke();
+        }
 
         protected void OnIndustryProgressChange()
         {
             IndustryProgressChange?.Invoke();
         }
-
 
         protected void OnStockDailyIndicatorProgressChange()
         {
@@ -73,6 +96,11 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
         protected void OnDailyTradeDataProgressChange()
         {
             DailyTradeDataProgressChange?.Invoke();
+        }
+
+        protected void OnDataCleaningProgressChange()
+        {
+            DataCleaningProgressChange?.Invoke();
         }
         #endregion
 
@@ -85,12 +113,20 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
         public bool IsRestoreIndustry { get; set; } = false;
 
         public bool IsCollectDailyStockTradeData { get; set; } = false;
+
+       /// <summary>
+       /// 数据清理
+       /// </summary>
+        public bool IsDataCleaning { get; set; } = false;
         public bool IsRestoreDailyStockTradeData { get; set; } = false;
 
         public bool IsCollectStockDailyIndicator { get; set; } = false;
         public bool IsRestoreStockDailyIndicator { get; set; } = false;
 
         public bool IsCalculateAllAdjustFactor { get; set; } = false;
+
+
+        public bool IsSyncTurnover { get; set; } = false;
 
         /// <summary>
         /// 运行时消息
@@ -114,6 +150,10 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
         /// </summary>
 
         public string StockDailyIndicatorProgress { get; set; }
+
+        public string SyncTurnoverProgress { get; set; }
+
+        public string DataCleaningProgress { get; set; }
 
 
         /// <summary>
@@ -309,9 +349,9 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
 
             IsCollectDailyStockTradeData = true;
 
-            var t = Task.Run(async () =>
-            {
-                await _dailyStockTradeDataCollector.CollectHistoryDailyTradeDataAsync();
+            var t = Task.Run(async () => {
+
+               await _dailyStockTradeDataCollector.CollectHistoryDailyTradeDataAsync();
             });
             await t;
 
@@ -385,6 +425,31 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
 
         }
 
+
+        public async Task DataCleaning()
+        {
+            Message += $"开始数据清洗，{DateTime.Now.ToString()}\r\n";
+            IsDataCleaning = true;
+            var t = Task.Run(async () =>
+            {
+               await _dailyStockTradeDataCollector.DataCleaning();
+            });
+
+            await t;
+
+            if (t.Exception == null)
+            {
+                Message += $"数据清洗全部成功，{DateTime.Now.ToString()}\r\n";
+            }
+            else
+            {
+                Message += $"数据清洗过程中发生异常，{DateTime.Now.ToString()}\r\n";
+                Message += t.Exception.Message + "\r\n" + t.Exception.StackTrace + "\r\n";
+
+            }
+            IsDataCleaning = false;
+        }
+
         /// <summary>
         /// 每日指标
         /// </summary>
@@ -423,16 +488,16 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
             IsRestoreStockDailyIndicator = true;
 
             string rf = "data/stockdailyindicator.txt";
-            var tscodes=new List<string>();
+            var tscodes = new List<string>();
 
             if (File.Exists(rf))
             {
                 try
                 {
-                     tscodes = JsonSerializer.Deserialize<List<string>>(File.ReadAllText(rf));
+                    tscodes = JsonSerializer.Deserialize<List<string>>(File.ReadAllText(rf));
                 }
 
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Message += $"读取每日指标数据(继续)股票代码文件过程中发生异常，{DateTime.Now.ToString()}\r\n";
                     Message += e.Message + "\r\n" + e.StackTrace + "\r\n";
@@ -481,7 +546,7 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
             IsCalculateAllAdjustFactor = true;
             var t = Task.Run(async () =>
             {
-              await  _dailyStockTradeDataCollector.CalculateAllAdjustFactorAsync();
+                await _dailyStockTradeDataCollector.CalculateAllAdjustFactorAsync();
             });
             await t;
             IsCalculateAllAdjustFactor = false;
@@ -494,6 +559,33 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
                 Message += $"计算复权因子过程中发生异常，{DateTime.Now.ToString()}\r\n";
                 Message += t.Exception.Message + "\r\n" + t.Exception.StackTrace + "\r\n";
             }
+        }
+
+
+
+        public async Task SyncTurnover()
+        {
+            Message += $"开始同步换手率，{DateTime.Now.ToString()}\r\n";
+            IsSyncTurnover = true;
+
+            var t =   _dailyStockTradeDataCollector.SyncTurnoverAsync();
+
+            await t;
+
+            if (t.Exception == null)
+            {
+                Message += $"同步换手率数据全部成功，{DateTime.Now.ToString()}\r\n";
+            }
+            else
+            {
+                File.WriteAllText("data/stockdailyindicator.txt",
+                    JsonSerializer.Serialize<List<string>>(_stockDailyIndicatorCollector.UnCompleteStocks));
+
+                Message += $"同步换手率数据过程中发生异常，{DateTime.Now.ToString()}\r\n";
+                Message += t.Exception.Message + "\r\n" + t.Exception.StackTrace + "\r\n";
+
+            }
+            IsSyncTurnover = false;
         }
     }
 }

@@ -89,15 +89,15 @@ namespace DawnQuant.App.Services.AShare
                 var data = GetStockTradeData(tsCode, kCycle, totalSzie, adjustedState);
 
                 //真实跳过数据
-                int realTakeSize = data.Count() >= size ? data.Count() - size : 0;
+                int realSkipSize = data.Count() >= size ? data.Count() - size : 0;
 
-                spdata.PlotDatas = _imapper.Map<ObservableCollection<StockPlotData>>(data.Skip(realTakeSize).Take(size));
+                spdata.PlotDatas = _imapper.Map<ObservableCollection<StockPlotData>>(data.Skip(realSkipSize).Take(size));
 
                 #region 计算均线
                 if (spdata.ShowMA5)
                 {
                     int i = 0;
-                    foreach (var ma in TechnicalIndicatorUtil.SMA(data, 5).Skip(realTakeSize).Take(size))
+                    foreach (var ma in TechnicalIndicatorUtil.SMA(data, 5).Skip(realSkipSize).Take(size))
                     {
                         spdata.PlotDatas[i].MA5 = ma;
                         i++;
@@ -106,7 +106,7 @@ namespace DawnQuant.App.Services.AShare
                 if (spdata.ShowMA10)
                 {
                     int i = 0;
-                    foreach (var ma in TechnicalIndicatorUtil.SMA(data, 10).Skip(realTakeSize).Take(size))
+                    foreach (var ma in TechnicalIndicatorUtil.SMA(data, 10).Skip(realSkipSize).Take(size))
                     {
                         spdata.PlotDatas[i].MA10 = ma;
                         i++;
@@ -115,7 +115,7 @@ namespace DawnQuant.App.Services.AShare
                 if (spdata.ShowMA20)
                 {
                     int i = 0;
-                    foreach (var ma in TechnicalIndicatorUtil.SMA(data, 20).Skip(realTakeSize).Take(size))
+                    foreach (var ma in TechnicalIndicatorUtil.SMA(data, 20).Skip(realSkipSize).Take(size))
                     {
                         spdata.PlotDatas[i].MA20 = ma;
                         i++;
@@ -125,7 +125,7 @@ namespace DawnQuant.App.Services.AShare
                 if (spdata.ShowMA30)
                 {
                     int i = 0;
-                    foreach (var ma in TechnicalIndicatorUtil.SMA(data, 30).Skip(realTakeSize).Take(size))
+                    foreach (var ma in TechnicalIndicatorUtil.SMA(data, 30).Skip(realSkipSize).Take(size))
                     {
                         spdata.PlotDatas[i].MA30 = ma;
                         i++;
@@ -135,7 +135,7 @@ namespace DawnQuant.App.Services.AShare
                 if (spdata.ShowMA60)
                 {
                     int i = 0;
-                    foreach (var ma in TechnicalIndicatorUtil.SMA(data, 60).Skip(realTakeSize).Take(size))
+                    foreach (var ma in TechnicalIndicatorUtil.SMA(data, 60).Skip(realSkipSize).Take(size))
                     {
                         spdata.PlotDatas[i].MA60 = ma;
                         i++;
@@ -145,7 +145,7 @@ namespace DawnQuant.App.Services.AShare
                 if (spdata.ShowMA120)
                 {
                     int i = 0;
-                    foreach (var ma in TechnicalIndicatorUtil.SMA(data, 120).Skip(realTakeSize).Take(size))
+                    foreach (var ma in TechnicalIndicatorUtil.SMA(data, 120).Skip(realSkipSize).Take(size))
                     {
                         spdata.PlotDatas[i].MA120 = ma;
                         i++;
@@ -155,11 +155,24 @@ namespace DawnQuant.App.Services.AShare
                 if (spdata.ShowMA250)
                 {
                     int i = 0;
-                    foreach (var ma in TechnicalIndicatorUtil.SMA(data, 250).Skip(realTakeSize).Take(size))
+                    foreach (var ma in TechnicalIndicatorUtil.SMA(data, 250).Skip(realSkipSize).Take(size))
                     {
                         spdata.PlotDatas[i].MA250 = ma;
                         i++;
                     }
+                }
+                #endregion
+
+                #region  macd
+                var macd = TechnicalIndicatorUtil.MACD(data);
+                var m=macd.Macd.Skip(realSkipSize).Take(size).ToList();
+                var s = macd.MacdSignal.Skip(realSkipSize).Take(size).ToList();
+                var h = macd.MacdHist.Skip(realSkipSize).Take(size).ToList();
+                for (int i=0; i< spdata.PlotDatas.Count; i++)
+                {
+                    spdata.PlotDatas[i].MACD = m[i];
+                    spdata.PlotDatas[i].MacdSignal = s[i];
+                    spdata.PlotDatas[i].MacdHist = h[i];
                 }
                 #endregion
 
@@ -326,16 +339,16 @@ namespace DawnQuant.App.Services.AShare
                 BinaryReader br = new BinaryReader(fs);
 
                 //读取最后一日收盘价格
-                br.BaseStream.Seek(6*8, SeekOrigin.Begin);
+                br.BaseStream.Seek(6*10, SeekOrigin.Begin);
                 basePrice = br.ReadDouble();
 
                 //数据够 截取数据
-                if (br.BaseStream.Length >= 8 * 9 * totalSzie)
+                if (br.BaseStream.Length >= 8 * 11 * totalSzie)
                 {
 
                     //定位数据
                     br.BaseStream.Seek(0, SeekOrigin.End);
-                    br.BaseStream.Seek(-8 * 9 * totalSzie, SeekOrigin.End);
+                    br.BaseStream.Seek(-8 * 11 * totalSzie, SeekOrigin.End);
                 }
                 else
                 {
@@ -352,6 +365,8 @@ namespace DawnQuant.App.Services.AShare
                     d.Volume = br.ReadDouble();
                     d.Amount = br.ReadDouble();
                     d.PreClose = br.ReadDouble();
+                    d.Turnover = br.ReadDouble();
+                    d.TurnoverFree = br.ReadDouble();
                     d.AdjustFactor = br.ReadDouble();
                     d.TradeDateTime = DateTime.FromBinary(br.ReadInt64());
                     datas.Add(d);

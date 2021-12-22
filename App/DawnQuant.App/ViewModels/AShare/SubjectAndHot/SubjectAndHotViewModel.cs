@@ -21,12 +21,14 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
 
         private readonly SubjectAndHotService _subjectAndHotService;
         private readonly IPassportProvider _passportProvider;
+        private readonly AShareDataMaintainService _dataMaintainService;
 
 
         public SubjectAndHotViewModel()
         {
             _subjectAndHotService = IOCUtil.Container.Resolve<SubjectAndHotService>();
             _passportProvider = IOCUtil.Container.Resolve<IPassportProvider>();
+            _dataMaintainService = IOCUtil.Container.Resolve<AShareDataMaintainService>();
 
 
             DelStockItemCommand = new DelegateCommand(DelStockItem);
@@ -39,12 +41,13 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
             DeleteSubjectAndHotStockCategoryCommand = new DelegateCommand(DeleteSubjectAndHotStockCategory);
             DelStockItemCommand = new DelegateCommand(DelStockItem);
 
+            AddToCurSubjectAndHotCommand=new DelegateCommand(AddToCurSubjectAndHot);
+
             //初始化 加载题材热点分类数据
             Initialize();
         }
 
-        public Dispatcher Dispatcher { get; set; }
-
+      
         public void Initialize()
         {
             RefreshSubjectAndHotStockCategories();
@@ -53,9 +56,7 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
 
         public void RefreshSubjectAndHotStockCategories()
         {
-           
                 LoadCategories();
-          
         }
 
         /// <summary>
@@ -248,7 +249,8 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
                     StockName = stockItem.Name,
                     KCycle = KCycle.Day,
                     VA = StockChartViewModel.VisibleArea.Chart,
-                     AdjustedState = AdjustedState.None,
+                    AdjustedState = AdjustedState.None,
+                    Industry= stockItem.Industry,
                 };
                 //保存前一个数据选择状态
                 if (StockChartViewModel != null)
@@ -328,6 +330,40 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
         }
 
 
+        public DelegateCommand AddToCurSubjectAndHotCommand { set; get; }
+        private async void AddToCurSubjectAndHot()
+        {
+            if (StockChartViewModel != null)
+            {
+                if (Stocks == null || !Stocks.Any(p => p.TSCode == StockChartViewModel.TSCode))
+                {
+                    SubjectAndHotStock item = new SubjectAndHotStock();
+
+                    item.UserId = CurSelCategory.UserId;
+                    item.CategoryId = CurSelCategory.Id;
+                    item.TSCode = StockChartViewModel.TSCode;
+                    item.Name = StockChartViewModel.StockName;
+                    item.Industry = StockChartViewModel.Industry;
+                    item.CreateTime = DateTime.Now;
+
+                    //保存数据
+                    SubjectAndHotStock ssItem = null;
+                    await Task.Run(() =>
+                    {
+                        ssItem = _subjectAndHotService.SaveSubjectAndHotStock(item);
+                    }).ConfigureAwait(true);
+
+                    Stocks.Insert(0, ssItem);
+
+                    await Task.Run(() => {
+                        _dataMaintainService.DownLoadStockData(ssItem.TSCode);
+                    });
+                }
+            }
+
+        }
+
+
         public DelegateCommand CopyStockCodeCommand { set; get; }
         private void CopyStockCode()
         {
@@ -355,7 +391,6 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
                 TextCopy.ClipboardService.SetText(CurSelRelateStock.TSCode.Substring(0, 6));
             }
         }
-
 
         public DelegateCommand CopyRelateStockNameCommand { set; get; }
         private void CopyRelateStockName()

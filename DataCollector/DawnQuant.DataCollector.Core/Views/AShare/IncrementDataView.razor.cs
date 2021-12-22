@@ -36,6 +36,7 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
             ViewModel.Message = "";
             ViewModel.StockDailyIndicatorProgress = "";
             ViewModel.DailyTradeDataProgress = "";
+            ViewModel.InSyncTurnoverProgress = "";
         }
 
         private void StartIDTDFromSinaTask()
@@ -53,6 +54,11 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
             ViewModel.StartIDITask();
         }
 
+
+        private void StartInSyncTurnover()
+        {
+            ViewModel.StartInSyncTrunover();
+        }
         private void StartAllTask()
         {
             ViewModel.StartAllTask();

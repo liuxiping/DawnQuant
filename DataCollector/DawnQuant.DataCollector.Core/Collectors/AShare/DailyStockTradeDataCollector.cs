@@ -42,9 +42,12 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
         string _apiUrl;
         int _threadCount = 5;
 
-        public event Action ProgressChanged;
+        public event Action<string> DailyStockTradeDataJobProgressChanged;
 
-        public string Msg { get; set; }
+        public event Action<string> SyncTurnoverJobProgressChanged;
+
+        public event Action<string> DataCleaningJobProgressChanged;
+
         public List<string> UnCompleteStocks { get; set; }
 
         /// <summary>
@@ -54,6 +57,8 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
         /// <param name="startDate"></param>
         public async Task CollectHistoryDailyTradeDataAsync()
         {
+            string msg = "";
+
             List<string> alltscodes = new List<string>();
             List<string> completetscodes = new List<string>();
             GrpcChannel channel = GrpcChannel.ForAddress(_apiUrl);
@@ -96,8 +101,8 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
                                 completetscodes.Add(tscode);
                                 complete++;
                             }
-                            Msg = $"日线历史数据已经成功采集{complete}个股票，总共{allCount}个股票";
-                            OnProgressChanged();
+                             msg = $"日线历史数据已经成功采集{complete}个股票，总共{allCount}个股票";
+                            OnDailyStockTradeDataJobProgressChanged(msg);
                         }
                     });
 
@@ -105,25 +110,37 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
                     t.Start();
 
                 }
-
                 Task.WaitAll(tasks.ToArray());
 
-                //更新完交易数据 更新复权因子
-                Msg = $"日线历史数据已经成功采集{complete}个股票，总共{allCount}个股票。正在计算复权因子...";
-                OnProgressChanged();
+                msg = $"日线历史数据已经成功采集{complete}个股票，总共{allCount}个股票。正在数据清洗...";
+                OnDailyStockTradeDataJobProgressChanged(msg);
 
+                //数据清理
+                var dcclient = new StockTradeDataApi.StockTradeDataApiClient(channel);
+                using (var call = dcclient.DataCleaning(new Empty(), meta))
+                {
+                    while (await call.ResponseStream.MoveNext())
+                    {
+                        msg = call.ResponseStream.Current.Message;
+                        OnDataCleaningJobProgressChanged(msg);
+                    }
+                }
+
+                msg = $"日线历史数据已经成功采集{complete}个股票，总共{allCount}个股票，数据清洗已经完成。正在计算复权因子...";
+                OnDailyStockTradeDataJobProgressChanged(msg);
+
+                //更新完交易数据 更新复权因子
                 var sclient = new StockTradeDataApi.StockTradeDataApiClient(channel);
                 using (var call = sclient.CalculateAllAdjustFactor(new CalculateAllAdjustFactorRequest { KCycle = KCycleDto.Day }, meta))
                 {
                     while (await call.ResponseStream.MoveNext())
                     {
-                        Msg = call.ResponseStream.Current.Message;
-                        OnProgressChanged();
+                         msg = call.ResponseStream.Current.Message;
+                        OnDailyStockTradeDataJobProgressChanged(msg);
                     }
                 }
-
-                Msg = $"日线历史数据已经成功采集{complete}个股票，总共{allCount}个股票，更新复权因子已完成";
-                OnProgressChanged();
+                msg = $"日线历史数据已经成功采集{complete}个股票，总共{allCount}个股票，数据清洗已经完成，更新复权因子已完成";
+                OnDailyStockTradeDataJobProgressChanged(msg);
             }
             finally
             {
@@ -142,6 +159,7 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
         /// <param name="stocks"></param>
         public async Task CollectHistoryDailyTradeDataAsync(List<string> stocks)
         {
+            string msg = "";
             List<string> completetscodes = new List<string>();
             GrpcChannel channel = GrpcChannel.ForAddress(_apiUrl);
             try
@@ -174,8 +192,8 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
                                 completetscodes.Add(tscode);
                                 complete++;
                             }
-                            Msg = $"日线历史数据已经成功采集{complete}个股票，总共{allCount}个股票";
-                            OnProgressChanged();
+                            msg = $"日线历史数据已经成功采集{complete}个股票，总共{allCount}个股票";
+                            OnDailyStockTradeDataJobProgressChanged(msg);
 
                         }
                     });
@@ -187,8 +205,8 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
                 Task.WaitAll(tasks.ToArray());
 
                 //更新完交易数据 更新复权因子
-                Msg = $"日线历史数据已经成功采集{complete}个股票，总共{allCount}个股票，正在更新复权因子...";
-                OnProgressChanged();
+                msg = $"日线历史数据已经成功采集{complete}个股票，总共{allCount}个股票，正在更新复权因子...";
+                OnDailyStockTradeDataJobProgressChanged(msg);
                 Metadata meta = new Metadata();
                 meta.AddAuthorization(_passportProvider.AccessToken);
                 var sclient = new StockTradeDataApi.StockTradeDataApiClient(channel);
@@ -197,13 +215,13 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
                 {
                     while (await call.ResponseStream.MoveNext())
                     {
-                        Msg = call.ResponseStream.Current.Message;
-                        OnProgressChanged();
+                        msg = call.ResponseStream.Current.Message;
+                        OnDailyStockTradeDataJobProgressChanged(msg);
                     }
                 }
 
-                Msg = $"日线历史数据已经成功采集{complete}个股票，总共{allCount}个股票，更新复权因子已完成";
-                OnProgressChanged();
+                msg = $"日线历史数据已经成功采集{complete}个股票，总共{allCount}个股票，更新复权因子已完成";
+                OnDailyStockTradeDataJobProgressChanged(msg);
             }
             finally
             {
@@ -215,11 +233,27 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
             }
         }
 
-        protected void OnProgressChanged()
+        protected void OnDailyStockTradeDataJobProgressChanged(string msg)
         {
-            if (ProgressChanged != null)
+            if (DailyStockTradeDataJobProgressChanged != null)
             {
-                ProgressChanged();
+                DailyStockTradeDataJobProgressChanged(msg);
+            }
+        }
+
+        protected void OnDataCleaningJobProgressChanged(string msg)
+        {
+            if (DataCleaningJobProgressChanged != null)
+            {
+                DataCleaningJobProgressChanged(msg);
+            }
+        }
+
+        protected void OnSyncTurnoverJobProgressChanged(string msg)
+        {
+            if (SyncTurnoverJobProgressChanged != null)
+            {
+                SyncTurnoverJobProgressChanged(msg);
             }
         }
 
@@ -329,6 +363,7 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
         /// </summary>
         public async Task CalculateAllAdjustFactorAsync()
         {
+            string msg = "";
             GrpcChannel channel = GrpcChannel.ForAddress(_apiUrl);
             try
             {
@@ -341,10 +376,72 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
                 {
                     while (await call.ResponseStream.MoveNext())
                     {
-                        Msg = call.ResponseStream.Current.Message;
-                        OnProgressChanged();
+                        msg = call.ResponseStream.Current.Message;
+                        OnDailyStockTradeDataJobProgressChanged(msg);
                     }
 
+                }
+            }
+            finally
+            {
+                if (channel != null)
+                {
+                    channel.Dispose();
+                }
+            }
+        }
+
+
+        public async Task DataCleaning()
+        {
+            string msg = "";
+            GrpcChannel channel = GrpcChannel.ForAddress(_apiUrl);
+            try
+            {
+                Metadata meta = new Metadata();
+                meta.AddAuthorization(_passportProvider.AccessToken);
+
+                var sclient = new StockTradeDataApi.StockTradeDataApiClient(channel);
+
+                using (var call = sclient.DataCleaning(new Empty(), meta))
+                {
+                    while (await call.ResponseStream.MoveNext())
+                    {
+                        msg = call.ResponseStream.Current.Message;
+                        OnDataCleaningJobProgressChanged(msg);
+                    }
+                }
+            }
+            finally
+            {
+                if (channel != null)
+                {
+                    channel.Dispose();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 同步换手率
+        /// </summary>
+        public async Task SyncTurnoverAsync()
+        {
+            string msg="";
+            GrpcChannel channel = GrpcChannel.ForAddress(_apiUrl);
+            try
+            {
+                Metadata meta = new Metadata();
+                meta.AddAuthorization(_passportProvider.AccessToken);
+
+                var sclient = new StockTradeDataApi.StockTradeDataApiClient(channel);
+
+                using (var call = sclient.SyncTurnover(new Empty() , meta))
+                {
+                    while (await call.ResponseStream.MoveNext())
+                    {
+                        msg = call.ResponseStream.Current.Message;
+                        OnDataCleaningJobProgressChanged(msg);
+                    }
                 }
             }
             finally

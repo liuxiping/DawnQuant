@@ -19,7 +19,7 @@ namespace DawnQuant.App
             Startup += App_Startup;
             Exit += App_Exit;
 
-            ILogger _logger = IOCUtil.Container.Resolve<ILogger<App>>();
+            _logger = IOCUtil.Container.Resolve<ILogger<App>>();
 
         }
 
@@ -27,11 +27,11 @@ namespace DawnQuant.App
 
         private void App_Startup(object sender, StartupEventArgs e)
         {
-           // DispatcherUnhandledException += App_DispatcherUnhandledException;
+            DispatcherUnhandledException += App_DispatcherUnhandledException;
 
-           // TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
+            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
 
-           // AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         }
 
         private void App_Exit(object sender, ExitEventArgs e)

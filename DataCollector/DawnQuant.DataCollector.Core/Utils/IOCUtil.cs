@@ -43,6 +43,7 @@ namespace DawnQuant.DataCollector.Core.Utils
                 config.DailyTradeDataTaskCron = configuration["DailyTradeDataTaskCron"];
                 config.DailyTradeDataTaskFromSinaCron = configuration["DailyTradeDataFromSinaTaskCron"];
                 config.StockDailyIndicatorTaskCron = configuration["StockDailyIndicatorTaskCron"];
+                config.InSyncTurnoverTaskCron= configuration["InSyncTurnoverTaskCron"];
 
 
                 return config;

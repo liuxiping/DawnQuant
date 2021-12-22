@@ -35,7 +35,9 @@ namespace DawnQuant.AShare.Analysis.Resample
                 Low = p.Min(i => i.Low),
                 Volume = p.Sum(i => i.Volume),
                 Amount = p.Sum(i => i.Amount),
-                TradeDateTime = p.Last().TradeDateTime
+                TradeDateTime = p.Last().TradeDateTime,
+                Turnover = p.Sum(i => i.Turnover),
+                TurnoverFree = p.Sum((i) => i.TurnoverFree),
             }).ToList();
 
             //计算前收盘价格
@@ -70,7 +72,9 @@ namespace DawnQuant.AShare.Analysis.Resample
                 Low = p.Min(i => i.Low),
                 Volume = p.Sum(i => i.Volume),
                 Amount = p.Sum(i => i.Amount),
-                TradeDateTime = p.Last().TradeDateTime
+                TradeDateTime = p.Last().TradeDateTime,
+                Turnover = p.Sum(i => i.Turnover),
+                TurnoverFree = p.Sum((i) => i.TurnoverFree),
             }).ToList();
 
             for (int i = 0; i < monthData.Count() - 1; i++)

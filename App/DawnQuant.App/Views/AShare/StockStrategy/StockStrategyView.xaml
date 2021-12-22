@@ -52,8 +52,8 @@
                             <RowDefinition></RowDefinition>
                             <RowDefinition Height="auto"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <dxa:AccordionControl   Padding="0"  Margin="0"   IsExpanded="True"     Name="_acStrategyList"   BorderThickness="1" ItemsSource="{Binding StockStrategyCategories}"
-                        ExpandMode="SingleOrNone" HorizontalAlignment="Stretch"    
+                        <dxa:AccordionControl   AutoExpandAllItems="True" Padding="0"  Margin="0"   IsExpanded="True"     Name="_acStrategyList"   BorderThickness="1" ItemsSource="{Binding StockStrategyCategories}"
+                        ExpandMode="MultipleOrNone" HorizontalAlignment="Stretch"    
                                                 SelectedItemChanged="_acStrategyList_SelectedItemChanged" 
                                                 IsCollapseButtonVisible="False"   >
 

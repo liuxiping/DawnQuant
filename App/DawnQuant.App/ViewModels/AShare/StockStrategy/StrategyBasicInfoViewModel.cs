@@ -18,26 +18,44 @@ namespace DawnQuant.App.ViewModels.AShare.StockStrategy
         private readonly IPassportProvider _passportProvider;
         private readonly StockStrategyService _stockStrategyService;
 
-        public StrategyBasicInfoViewModel()
+        public StrategyBasicInfoViewModel(Tuple<string,string , long> basicInfo)
         {
             _passportProvider = IOCUtil.Container.Resolve<IPassportProvider>();
 
             _stockStrategyService = IOCUtil.Container.Resolve<StockStrategyService>();
 
-            LoadStockStrategyCategories();
+
+            if (basicInfo!=null)
+            {
+                Name = basicInfo.Item1;
+                Desc = basicInfo.Item2;
+            }
+            Initialize( basicInfo);
 
         }
 
 
-        public async void LoadStockStrategyCategories()
+        private async void Initialize(Tuple<string, string, long> basicInfo)
         {
             ObservableCollection<StockStrategyCategory> categories = null;
             await Task.Run(() =>
             {
                 categories = _stockStrategyService.GetStockStrategyCategoriesByUser(_passportProvider.UserId);
             }).ConfigureAwait(true);
+
             StockStrategyCategories = categories;
+
+            if(StockStrategyCategories!=null && StockStrategyCategories.Count>0)
+            {
+                if (basicInfo != null)
+                {
+                    InitCategory(basicInfo.Item3);
+                }
+            }
+
         }
+
+       
 
         /// <summary>
         /// 策略名称

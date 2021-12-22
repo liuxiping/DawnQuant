@@ -23,6 +23,7 @@ namespace DawnQuant.App.ViewModels.AShare.Bellwether
         private readonly BellwetherService _bellwetherService;
         private readonly IPassportProvider _passportProvider;
         private readonly SelfSelService _selfSelService;
+        private readonly AShareDataMaintainService _dataMaintainService;
 
 
         public BellwetherViewModel()
@@ -32,6 +33,7 @@ namespace DawnQuant.App.ViewModels.AShare.Bellwether
             _stockPlotDataService = IOCUtil.Container.Resolve<StockPlotDataService>(); ;
             _bellwetherService = IOCUtil.Container.Resolve<BellwetherService>();
             _passportProvider = IOCUtil.Container.Resolve<IPassportProvider>();
+            _dataMaintainService = IOCUtil.Container.Resolve<AShareDataMaintainService>();
 
 
             DelStockItemCommand = new DelegateCommand(DelStockItem);
@@ -43,6 +45,9 @@ namespace DawnQuant.App.ViewModels.AShare.Bellwether
 
             DeleteBellwetherStockCategoryCommand = new DelegateCommand(DeleteBellwetherStockCategory);
             DelStockItemCommand = new DelegateCommand(DelStockItem);
+
+
+            AddToCurBellwetherCommand=new DelegateCommand(AddToCurBellwether);
 
             //初始化 加载龙头股分类数据
             RefreshBellwetherStockCategories();
@@ -242,6 +247,7 @@ namespace DawnQuant.App.ViewModels.AShare.Bellwether
                     KCycle = KCycle.Day,
                     VA = StockChartViewModel.VisibleArea.Chart,
                     AdjustedState = AdjustedState.None,
+                    Industry = CurSelCategory.Name
                 };
                 //保存前一个数据选择状态
                 if (StockChartViewModel != null)
@@ -315,6 +321,37 @@ namespace DawnQuant.App.ViewModels.AShare.Bellwether
             }
         }
 
+        public DelegateCommand AddToCurBellwetherCommand { set; get; }
+        private async void AddToCurBellwether()
+        {
+            if (StockChartViewModel != null)
+            {
+                if (Stocks == null || !Stocks.Any(p => p.TSCode == StockChartViewModel.TSCode))
+                {
+                    BellwetherStock item = new BellwetherStock();
+
+                    item.UserId = CurSelCategory.UserId;
+                    item.CategoryId = CurSelCategory.Id;
+                    item.TSCode = StockChartViewModel.TSCode;
+                    item.Name = StockChartViewModel.StockName;
+                    item.CreateTime = DateTime.Now;
+
+                    //保存数据
+                    BellwetherStock ssItem = null;
+                    await Task.Run(() =>
+                    {
+                        ssItem = _bellwetherService.SaveBellwetherStock(item);
+                    }).ConfigureAwait(true);
+
+                    Stocks.Insert(0, ssItem);
+
+                    await Task.Run(() => {
+                        _dataMaintainService.DownLoadStockData(ssItem.TSCode); 
+                    });
+                   
+                }
+            }
+        }
         public DelegateCommand CopyStockCodeCommand { set; get; }
         private void CopyStockCode()
         {

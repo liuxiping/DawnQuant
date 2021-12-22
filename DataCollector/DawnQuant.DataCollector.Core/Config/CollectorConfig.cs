@@ -68,5 +68,11 @@ namespace DawnQuant.DataCollector.Core.Config
         public string StockDailyIndicatorTaskCron { get; set; }
 
 
+        /// <summary>
+        /// 增量同步换手率定时时间
+        /// </summary>
+        public string InSyncTurnoverTaskCron { get; set; }
+
+
     }
 }

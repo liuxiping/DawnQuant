@@ -42,6 +42,12 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
         public string Msg { get; set ; }
         public List<string> UnCompleteStocks { get; set ; }
 
+
+        /// <summary>
+        /// 数据清洗
+        /// </summary>
+       
+
         public void CollectHistoryStockDailyIndicator()
         {
             GrpcChannel channel = GrpcChannel.ForAddress(_apiUrl);

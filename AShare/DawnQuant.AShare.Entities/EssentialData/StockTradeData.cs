@@ -53,6 +53,23 @@ namespace DawnQuant.AShare.Entities.EssentialData
         /// </summary>
         public double Amount { get; set; }
 
+
+        /// <summary>
+        /// 换手率
+        /// </summary>
+        public double Turnover { get; set; }
+
+        /// <summary>
+        /// 自由换手率
+        /// </summary>
+        public double TurnoverFree { get; set; }
+
+
+        /// <summary>
+        /// 复权因子
+        /// </summary>
+        public double AdjustFactor { get; set; }
+
         /// <summary>
         /// 交易时间
         /// </summary>
@@ -60,10 +77,10 @@ namespace DawnQuant.AShare.Entities.EssentialData
         public DateTime TradeDateTime { get; set; }
 
 
-        /// <summary>
-        /// 复权因子
-        /// </summary>
-        public double AdjustFactor { get; set; }
+       
+
+
+       
         
 
     }

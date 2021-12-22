@@ -113,5 +113,41 @@ namespace DawnQuant.App.Views.AShare.Bellwether
         {
 
         }
+
+        private void _bellwetherView_KeyDown(object sender, KeyEventArgs e)
+        {
+            ///删除当前自选股
+            if (e.Key == Key.Delete)
+            {
+                Model.DelStockItemCommand.Execute(null);
+            }
+            //添加自选股
+            if (e.KeyboardDevice.Modifiers == ModifierKeys.Control && e.Key == Key.A)
+            {
+
+                _btnAddStock_Click(null, null);
+
+            }
+
+            if (e.Key == Key.W )
+            {
+                _gcBellwetherStockList.View.MovePrevRow();
+            }
+
+            if (e.Key == Key.S )
+            {
+                _gcBellwetherStockList.View.MoveNextRow();
+            }
+
+            if (e.Key == Key.NumPad0)
+            {
+                _gcRelateStockList.View.MoveNextRow();
+            }
+
+            if (e.Key == Key.NumPad1)
+            {
+                _gcRelateStockList.View.MovePrevRow();
+            }
+        }
     }
 }
