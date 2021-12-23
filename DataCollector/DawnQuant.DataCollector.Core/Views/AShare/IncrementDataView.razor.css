@@ -29,13 +29,13 @@
 }
 
 #incrementdata button {
-    width: 210px;
+    width: 230px;
     margin-left: 10px;
     float: right;
 }
 
 #incrementdata-header table {
-    border-spacing:0px;
+    border-spacing: 0px;
     vertical-align: middle;
     width: 100%;
     border: 0px;

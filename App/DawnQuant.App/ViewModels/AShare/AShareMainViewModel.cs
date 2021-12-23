@@ -43,6 +43,17 @@ namespace DawnQuant.App.ViewModels.AShare
             Show(notification);
            
         }
+
+        public void ShowDataUpdateScheduledTaskCompletedNofify()
+        {
+            ImageSource image = new BitmapImage(new Uri("pack://application:,,,/DawnQuant.App;component/Assets/Images/sun.png", UriKind.Absolute));
+            string text1 = $"更新交易数据已完成！";
+            string text2 = null;
+            string text3 = null;
+            INotification notification = NotificationService.CreatePredefinedNotification(text1, text2, text3, image);
+            Show(notification);
+        }
+
         void Show(INotification notification)
         {
             notification.ShowAsync().ContinueWith(OnNotificationShown, TaskScheduler.FromCurrentSynchronizationContext());

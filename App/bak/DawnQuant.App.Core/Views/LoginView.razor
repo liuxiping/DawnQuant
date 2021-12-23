@@ -1,0 +1,81 @@
+﻿@page "/"
+
+<div class="login-container-outer">
+
+    <div class="login-container">
+        <div class="login-sidebox"></div>
+        <div class="login-form">
+            <div class="login-form-header">
+                <h2>登录</h2>
+                <span >
+                    没有帐号？
+                    <a href="#">点此注册</a>
+                </span>
+            </div>
+
+            <div class="login-wrap">
+                <EditForm Model="@ViewModel" OnValidSubmit="@Login">
+                     <DataAnnotationsValidator />
+                    <div  class="form-group">
+                        <InputText  class="form-control"  @bind-Value="ViewModel.Name"   placeholder="用户名"></InputText>
+                    </div>
+                    <div  class="form-group">
+                        <InputText type="password" class="form-control"  @bind-Value="ViewModel.Password"   autocomplete="false" placeholder="密码"></InputText>
+                    </div>
+
+                    <div class="remeberme-autologin">
+                        <div>
+                            <InputCheckbox  @bind-Value="ViewModel.Remember"  id="remeberme" ></InputCheckbox>
+                            <label for="remeberme">记住密码</label>
+                        </div>
+                        <div>
+                            <InputCheckbox  @bind-Value="ViewModel.AutoLogin" id="autologin" ></InputCheckbox>
+                            <label for="autologin">自动登录</label>
+                        </div>
+                    </div>
+                    
+                    <ValidationSummary></ValidationSummary>
+                    
+                    <button type="submit" disabled="@loginDisabled" class="btn-blue">
+                       @btnMessage
+                    </button>
+                </EditForm>
+                <div class="forget-password">
+                    <a href="# ">已有帐号，忘记密码？</a>
+                </div>
+                <div>
+                    <div class="login-other">
+                        <div class="horizontal-line"></div>
+                        <span class="text-muted ">
+                            其他方式登录
+                        </span>
+                    </div>
+                    <div class="login-list ">
+                        <div class="item ">
+                            <a href="#">
+                                <img class="item " src="_content/DawnQuant.App.Core/images/weixin.svg">
+                            </a>
+                        </div>
+                        <div class="item ">
+                            <a href="#">
+                                <img class="item " src="_content/DawnQuant.App.Core/images/douyin.svg">
+                            </a>
+                        </div>
+                        <div class="item ">
+                            <a href="#">
+                                <img class="item " src="_content/DawnQuant.App.Core/images/weibo.svg">
+                            </a>
+                        </div>
+                        <div class="item ">
+                            <a href="#">
+                                <img class="item " src="_content/DawnQuant.App.Core/images/qq.svg">
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

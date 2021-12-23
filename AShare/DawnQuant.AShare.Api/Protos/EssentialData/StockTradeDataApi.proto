@@ -15,6 +15,14 @@ service StockTradeDataApi {
  
  rpc SaveStockTradeData(SaveStockTradeDataRequest) returns (google.protobuf.Empty);
 
+ 
+ //一次性保存所有数据交易数据
+ rpc SaveAllStockTradeData(SaveAllStockTradeDataRequest) returns (google.protobuf.Empty);
+
+
+ //增量保存交易数据并计算复权因子
+ rpc SaveInSTDAndCAF(SaveInSTDAndCAFRequest) returns (google.protobuf.Empty);
+
  rpc GetTradeData(GetTradeDataRequest) returns (stream  GetTradeDataResponse);
 
  rpc GetLatestTradeData(GetLatestTradeDataRequest) returns (GetLatestTradeDataResponse);
@@ -44,6 +52,19 @@ message SaveStockTradeDataRequest
     
 }
 
+message SaveAllStockTradeDataRequest
+{
+    string TSCode=1;
+    KCycleDto KCycle=2;
+    repeated StockTradeDataDto Entities=3;
+}
+
+message SaveInSTDAndCAFRequest
+{
+     string TSCode=1;
+     KCycleDto KCycle=2;
+     StockTradeDataDto Entity=3;
+}
 message  GetTradeDataRequest
 {
     string TSCode=1;

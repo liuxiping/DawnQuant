@@ -99,10 +99,3 @@ message StockStrategyCategoryDto{
 }
 
 
-message SettingDto {
-
-     int64 Id=1;
-     int64 UserId =2;
-     string Key =3;
-     string Content =4;
-}

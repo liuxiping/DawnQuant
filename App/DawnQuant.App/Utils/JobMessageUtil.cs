@@ -23,7 +23,12 @@ namespace DawnQuant.App.Utils
         }
 
 
-       
+        public event Action DataUpdateScheduledTaskJobCompleted;
+        public void OnDataUpdateScheduledTaskJobCompleted( )
+        {
+            DataUpdateScheduledTaskJobCompleted?.Invoke();
+        }
+
     }
 
 }

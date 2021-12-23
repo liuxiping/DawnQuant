@@ -10,14 +10,22 @@ option csharp_namespace = "DawnQuant.AShare.Api.EssentialData";
 package DawnQuant.AShare.Api.EssentialData;
 
 
-//股东人数
-service HolderNumberApi {
+//股东
+service HolderApi {
   
 //获取股东人数
   rpc GetHolderNumber(GetHolderNumberRequest) returns (GetHolderNumberResponse);
 
   //保存股东人数数据
   rpc SaveHolderNumber(SaveHolderNumberRequest) returns (SaveHolderNumberResponse);
+
+
+  //获取10大股东数据
+  rpc GetTop10FloatHolder(GetTop10FloatHolderRequest) returns (GetTop10FloatHolderResponse);
+
+  //保存10大股东数据
+  rpc SaveTop10FloatHolder(SaveTop10FloatHolderRequest) returns (SaveTop10FloatHolderResponse);
+
 
 }
 
@@ -51,6 +59,32 @@ message SaveHolderNumberResponse
 
 
 
+
+message GetTop10FloatHolderRequest
+{
+ string TSCode = 1;
+ //开始日期
+ google.protobuf.Timestamp SartDate  =2;
+ //结束日期
+ google.protobuf.Timestamp EndDate  =3;
+
+}
+
+message GetTop10FloatHolderResponse
+{
+  repeated  Top10FloatHolderDto Entities=1;
+}
+
+
+message SaveTop10FloatHolderRequest
+{
+   repeated  Top10FloatHolderDto Entities=1;
+}
+
+message SaveTop10FloatHolderResponse
+{
+   repeated  Top10FloatHolderDto Entities=1;
+}
 
 
 

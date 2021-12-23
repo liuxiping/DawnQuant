@@ -6,6 +6,7 @@ using System.Windows;
 using Autofac;
 using Microsoft.Extensions.Logging;
 using System.Text;
+using DawnQuant.App.Models.AShare.UserProfile;
 
 namespace DawnQuant.App
 {
@@ -22,6 +23,11 @@ namespace DawnQuant.App
             _logger = IOCUtil.Container.Resolve<ILogger<App>>();
 
         }
+
+        /// <summary>
+        /// 配置信息
+        /// </summary>
+        public static Setting AShareSetting { get; set; } = null;
 
         ILogger _logger = null;
 

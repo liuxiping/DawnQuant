@@ -160,9 +160,6 @@ message  Top10FloatHolderDto
 
          string TSCode =2;
 
-        // 公告日期
-         google.protobuf.Timestamp AnnDate =3;
-
 
         // 报告期
          google.protobuf.Timestamp EndDate =4;
@@ -172,6 +169,16 @@ message  Top10FloatHolderDto
 
         // 持股数量
          double HoldAmount =6;
+
+        
+         //持股比例
+         double HoldRatio=7;
+
+          //持股变化（股）
+         double HoldChange=8;
+
+         //变动性质
+         int32 HoldChangeCharacter=9;
 }
 
 // K线周期

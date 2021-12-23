@@ -58,7 +58,8 @@ message StrategyScheduledTaskDto
          google.protobuf.Timestamp LatestExecuteTime =8;
          bool IsJoinServerScheduleTask =9;
          bool IsJoinClientScheduleTask =10;
-         google.protobuf.Timestamp ClientScheduleTime =11;
+        // google.protobuf.Timestamp ClientScheduleTime =11;
+         string ClientScheduleCron=11;
          google.protobuf.Timestamp CreateTime =12;
 
          

@@ -25,7 +25,7 @@
                                     ApplicationId="DawnQuant.App"
                                     ApplicationIconPath="/Assets/Icons/app.png"
                                     CreateApplicationShortcut="True">
-          
+
         </dxmvvm:NotificationService>
     </dxmvvm:Interaction.Behaviors>
     <Grid >
@@ -44,7 +44,7 @@
                     <BellwetherView:BellwetherView x:Name="_bellwetherView"></BellwetherView:BellwetherView>
                     <SubjectAndHotView:SubjectAndHotView x:Name="_subjectAndHotView"></SubjectAndHotView:SubjectAndHotView>
                     <SettingView:SettingView x:Name="_settingView"></SettingView:SettingView>
-                    
+
                 </Grid>
             </dxwui:HamburgerMenu.Content>
             <dxwui:HamburgerMenuNavigationButton ToolTip="自选分类" Name="_btnSelfSelStock"  Glyph="/Assets/Images/group.png" />
@@ -52,7 +52,7 @@
             <dxwui:HamburgerMenuNavigationButton ToolTip="任务计划" Name="_btnScheduledTask" Glyph="/Assets/Images/scheduledtask.png"  />
             <dxwui:HamburgerMenuNavigationButton ToolTip="龙头股" Name="_btnBellwether" Glyph="/Assets/Images/bellwether.png"  />
             <dxwui:HamburgerMenuNavigationButton ToolTip="题材热点" Name="_btnSubjectAndHot" Glyph="/Assets/Images/subjectandhot.png"  />
-            <dxwui:HamburgerMenuNavigationButton  Visibility="Collapsed" ToolTip="参数设置" Name="_btnSetting" Glyph="/Assets/Images/setting.png"  />
+            <dxwui:HamburgerMenuNavigationButton Placement="Bottom"  ToolTip="参数设置" Name="_btnSetting" Glyph="/Assets/Images/setting.png"  />
 
         </dxwui:HamburgerMenu>
     </Grid>

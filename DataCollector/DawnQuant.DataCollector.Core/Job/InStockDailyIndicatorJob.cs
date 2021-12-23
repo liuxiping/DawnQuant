@@ -35,7 +35,7 @@ namespace DawnQuant.DataCollector.Core.Job
                     //};
 
                     jobMessageUtility.OnInStockDailyIndicatorJobStarted();
-                    collector.CollectIncrementStockDailyIndicator(DateTime.Now);
+                    collector.CollectInStockDailyIndicatorFromTushare(DateTime.Now);
                     jobMessageUtility.OnInStockDailyIndicatorJobCompleted();
                 }
             }

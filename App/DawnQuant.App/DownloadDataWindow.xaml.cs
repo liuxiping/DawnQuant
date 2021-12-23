@@ -71,7 +71,7 @@ namespace DawnQuant.App
             }
             else
             {
-                this.ShowInTaskbar = false;
+                this.ShowInTaskbar = true;
             }
             await Task.Run(() =>
             {

@@ -11,6 +11,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Threading;
+using DawnQuant.App.Services.AShare;
 
 namespace DawnQuant.App
 {
@@ -85,6 +86,10 @@ namespace DawnQuant.App
                         string configFile = Path.Combine(Environment.CurrentDirectory, "Config\\user.config");
                         File.WriteAllText(configFile, base64UserInfo);
                     }
+
+                    //加载配置信息
+                    var ss = IOCUtil.Container.Resolve<SettingService>();
+                    App.AShareSetting = ss.GetSetting();
 
                     //登录成功 更新数据
                     this.ShowInTaskbar = false;

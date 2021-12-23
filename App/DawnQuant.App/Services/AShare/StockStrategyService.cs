@@ -47,6 +47,10 @@ namespace DawnQuant.App.Services.AShare
             {
                 cs.Add(_mapper.Map<StockStrategyCategory>(item));
             }
+            foreach (var item in cs)
+            {
+                item.StockStrategies = item.StockStrategies.OrderBy(p => p.SortNum).ToList();
+            }
 
             return cs;
         }

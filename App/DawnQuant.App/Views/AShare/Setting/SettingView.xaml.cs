@@ -40,12 +40,12 @@ namespace DawnQuant.App.Views.AShare.Setting
                     frameworkElement.Visibility = Visibility.Collapsed;
                 }
 
-                if (item.Name == "_lbeiReadyToBuyStockJobSetting")
+                if (item.Name == "_lbeiDataUpdateSetting")
                 {
-                    //_readyToBuyStockJobSettingView.Visibility = Visibility.Visible;
+                    _ucDataUpdateSettingView.Visibility = Visibility.Visible;
                 }
             }
-            
+
         }
     }
 }

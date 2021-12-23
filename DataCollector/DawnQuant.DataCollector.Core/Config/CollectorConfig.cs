@@ -60,18 +60,21 @@ namespace DawnQuant.DataCollector.Core.Config
         /// <summary>
         /// 每日增量交易数据指标定时时间
         /// </summary>
-        public string DailyTradeDataTaskCron { get; set; }
-        public string DailyTradeDataTaskFromSinaCron { get; set; }
+       // public string DailyTradeDataTaskCron { get; set; }
+        public string InDTDFromSinaTaskCron { get; set; }
+
+        public string InDataFromTushareTaskCron { get; set; }
+        
         /// <summary>
         /// 每日增量m每日指标定时时间
         /// </summary>
-        public string StockDailyIndicatorTaskCron { get; set; }
+      //  public string StockDailyIndicatorTaskCron { get; set; }
 
 
         /// <summary>
         /// 增量同步换手率定时时间
         /// </summary>
-        public string InSyncTurnoverTaskCron { get; set; }
+     //   public string InSyncTurnoverTaskCron { get; set; }
 
 
     }

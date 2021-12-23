@@ -63,7 +63,14 @@ namespace DawnQuant.App.Services.AShare
             meta.AddAuthorization(_passportProvider?.AccessToken);
             var dtos = client.GetSelectScopeMetadataCategoriesIncludeItems(new  Google.Protobuf.WellKnownTypes.Empty(),meta);
 
-           return _mapper.Map<ObservableCollection<SelectScopeMetadataCategory>>(dtos.Entities);
+           var categories= _mapper.Map<ObservableCollection<SelectScopeMetadataCategory>>(dtos.Entities);
+
+            foreach (var c in categories)
+            {
+                c.SelectScopeMetadatas = c.SelectScopeMetadatas.OrderBy(p => p.SortNum).ToList();
+            }
+
+            return categories;
            
         }
 

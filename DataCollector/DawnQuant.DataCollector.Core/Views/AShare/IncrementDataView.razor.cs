@@ -44,21 +44,11 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
             ViewModel.StartIDTDFromSinaTask();
         }
 
-        private void StartIDTDTask()
+        private void StartInDataFromTushareTask()
         {
-            ViewModel.StartIDTDTask();
+            ViewModel.StartInDataFromTushareTask();
         }
-
-        private void StartIDITask()
-        {
-            ViewModel.StartIDITask();
-        }
-
-
-        private void StartInSyncTurnover()
-        {
-            ViewModel.StartInSyncTrunover();
-        }
+       
         private void StartAllTask()
         {
             ViewModel.StartAllTask();

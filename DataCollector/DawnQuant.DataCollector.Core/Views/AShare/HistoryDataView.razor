@@ -31,8 +31,11 @@
         <div>
             <div>
                 <button @onclick="CollectTC"  disabled="@ViewModel.IsCollectTradingCalendar" class="btn-blue">采集交易日历</button>
-                <button @onclick="CollectCompany" disabled="@ViewModel.IsCollectCompany"class="btn-blue">采集所有公司基本信息</button>
-                <button @onclick="CollectBSInfo"   disabled="@ViewModel.IsCollectBasicStockInfo"  class="btn-blue">采集所有股票基本信息</button>
+
+                <button @onclick="CollectDTDAndDI"   disabled="@ViewModel.IsCollectDTDAndDI"  class="btn-blue">采集日线数据和每日指标</button>
+
+
+                <button @onclick="CollectStockInfo"   disabled="@ViewModel.IsCollectStockInfo"  class="btn-blue">采集所有股票信息</button>
 
             </div>
         </div>

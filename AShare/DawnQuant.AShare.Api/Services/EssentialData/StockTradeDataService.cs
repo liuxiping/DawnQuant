@@ -62,6 +62,117 @@ namespace DawnQuant.AShare.Api.EssentialData
         }
 
 
+
+        public override Task<Empty> SaveAllStockTradeData(SaveAllStockTradeDataRequest request, ServerCallContext context)
+        {
+            return Task.Run(() =>
+            {
+                var kCycle = _imapper.Map<KCycle>(request.KCycle);
+                using (var stdr = _stockTradeDataRepositoryFunc(request.TSCode, kCycle))
+                {
+
+                    var datas = _imapper.Map<IEnumerable<StockTradeData>>(request.Entities).ToList();
+
+                    //数据清洗
+                    var errdatas = datas.Where(
+                                   p => p.Open == 0 || p.Close == 0|| 
+                                   p.Low==0|| p.High==0 ||p.Volume==0).ToList();
+                    if (errdatas != null && errdatas.Count > 0)
+                    {
+                        foreach (var err in errdatas)
+                        {
+                            datas.Remove(err);
+                        }
+                    }
+
+                    //计算复权因子
+                    AdjustCalculator.CalculateAllAdjustFactor(datas);
+
+                    //同步换手率
+                    using (var dir = _stockDailyIndicatorRepositoryFunc(request.TSCode))
+                    {
+                        var dis = dir.Entities.Select(p =>
+                        new
+                        {
+                            Turnover = p.Turnover,
+                            TurnoverFree = p.TurnoverFree,
+                            TradeDate = p.TradeDate
+                        }).ToList();
+
+                        if (dis != null && dis.Count > 0)
+                        {
+                            //更新交易数据
+                            for (int i = 0; i < datas.Count; i++)
+                            {
+                                var d = dis.Where(p => p.TradeDate == datas[i].TradeDateTime).FirstOrDefault();
+
+                                if (d != null)
+                                {
+                                    datas[i].Turnover = d.Turnover;
+                                    datas[i].TurnoverFree = d.TurnoverFree;
+                                }
+                            }
+                           
+                        }
+                        else
+                        {
+                            _logger.LogWarning($"代码：{request.TSCode}没有每日指标数据。");
+
+                        }
+                    }
+
+                    //清空
+                    stdr.Empty();
+
+                    //保存交易数据  
+                    stdr.Save(datas);
+
+                    return new Empty();
+                }
+            });
+        }
+
+        /// <summary>
+        /// 保存增量数据并计算复权因子
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override Task<Empty> SaveInSTDAndCAF(SaveInSTDAndCAFRequest request, ServerCallContext context)
+        {
+            return Task.Run(() =>
+            {
+                var kCycle = _imapper.Map<KCycle>(request.KCycle);
+
+                //只支持日线
+                if(kCycle !=  KCycle.Day)
+                {
+                    return null;
+
+                }
+
+                using (var stockTradeDataRepository = _stockTradeDataRepositoryFunc(request.TSCode, kCycle))
+                {
+                    var data = _imapper.Map<StockTradeData>(request.Entity);
+
+                    //计算复权因子
+                    //获取当前数据的前一个交易数据
+                    var predata = stockTradeDataRepository.Entities.Where(p=>p.TradeDateTime<data.TradeDateTime)
+                    .OrderByDescending(p => p.TradeDateTime).Take(1).FirstOrDefault();
+                    if (predata != null)
+                    {
+                        double gain = (data.Close - data.PreClose) / data.PreClose;
+                        data.AdjustFactor = predata.AdjustFactor * (1 + gain);
+
+                    }
+                    stockTradeDataRepository.Save(data);
+
+                    return new Empty();
+                }
+            });
+           
+        }
+
         public override async Task GetTradeData(GetTradeDataRequest request, IServerStreamWriter<GetTradeDataResponse> responseStream, ServerCallContext context)
         {
             var kCycle = _imapper.Map<KCycle>(request.KCycle);
@@ -403,8 +514,6 @@ namespace DawnQuant.AShare.Api.EssentialData
         }
 
 
-
-
         /// <summary>
         /// 增量更新日线复权因子
         /// </summary>
@@ -463,8 +572,6 @@ namespace DawnQuant.AShare.Api.EssentialData
             }
             Task.WaitAll(tasks.ToArray());
         }
-
-
 
 
         /// <summary>
@@ -717,7 +824,8 @@ namespace DawnQuant.AShare.Api.EssentialData
                             {
                                 //清洗停牌数据
                                 var datas = tdr.Entities.Where(
-                                    p => p.Open == 0 || p.Close == 0).ToList();
+                                    p => p.Open == 0 || p.Close == 0 ||
+                                   p.Low == 0 || p.High == 0||p.Volume==0 ).ToList();
 
                                 if (datas != null && datas.Count > 0)
                                 {
@@ -742,5 +850,8 @@ namespace DawnQuant.AShare.Api.EssentialData
                 Task.WaitAll(tasks.ToArray());
             });
         }
+
+
+       
     }
 }

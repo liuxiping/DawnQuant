@@ -1,0 +1,18 @@
+﻿@page "/Main"
+@using DawnQuant.App.Core.Views.AShare
+
+ <main id="main">
+        <div id="tab-content">
+            <section id="tab-content-ashare" class="@GetTabContentCssClass("ashare")">
+              <AShareMainView></AShareMainView>
+            </section>
+        </div>
+        <div id="tab-header">
+        <div >
+            <label class="@GetTabHeaderCssClass("ashare")" id="tab-header-ashare" >沪深股市</label>
+        </div>
+        <div class=system-menu>
+            系统菜单
+         </div>
+        </div>
+    </main>

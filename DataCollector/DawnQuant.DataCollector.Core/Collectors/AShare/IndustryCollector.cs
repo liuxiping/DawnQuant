@@ -1,10 +1,10 @@
-﻿using DawnQuant.AShare.Api.EssentialData;
+﻿using AngleSharp.Html.Parser;
+using DawnQuant.AShare.Api.EssentialData;
 using DawnQuant.DataCollector.Core.Config;
 using DawnQuant.Passport;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Grpc.Net.Client;
-using HtmlAgilityPack;
 using Microsoft.Extensions.Logging;
 using System.Net;
 using System.Text;
@@ -12,7 +12,7 @@ using System.Text;
 
 namespace DawnQuant.DataCollector.Core.Collectors.AShare
 {
-    public class IndustryCollector 
+    public class IndustryCollector
     {
 
         public IndustryCollector(ILogger logger, CollectorConfig config,
@@ -43,28 +43,31 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
             }
         }
 
-        private void CollectIndustry(string tsCode, GrpcChannel channel)
+
+        /// <summary>
+        /// 获取单个行业信息
+        /// </summary>
+        /// <param name="tsCode"></param>
+        /// <param name="channel"></param>
+        private void CollectSingleStockIndustryFromTHS(string tsCode, GrpcChannel channel)
         {
 
             string id = tsCode.Substring(0, 6);
             //获取行业分类
             string fieldUrl = string.Concat(@"http://basic.10jqka.com.cn/", id, @"/field.html");
+
             HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(fieldUrl);
-            //  SetTHSWebRequestHeader((HttpWebRequest)request);
+
             using (WebResponse webResponse = request.GetResponse())
             {
-                HtmlDocument htmlDocument = new HtmlDocument();
-                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-                htmlDocument.Load(webResponse.GetResponseStream(), Encoding.GetEncoding("GBK"));
+                HtmlParser htmlParser = new HtmlParser();
+                var dom = htmlParser.ParseDocument(webResponse.GetResponseStream());
 
-
-                HtmlNode industryNode = htmlDocument.DocumentNode.
-                 SelectSingleNode("//*[@id=\"fieldstatus\"]/descendant::p[contains(text(), '三级行业分类：')]")?
-                 .SelectSingleNode("span");
+                var industryNode = dom.QuerySelector(".page9table .threecate span");
 
                 if (industryNode != null)
                 {
-                    string industryInfo = industryNode.InnerText.Trim();
+                    string industryInfo = industryNode.InnerHtml.Trim();
                     var industrys = industryInfo.Split("--");
                     var first = industrys[0].Trim();
                     var second = industrys[1].Trim();
@@ -76,7 +79,7 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
                     Metadata meta = new Metadata();
                     meta.AddAuthorization(_passportProvider.AccessToken);
 
-                    var industry = clientIndustry.ParseIndustry(new   ParseIndustryRequest
+                    var industry = clientIndustry.ParseIndustry(new ParseIndustryRequest
                     {
                         First = first,
                         Second = second,
@@ -85,7 +88,7 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
 
                     var clientBasicStockInfo = new BasicStockInfoApi.BasicStockInfoApiClient(channel);
 
-                    clientBasicStockInfo.UpdateIndustry(new  UpdateIndustryRequest
+                    clientBasicStockInfo.UpdateIndustry(new UpdateIndustryRequest
                     {
                         IndustryId = industry.Entity.Id,
                         TSCode = tsCode
@@ -102,11 +105,14 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
             }
         }
 
-        public  void CollectIndustry()
+        /// <summary>
+        /// 从同花顺提取行业数据
+        /// </summary>
+        public void CollectIndustryFromTHS()
         {
 
             GrpcChannel channel = null;
-            List<string> alltscodes=new List<string>();
+            List<string> alltscodes = new List<string>();
             List<string> completetscodes = new List<string>();
             try
             {
@@ -126,9 +132,9 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
 
                 foreach (var tscode in response.TSCodes)
                 {
-                    CollectIndustry(tscode, channel);
+                    CollectSingleStockIndustryFromTHS(tscode, channel);
                     completetscodes.Add(tscode);
-                   
+
                     complete++;
                     Msg = $"行业信息已经成功采集{complete}个股票，总共{all}个股票";
                     OnProgressChanged();
@@ -147,7 +153,7 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
             }
         }
 
-        public void CollectIndustry(List<string> stocks)
+        public void CollectIndustryFromTHS(List<string> stocks)
         {
             GrpcChannel channel = null;
             List<string> completetscodes = new List<string>();
@@ -164,7 +170,7 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
 
                 foreach (var tscode in stocks)
                 {
-                    CollectIndustry(tscode, channel);
+                    CollectSingleStockIndustryFromTHS(tscode, channel);
                     completetscodes.Add(tscode);
                     complete++;
                     Msg = $"行业信息已经成功采集{complete}个股票，总共{all}个股票";

@@ -18,7 +18,7 @@ namespace DawnQuant.App.ViewModels.AShare.StockStrategy
         private readonly IPassportProvider _passportProvider;
         private readonly StockStrategyService _stockStrategyService;
 
-        public StrategyBasicInfoViewModel(Tuple<string,string , long> basicInfo)
+        public StrategyBasicInfoViewModel(Tuple<string,string ,long,int> basicInfo)
         {
             _passportProvider = IOCUtil.Container.Resolve<IPassportProvider>();
 
@@ -29,13 +29,14 @@ namespace DawnQuant.App.ViewModels.AShare.StockStrategy
             {
                 Name = basicInfo.Item1;
                 Desc = basicInfo.Item2;
+                SortNum= basicInfo.Item4;
             }
             Initialize( basicInfo);
 
         }
 
 
-        private async void Initialize(Tuple<string, string, long> basicInfo)
+        private async void Initialize(Tuple<string, string, long,int> basicInfo)
         {
             ObservableCollection<StockStrategyCategory> categories = null;
             await Task.Run(() =>
@@ -65,6 +66,17 @@ namespace DawnQuant.App.ViewModels.AShare.StockStrategy
         {
             get { return _name; }
             set { SetProperty(ref _name, value, nameof(Name)); }
+        }
+
+
+        /// <summary>
+        /// 排序
+        /// </summary>
+        private int _sortNum=0;
+        public int SortNum
+        {
+            get { return _sortNum; }
+            set { SetProperty(ref _sortNum, value, nameof(SortNum)); }
         }
 
         /// <summary>

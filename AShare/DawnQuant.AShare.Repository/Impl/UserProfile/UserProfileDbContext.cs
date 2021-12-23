@@ -94,11 +94,8 @@ namespace DawnQuant.AShare.Repository.Impl.UserProfile
                 en.HasIndex(p => p.UserId);
             });
 
-            //用户 键值 联合唯一索引
-            modelBuilder.Entity<Setting>(en => 
-            {
-                en.HasIndex(p => new { p.UserId, p.Key }).IsUnique();
-            });
+         
+           
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -23,7 +23,7 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
             {
                 //查询数据是否存在
                 var holderNumber = _dbContext.Entities.Where(p => p.TSCode == entity.TSCode &&
-                  p.AnnDate == entity.AnnDate && p.HolderName == entity.HolderName).SingleOrDefault();
+                  p.EndDate == entity.EndDate && p.HolderName == entity.HolderName).SingleOrDefault();
 
                 if (holderNumber != null)
                 {
@@ -39,7 +39,7 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
         {
             //查询数据是否存在
             var holderNumber = _dbContext.Entities.Where(p => p.TSCode == entity.TSCode &&
-              p.AnnDate == entity.AnnDate && p.HolderName== entity.HolderName).SingleOrDefault();
+              p.EndDate == entity.EndDate && p.HolderName== entity.HolderName).SingleOrDefault();
 
             if (holderNumber != null)
             {

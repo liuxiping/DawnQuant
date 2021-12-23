@@ -63,20 +63,25 @@
     <StackPanel  HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True"
                  VerticalAlignment="Center" Orientation="Horizontal">
         <Menu >
-            <MenuItem  Padding="2" Name="_miUpdateData"  ToolTip="下载交易数据" Click="_miUpdateData_Click" >
+            <MenuItem  Padding="0" Name="_miUpdateData"  ToolTip="下载交易数据" Click="_miUpdateData_Click" >
                 <MenuItem.Header>
-                    <TextBlock  Margin="0 1 0 0" FontSize="18" Padding="0 0 0 1" HorizontalAlignment="Center" Text="&#xe619;"  
+                    <TextBlock  Margin="0 0 0 0" FontSize="18" Padding="0 0 0 0" HorizontalAlignment="Center" 
+                                Text="&#xe604;"  
                                 Foreground="#1296db" FontFamily="../../Assets/Fonts/#iconfont" ></TextBlock>
                 </MenuItem.Header>
             </MenuItem>
         </Menu>
         <Menu  >
-            <MenuItem   ToolTip="设置" Padding="2" Margin="6 0 0 0" >
+            <MenuItem   ToolTip="设置" Padding="0" Margin="10 0 8 0" >
                 <MenuItem.Header >
-                    <TextBlock FontSize="20"  Padding="0" Foreground="#1296db" 
-                               Text="&#xeec9;" FontFamily="../../Assets/Fonts/#iconfont" ></TextBlock>
+                    <TextBlock FontSize="18"  Padding="0" Foreground="#1296db" 
+                               Text="&#xe656;" FontFamily="../../Assets/Fonts/#iconfont" ></TextBlock>
                 </MenuItem.Header>
+                
                 <MenuItem FontSize="15" Header="系统设置"/>
+                <MenuItem FontSize="15" Header="软件更新"/>
+                <MenuItem FontSize="15" Header="帮助中心"/>
+                <MenuItem FontSize="15" Header="反馈"/>
                 <MenuItem FontSize="15" Header="关于"/>
             </MenuItem>
         </Menu>

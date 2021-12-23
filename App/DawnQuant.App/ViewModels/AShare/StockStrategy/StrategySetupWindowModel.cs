@@ -30,10 +30,6 @@ namespace DawnQuant.App.ViewModels.AShare.StockStrategy
 
         }
 
-        //public StrategySetupWindowModel(UserProfile.StockStrategy strategy):this()
-        //{
-        //    Strategy=strategy;
-        //}
 
         UserProfile.StockStrategy _strategy;
         public UserProfile.StockStrategy Strategy
@@ -73,7 +69,8 @@ namespace DawnQuant.App.ViewModels.AShare.StockStrategy
             if (_strategy != null)
             {
                 var basicInfoModel = new StrategyBasicInfoViewModel(
-                    new Tuple<string, string, long>(_strategy.Name, _strategy.Desc, _strategy.CategoryId));
+                    new Tuple<string, string, long,int>(_strategy.Name, _strategy.Desc,
+                    _strategy.CategoryId, _strategy.SortNum));
 
                 BasicInfoViewModel = basicInfoModel;
 
@@ -129,6 +126,7 @@ namespace DawnQuant.App.ViewModels.AShare.StockStrategy
             stockStrategy.UserId = _passportProvider.UserId;
             stockStrategy.Name = BasicInfoViewModel.Name;
             stockStrategy.Desc = BasicInfoViewModel.Desc;
+            stockStrategy.SortNum = BasicInfoViewModel.SortNum;
             stockStrategy.CategoryId = BasicInfoViewModel.CurSelStockStrategyCategory.Id;
             stockStrategy.CreateTime = DateTime.Now;
             stockStrategy.StockStragyContent = JsonSerializer.Serialize(strategyInsDescriptor);

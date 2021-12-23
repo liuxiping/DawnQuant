@@ -38,7 +38,7 @@ namespace DawnQuant.App.Services.AShare
             Metadata meta = new Metadata();
             meta.AddAuthorization(_passportProvider?.AccessToken);
             var dtos = client.GetStockCategoriesByUser(new GetStockCategoriesByUserRequest { UserId = _passportProvider.UserId }, meta);
-            foreach (var c in dtos.Entities)
+            foreach (var c in dtos.Entities.OrderBy(p=>p.SortNum))
             {
                 categories.Add(new SupportedCategory { CategoryId = c.Id, Name = c.Name });
             }

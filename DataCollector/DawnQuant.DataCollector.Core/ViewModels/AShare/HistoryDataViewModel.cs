@@ -67,15 +67,23 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
             };
         }
 
-       
+
+
+        //通知更新视图
+        public event Action ViewNeedUpdate;
+
+        protected void OnViewNeedUpdate()
+        {
+            ViewNeedUpdate?.Invoke();
+        }
 
 
         #region  采集消息通知
+
         public event Action IndustryProgressChange;
         public event Action StockDailyIndicatorProgressChange;
         public event Action DailyTradeDataProgressChange;
         public event Action SyncTurnoverProgressChange;
-
         public event Action DataCleaningProgressChange;
 
         protected void OnSyncTurnoverChangeChange()
@@ -106,9 +114,10 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
 
 
         //状态标识
-        public bool IsCollectBasicStockInfo { get; set; } = false;
+        public bool IsCollectStockInfo { get; set; } = false;
+
+        public bool IsCollectDTDAndDI { get; set; } = false;
         public bool IsCollectTradingCalendar { get; set; } = false;
-        public bool IsCollectCompany { get; set; } = false;
         public bool IsCollectIndustry { get; set; } = false;
         public bool IsRestoreIndustry { get; set; } = false;
 
@@ -156,6 +165,48 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
         public string DataCleaningProgress { get; set; }
 
 
+
+
+
+        /// <summary>
+        /// 采集股票信息
+        /// </summary>
+        /// <returns></returns>
+        public async Task CollectStockInfo()
+        {
+            IsCollectStockInfo = true;
+
+            await Task.Run(async () =>
+            {
+
+                var t1 = CollectBSInfo();
+
+                var t2 = CollectCompany();
+
+                Task.WaitAll(t1, t2);
+
+               await CollectIndustry();
+            });
+
+            IsCollectStockInfo = false;
+        }
+
+
+        /// <summary>
+        /// 采集日线数据和每日指标
+        /// </summary>
+        public async Task CollectDTDAndDI()
+        {
+            IsCollectDTDAndDI=true;
+
+            //先采集每日指标
+            await CollectDI();
+
+            await CollectDTD();
+
+            IsCollectDTDAndDI = false;
+        }
+
         /// <summary>
         /// 开始采集所有股票基本信息
         /// </summary>
@@ -164,28 +215,63 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
         {
 
             Message += $"开始采集所有股票基本信息，{DateTime.Now.ToString()}\r\n";
+            OnViewNeedUpdate();
 
-            IsCollectBasicStockInfo = true;
             //开启采集任务
             var t = Task.Run(() =>
-           {
-               _basicStockInfoCollector.CollectAllBasicStockInfo();
-           });
+            {
+                _basicStockInfoCollector.CollectAllBasicStockInfoFromTushare();
+            });
             await t;
-            IsCollectBasicStockInfo = false;
+
 
             if (t.Exception == null)
             {
                 Message += $"采集所有股票基本信息成功，{DateTime.Now.ToString()}\r\n";
-
+                OnViewNeedUpdate();
             }
             else
             {
                 Message += $"采集所有股票基本信息过程中发生异常，{DateTime.Now.ToString()}\r\n";
                 Message += t.Exception.Message + "\r\n" + t.Exception.StackTrace + "\r\n";
+                OnViewNeedUpdate();
             }
 
         }
+
+        /// <summary>
+        /// 公司基本信息
+        /// </summary>
+        public async Task CollectCompany()
+        {
+
+            Message += $"开始采集所有公司基本信息，{DateTime.Now.ToString()}\r\n";
+            OnViewNeedUpdate();
+            //开启采集任务
+            Task t = Task.Run(() =>
+            {
+
+                _companyCollector.CollectAllCompanyInfoFromTushare();
+
+            });
+
+            await t;
+
+
+            if (t.Exception == null)
+            {
+                Message += $"采集所有公司基本信息成功，{DateTime.Now.ToString()}\r\n";
+                OnViewNeedUpdate();
+            }
+            else
+            {
+                Message += $"采集所有公司基本信息过程中发生异常，{DateTime.Now.ToString()}\r\n";
+                Message += t.Exception.Message + "\r\n" + t.Exception.StackTrace + "\r\n";
+                OnViewNeedUpdate();
+            }
+
+        }
+
         /// <summary>
         /// 交易日历
         /// </summary>
@@ -198,7 +284,7 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
             Task t = Task.Run(() =>
             {
 
-                _tradingCalendarCollector.CollectHistoryTradingCalendar();
+                _tradingCalendarCollector.CollectHistoryTradingCalendarFromTushare();
 
             });
             await t;
@@ -220,36 +306,7 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
         }
 
 
-        /// <summary>
-        /// 公司基本信息
-        /// </summary>
-        public async Task CollectCompany()
-        {
-
-            Message += $"开始采集所有公司基本信息，{DateTime.Now.ToString()}\r\n";
-            IsCollectCompany = true;
-            //开启采集任务
-            Task t = Task.Run(() =>
-            {
-
-                _companyCollector.CollectAllCompanyInfo();
-
-            });
-
-            await t;
-            IsCollectCompany = false;
-
-            if (t.Exception == null)
-            {
-                Message += $"采集所有公司基本信息成功，{DateTime.Now.ToString()}\r\n";
-            }
-            else
-            {
-                Message += $"采集所有公司基本信息过程中发生异常，{DateTime.Now.ToString()}\r\n";
-                Message += t.Exception.Message + "\r\n" + t.Exception.StackTrace + "\r\n";
-            }
-
-        }
+       
 
 
         /// <summary>
@@ -258,11 +315,11 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
         public async Task CollectIndustry()
         {
             Message += $"开始采集行业信息，{DateTime.Now.ToString()}\r\n";
-
+            OnViewNeedUpdate();
             IsCollectIndustry = true;
             var t = Task.Run(() =>
               {
-                  _industryCollector.CollectIndustry();
+                  _industryCollector.CollectIndustryFromTHS();
 
               });
             await t;
@@ -273,11 +330,12 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
 
                 Message += $"采集所有公司基本信息过程中发生异常，{DateTime.Now.ToString()}\r\n";
                 Message += t.Exception.Message + "\r\n" + t.Exception.StackTrace + "\r\n";
-
+                OnViewNeedUpdate();
             }
             else
             {
                 Message += $"成功采集行业信息，{DateTime.Now.ToString()}\r\n";
+                OnViewNeedUpdate();
             }
 
             IsCollectIndustry = false;
@@ -313,7 +371,7 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
 
                 var t = Task.Run(() =>
                 {
-                    _industryCollector.CollectIndustry(tscodes);
+                    _industryCollector.CollectIndustryFromTHS(tscodes);
 
                 });
                 await t;
@@ -349,9 +407,9 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
 
             IsCollectDailyStockTradeData = true;
 
-            var t = Task.Run(async () => {
+            var t = Task.Run( () => {
 
-               await _dailyStockTradeDataCollector.CollectHistoryDailyTradeDataAsync();
+                _dailyStockTradeDataCollector.CollectHistoryDailyTradeDataFromTushare();
             });
             await t;
 
@@ -396,9 +454,9 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
 
                 }
                 //采集数据
-                var t = Task.Run(async () =>
+                var t = Task.Run( () =>
                 {
-                    await _dailyStockTradeDataCollector.CollectHistoryDailyTradeDataAsync(tscodes);
+                     _dailyStockTradeDataCollector.CollectHistoryDailyTradeDataFromTushare(tscodes);
                 });
                 await t;
                 IsRestoreDailyStockTradeData = false;
@@ -432,7 +490,7 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
             IsDataCleaning = true;
             var t = Task.Run(async () =>
             {
-               await _dailyStockTradeDataCollector.DataCleaning();
+               await _dailyStockTradeDataCollector.DataCleaningAsync();
             });
 
             await t;
@@ -459,7 +517,7 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
             IsCollectStockDailyIndicator = true;
             var t = Task.Run(() =>
             {
-                _stockDailyIndicatorCollector.CollectHistoryStockDailyIndicator();
+                _stockDailyIndicatorCollector.CollectHistoryStockDailyIndicatorFromTushare();
             });
 
             await t;
@@ -509,7 +567,7 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
 
                 var t = Task.Run(() =>
                 {
-                    _stockDailyIndicatorCollector.CollectHistoryStockDailyIndicator(tscodes);
+                    _stockDailyIndicatorCollector.CollectHistoryStockDailyIndicatorFromTushare(tscodes);
                 });
                 await t;
 

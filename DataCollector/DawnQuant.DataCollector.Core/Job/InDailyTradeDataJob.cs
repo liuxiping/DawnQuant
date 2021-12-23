@@ -23,7 +23,7 @@ namespace DawnQuant.DataCollector.Core.Job
         }
 
 
-        private async void CollectInDailyTradeData(IServiceProvider serviceProvider)
+        private  void CollectInDailyTradeData(IServiceProvider serviceProvider)
         {
             using (var scope = serviceProvider.CreateScope())
             {
@@ -41,7 +41,7 @@ namespace DawnQuant.DataCollector.Core.Job
                     //};
 
                     jobMessageUtility.OnInDailyTradeDataJobStarted();
-                    await collector.CollectIncrementDailyTradeDataAsync(DateTime.Now);
+                     collector.CollectInDailyTradeDataFromTushare(DateTime.Now);
                     jobMessageUtility.OnInDailyTradeDataJobCompleted();
                 }
             }

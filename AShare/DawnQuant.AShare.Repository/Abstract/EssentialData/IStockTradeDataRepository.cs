@@ -10,5 +10,9 @@ namespace DawnQuant.AShare.Repository.Abstract.EssentialData
 {
     public interface IStockTradeDataRepository : IRepository<StockTradeData, DateTime>
     {
+        /// <summary>
+        /// 清空数据
+        /// </summary>
+        void Empty();
     }
 }

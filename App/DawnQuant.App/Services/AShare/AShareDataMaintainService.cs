@@ -379,5 +379,29 @@ namespace DawnQuant.App.Services.AShare
 
         }
 
+        /// <summary>
+        /// 判断当前时间是否开市
+        /// </summary>
+        /// <returns></returns>
+        public bool IsOpen()
+        {
+            var date = DateTime.Now.Date;
+            bool isOpen = false;
+            var utcdate = DateTime.SpecifyKind(new DateTime(date.Year, date.Month, date.Day), DateTimeKind.Utc);
+            //交易所代码
+            var tcClient = new TradingCalendarApi.TradingCalendarApiClient(_grpcChannelSet.AShareGrpcChannel);
+
+            Metadata meta = new Metadata();
+            meta.AddAuthorization(_passportProvider.AccessToken);
+
+            var tr = tcClient.MarketIsOpen(new MarketIsOpenRequest
+            {
+                Exchange = "SSE",
+                Date = Timestamp.FromDateTime(utcdate)
+            }, meta);
+            isOpen = tr.IsOpen;
+            return isOpen;
+        }
+
     }
 }

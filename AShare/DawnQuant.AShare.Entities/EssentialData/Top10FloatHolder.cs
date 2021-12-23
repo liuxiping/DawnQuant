@@ -26,12 +26,6 @@ namespace DawnQuant.AShare.Entities.EssentialData
 
         public string TSCode { get; set; }
 
-        /// <summary>
-        /// 公告日期
-        /// </summary>
-        [DataType(DataType.Date)]
-        public DateTime AnnDate { get; set; }
-
 
         /// <summary>
         /// 报告期
@@ -49,5 +43,24 @@ namespace DawnQuant.AShare.Entities.EssentialData
         /// </summary>
         public double HoldAmount { get; set; }
 
+
+        /// <summary>
+        /// 持股比例
+        /// </summary>
+        public double HoldRatio { get; set; }
+
+
+        /// <summary>
+        /// 持股变化（股）
+        /// </summary>
+        public double HoldChange { get; set; }
+
+
+        /// <summary>
+        /// 变动性质:1 不变，2新进，3增加，4减少
+        /// </summary>
+        public int HoldChangeCharacter { get; set; }
     }
+
+   
 }

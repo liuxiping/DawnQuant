@@ -2,6 +2,7 @@
 using DawnQuant.App.Job;
 using DawnQuant.App.Services.AShare;
 using DawnQuant.Passport;
+using Microsoft.Extensions.Logging;
 using Quartz;
 using Quartz.Impl;
 using System;
@@ -32,15 +33,17 @@ namespace DawnQuant.App.Utils
 
 
         /// <summary>
-        /// 开启定时任务
+        /// 客户端定时执行策略任务
         /// </summary>
         public static void StartStrategyScheduledTask()
         {
 
             //获取策略任务
             long userId = IOCUtil.Container.Resolve<IPassportProvider>().UserId;
-            var _strategyScheduledTaskService = IOCUtil.Container.Resolve<StrategyScheduledTaskService>();
-            var tasks = _strategyScheduledTaskService.GetStrategyScheduledTasksByUserId(userId);
+            var logger = IOCUtil.Container.Resolve<ILogger>();
+
+            var strategyScheduledTaskService = IOCUtil.Container.Resolve<StrategyScheduledTaskService>();
+            var tasks = strategyScheduledTaskService.GetStrategyScheduledTasksByUserId(userId);
 
             if (tasks != null && tasks.Count > 0)
             {
@@ -48,24 +51,63 @@ namespace DawnQuant.App.Utils
                 {
                     if (task.IsJoinClientScheduleTask)
                     {
-                        JobDataMap jobDataMap = new JobDataMap();
-                        jobDataMap.Add(new KeyValuePair<string, object>("StrategyScheduledTask", task));
+                        try
+                        {
+                            JobDataMap jobDataMap = new JobDataMap();
+                            jobDataMap.Add(new KeyValuePair<string, object>("StrategyScheduledTask", task));
 
-                        //任务
-                        IJobDetail job = JobBuilder.Create<StrategyScheduledTaskJob>()
-                            .WithIdentity("StrategyScheduledTaskJob").SetJobData(jobDataMap)
-                            .Build();
+                            //任务
+                            IJobDetail job = JobBuilder.Create<StrategyScheduledTaskJob>()
+                                .WithIdentity("StrategyScheduledTaskJob").SetJobData(jobDataMap)
+                                .Build();
 
-                        string cron = task.ClientScheduleTime.Value.Second + " " +
-                            task.ClientScheduleTime.Value.Minute + " " +
-                            task.ClientScheduleTime.Value.Hour + " " + @"? * MON-FRI";
-                        ITrigger trigger = TriggerBuilder.Create().
-                          WithCronSchedule(cron).StartNow().Build();
+                            string cron = task.ClientScheduleCron;
+                            ITrigger trigger = TriggerBuilder.Create().
+                              WithCronSchedule(cron).StartNow().Build();
 
-                        Scheduler.ScheduleJob(job, trigger);
+                            Scheduler.ScheduleJob(job, trigger);
+                        }
+                        catch (Exception ex)
+                        {
+                            string message = $"启动{task.Name}定时任务失败。\r\n 错误信息：{ex.Message}\r\n{ex.StackTrace}";
+                            logger.LogError(message);
+                        }
                     }
                 }
 
+            }
+
+        }
+
+
+        /// <summary>
+        /// 定时自动更新交易数据
+        /// </summary>
+        public static void StartDataUpdateScheduledTask()
+        {
+            if (App.AShareSetting != null && App.AShareSetting.DataUpdateSetting != null)
+            {
+                var u = App.AShareSetting.DataUpdateSetting;
+
+                if (string.IsNullOrEmpty(u.TaskCron))
+                {
+                    var logger = IOCUtil.Container.Resolve<ILogger>();
+                    try
+                    {
+                        //任务
+                        IJobDetail job = JobBuilder.Create<DataUpdateScheduledTaskJob>()
+                            .WithIdentity("DataUpdateScheduledTaskJob").Build();
+
+                        ITrigger trigger = TriggerBuilder.Create().
+                          WithCronSchedule(u.TaskCron).StartNow().Build();
+                        Scheduler.ScheduleJob(job, trigger);
+                    }
+                    catch (Exception ex)
+                    {
+                        string message = $"启动自动更新定时任务失败。\r\n 错误信息：{ex.Message}\r\n{ex.StackTrace}";
+                        logger.LogError(message);
+                    }
+                }
             }
 
         }

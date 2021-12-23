@@ -88,7 +88,9 @@ namespace DawnQuant.App.Utils
             builder.RegisterType<StrategyScheduledTaskService>().SingleInstance();
             builder.RegisterType<SupportedCategoriesService>().SingleInstance();
 
+            builder.RegisterType<SettingService>().SingleInstance();
 
+            
             //映射转换服务
             builder.AddAutoMapper();
 

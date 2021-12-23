@@ -14,10 +14,11 @@
 
   <ItemGroup>
     <Compile Remove="Services\EssentialData\ReversionFactorService.cs" />
+    <Compile Remove="Services\EssentialData\Top10FloatHolderService.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Protos\EssentialData\HolderNumberApi.proto" />
+    <None Remove="Protos\EssentialData\HolderApi.proto" />
     <None Remove="Protos\EssentialData\ReversionFactorApi.proto" />
     <None Remove="Protos\EssentialData\Top10FloatHolderApi.proto" />
     <None Remove="Protos\SyncToy_a74b51fc-14e0-4c1f-8048-92502a6d3f82.dat" />
@@ -60,8 +61,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\EssentialData\HolderNumberApi.proto" GrpcServices="Server" />
-    <Protobuf Include="Protos\EssentialData\Top10FloatHolderApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\EssentialData\HolderApi.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\EssentialData\BasicStockInfoApi.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\EssentialData\Common.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\EssentialData\CompanyApi.proto" GrpcServices="Server" />

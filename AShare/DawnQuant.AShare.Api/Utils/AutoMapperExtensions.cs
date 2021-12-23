@@ -50,7 +50,7 @@ namespace DawnQuant.AShare.Api.Utils
                   config.CreateMap<SelectScopeMetadataDto, SelectScopeMetadata>().ReverseMap();
                   config.CreateMap<SelectScopeMetadataCategoryDto, SelectScopeMetadataCategory>().ReverseMap();
 
-                  config.CreateMap<Setting, SettingDto>().ReverseMap();
+               
 
 
                   config.CreateMap<DateTime, Timestamp>().ConvertUsing(new DateTimeToGrpcTimestampConverter());

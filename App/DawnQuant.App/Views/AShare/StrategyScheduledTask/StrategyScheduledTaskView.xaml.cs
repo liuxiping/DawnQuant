@@ -108,15 +108,15 @@ namespace DawnQuant.App.Views.AShare.StrategyScheduledTask
         private void _chkIsJoinClientScheduleTask_Checked(object sender, RoutedEventArgs e)
         {
             _txtClientScheduleTime.Visibility = Visibility.Visible;
-            _tpClientScheduleTime.Visibility = Visibility.Visible;
-            Model.ClientScheduleTime = new DateTime(8888, 8, 8, 14, 35, 0);
+            _tpClientScheduleCron.Visibility = Visibility.Visible;
+           // Model.ClientScheduleTime = new DateTime(8888, 8, 8, 14, 35, 0);
 
         }
 
         private void _chkIsJoinClientScheduleTask_Unchecked(object sender, RoutedEventArgs e)
         {
             _txtClientScheduleTime.Visibility = Visibility.Collapsed;
-            _tpClientScheduleTime.Visibility = Visibility.Collapsed;
+            _tpClientScheduleCron.Visibility = Visibility.Collapsed;
         }
     }
 }

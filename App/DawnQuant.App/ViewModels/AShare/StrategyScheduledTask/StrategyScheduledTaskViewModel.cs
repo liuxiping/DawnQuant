@@ -205,15 +205,24 @@ namespace DawnQuant.App.ViewModels.AShare.StrategyScheduledTask
             set { SetProperty(ref _isJoinClientScheduleTask, value, nameof(IsJoinClientScheduleTask)); }
         }
 
-        /// <summary>
-        /// 客户端定时时间
-        /// </summary>
-        private DateTime _clientScheduleTime;
-        public DateTime ClientScheduleTime
+        ///// <summary>
+        ///// 客户端定时时间
+        ///// </summary>
+        //private DateTime _clientScheduleTime;
+        //public DateTime ClientScheduleTime
+        //{
+        //    get { return _clientScheduleTime; }
+        //    set { SetProperty(ref _clientScheduleTime, value, nameof(ClientScheduleTime)); }
+        //}
+
+        private string _clientScheduleCron;
+        public string ClientScheduleCron
         {
-            get { return _clientScheduleTime; }
-            set { SetProperty(ref _clientScheduleTime, value, nameof(ClientScheduleTime)); }
+            get { return _clientScheduleCron; }
+            set { SetProperty(ref _clientScheduleCron, value, nameof(ClientScheduleCron)); }
         }
+
+        
 
         /// <summary>
         /// 所有计划任务列表
@@ -271,10 +280,7 @@ namespace DawnQuant.App.ViewModels.AShare.StrategyScheduledTask
 
                 if (IsJoinClientScheduleTask)
                 {
-                    if (task.ClientScheduleTime != null)
-                    {
-                        ClientScheduleTime = task.ClientScheduleTime.Value;
-                    }
+                    ClientScheduleCron = task.ClientScheduleCron;
                 }
 
                 StrategyName = "";
@@ -335,7 +341,7 @@ namespace DawnQuant.App.ViewModels.AShare.StrategyScheduledTask
 
             if (IsJoinClientScheduleTask)
             {
-                sst.ClientScheduleTime = ClientScheduleTime;
+                sst.ClientScheduleCron = ClientScheduleCron;
             }
 
             sst.StrategyIds = string.Join(',', CurSelStockStrategies.Select(p => p.Id));
@@ -372,7 +378,7 @@ namespace DawnQuant.App.ViewModels.AShare.StrategyScheduledTask
                 if (IsJoinClientScheduleTask)
                 {
                     //默认下午2:35 执行计划任务
-                    ClientScheduleTime = new DateTime(8888, 8, 8, 14, 35, 0);
+                    ClientScheduleCron = "0 30 14 ? * MON-FRI";
                 }
             }
         }

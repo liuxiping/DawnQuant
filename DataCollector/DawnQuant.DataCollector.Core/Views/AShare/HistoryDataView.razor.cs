@@ -21,8 +21,16 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
             ViewModel.StockDailyIndicatorProgressChange += UpdateNotifyMessage;
             ViewModel.SyncTurnoverProgressChange += UpdateNotifyMessage;
             ViewModel.DataCleaningProgressChange += UpdateNotifyMessage;
+            ViewModel.ViewNeedUpdate += ViewModel_ViewNeedUpdate;
         }
 
+        private void ViewModel_ViewNeedUpdate()
+        {
+            InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }
 
         private void UpdateNotifyMessage()
         {
@@ -47,24 +55,40 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
             ViewModel.DataCleaningProgress = "";
         }
 
-        private async void CollectBSInfo()
+
+        /// <summary>
+        /// 采集股票信息
+        /// </summary>
+        private async void CollectStockInfo()
         {
-            await ViewModel.CollectBSInfo();
+           await ViewModel.CollectStockInfo();
+           StateHasChanged();
+        }
+
+      
+
+        /// <summary>
+        /// 采集日线数据和每日指标
+        /// </summary>
+        private async void CollectDTDAndDI()
+        {
+           await ViewModel.CollectDTDAndDI();
             StateHasChanged();
         }
 
-        private async void CollectCompany()
-        {
-            await ViewModel.CollectCompany();
-            StateHasChanged();
-        }
 
+        /// <summary>
+        /// 交易日历
+        /// </summary>
         private async void CollectTC()
         {
             await ViewModel.CollectTC();
             StateHasChanged();
         }
 
+        /// <summary>
+        /// 行业
+        /// </summary>
         private async void CollectIndustry()
         {
             await ViewModel.CollectIndustry();
@@ -78,6 +102,9 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
         }
 
 
+        /// <summary>
+        /// 交易日线上数据
+        /// </summary>
         private async void CollectDTD()
         {
             await ViewModel.CollectDTD();
@@ -99,6 +126,9 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
             StateHasChanged();
         }
 
+        /// <summary>
+        /// 计算复权因子
+        /// </summary>
         private async void CalculateAllAdjustFactor()
         {
             await ViewModel.CalculateAllAdjustFactor();
@@ -106,6 +136,9 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
         }
 
 
+        /// <summary>
+        /// 每日指标
+        /// </summary>
         private async void CollectDI()
         {
             await ViewModel.CollectDI();
@@ -118,6 +151,9 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
             StateHasChanged();
         }
 
+        /// <summary>
+        /// 换手率
+        /// </summary>
         private async void SyncTurnover()
         {
             await ViewModel.SyncTurnover();

@@ -1,0 +1,34 @@
+﻿@using DawnQuant.App.Core.Views.AShare.Common  
+
+<div class="selfselstock-container">
+        <div class="selfselstock-header">
+            <div class="category">
+                <ul>
+                @if (ViewModel != null & ViewModel.Categories != null & ViewModel.Categories.Count > 0)
+                {
+                    foreach (var c in ViewModel.Categories)
+                    {
+                        <li>
+                            <a  class="@GetSelfSelCategoryCssClass(@c.Id.ToString())"      @onclick="(e)=>{SelfSelCategoryChange(c);}"  >@c.Name</a>
+                        </li>
+                    }
+                }
+                </ul>
+            </div>
+            <div class="categorymgr">
+                <ul>
+                    <li>
+                        <a ><img src="_content/DawnQuant.App.Core/images/categorymgr.svg" /></a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <div class="selfselstock-content">
+            <div class="selfselstocklist">
+                <StockList Stocks="@GetStocks()"></StockList>
+             </div>
+            <div class="stockkline"></div>
+            <div class="relatestocklist"></div>
+        </div>
+    </div>

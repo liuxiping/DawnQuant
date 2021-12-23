@@ -63,6 +63,16 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
         }
 
 
+        /// <summary>
+        /// 清空交易数据
+        /// </summary>
+        public void Empty()
+        {
+            StockTradeDataDbContext dbContext =(StockTradeDataDbContext)_dbContext.Context;
 
+            string emptySql = $"delete  from `{dbContext.TableName}`";
+
+            dbContext.Database.ExecuteSqlRaw(emptySql);
+        }
     }
 }

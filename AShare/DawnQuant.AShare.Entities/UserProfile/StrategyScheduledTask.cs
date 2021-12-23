@@ -78,7 +78,10 @@ namespace DawnQuant.AShare.Entities
         /// <summary>
         /// 客户端定时执行时间
         /// </summary>
-        public DateTime? ClientScheduleTime { get; set; }
+       // public DateTime? ClientScheduleTime { get; set; }
+
+        [MaxLength(255)]
+        public string ClientScheduleCron { get; set; }
 
         /// <summary>
         /// 创建时间

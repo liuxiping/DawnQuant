@@ -40,11 +40,9 @@ namespace DawnQuant.DataCollector.Core.Utils
                 config.ClientSecret = configuration["ClientSecret"];
                 config.Scope = configuration["Scope"];
 
-                config.DailyTradeDataTaskCron = configuration["DailyTradeDataTaskCron"];
-                config.DailyTradeDataTaskFromSinaCron = configuration["DailyTradeDataFromSinaTaskCron"];
-                config.StockDailyIndicatorTaskCron = configuration["StockDailyIndicatorTaskCron"];
-                config.InSyncTurnoverTaskCron= configuration["InSyncTurnoverTaskCron"];
-
+                config.InDataFromTushareTaskCron = configuration["InDataFromTushareTaskCron"];
+                config.InDTDFromSinaTaskCron = configuration["InDTDFromSinaTaskCron"];
+               
 
                 return config;
 

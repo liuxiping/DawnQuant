@@ -147,12 +147,11 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
 
 
 
-        public bool IsStartInDailyTradeData { set; get; } = false;
-        public bool IsStartInStockDailyIndicator { set; get; } = false;
+        public bool IsInDataFromTushare { set; get; } = false;
         public bool IsStartInDailyTradeDataFromSina { set; get; } = false;
         public bool IsStartAllTask { set; get; } = false;
 
-        public bool IsInSyncTrunover { set; get; } = false;
+      
 
 
         /// <summary>
@@ -182,54 +181,25 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
 
 
         /// <summary>
-        /// 增量更新每日日线交易数据
+        /// 从Tushare 增量更新数据
         /// </summary>
-        public void StartIDTDTask()
+        public void StartInDataFromTushareTask()
         {
-            IsStartInDailyTradeData = true;
+            IsInDataFromTushare = true;
 
             //任务
-            IJobDetail job = JobBuilder.Create<InDailyTradeDataJob>()
-                .WithIdentity("InDailyTradeDataJob").Build();
+            IJobDetail job = JobBuilder.Create<InDataFromTushareJob>()
+                .WithIdentity("InDataFromTushareJob").Build();
 
             job.JobDataMap.Add(Constant.ServiceProvider, _serviceProvider);
 
             ITrigger trigger = TriggerBuilder.Create().
-              WithCronSchedule(_collectorConfig.DailyTradeDataTaskCron).StartNow().Build();
+              WithCronSchedule(_collectorConfig.InDataFromTushareTaskCron).StartNow().Build();
 
-            // ITrigger trigger = TriggerBuilder.Create().WithSimpleSchedule(b =>
-            // { b.WithInterval(TimeSpan.FromSeconds(3)).WithRepeatCount(0); }).StartNow().Build();
-
+           
             TaskUtil.Scheduler.ScheduleJob(job, trigger);
 
-            Message += $"增量更新每日日线交易数据任务计划已经启动，{DateTime.Now.ToString()}\r\n";
-
-            SetIsStartAllTask();
-        }
-
-
-
-        /// <summary>
-        /// 增量更新每日指标数据
-        /// </summary>
-        public void StartIDITask()
-        {
-            IsStartInStockDailyIndicator = true;
-
-            IJobDetail job = JobBuilder.Create<InStockDailyIndicatorJob>()
-               .WithIdentity("InStockDailyIndicatorJob").Build();
-
-            job.JobDataMap.Add(Constant.ServiceProvider, _serviceProvider);
-
-            ITrigger trigger = TriggerBuilder.Create().
-            WithCronSchedule(_collectorConfig.StockDailyIndicatorTaskCron).StartNow().Build();
-
-            // ITrigger trigger = TriggerBuilder.Create().WithSimpleSchedule(b =>
-            // { b.WithInterval(TimeSpan.FromSeconds(3)).WithRepeatCount(0); }).StartNow().Build();
-
-            TaskUtil.Scheduler.ScheduleJob(job, trigger);
-
-            Message += $"增量更新每日指标数据任务计划已经成功启动，{DateTime.Now.ToString()}\r\n";
+            Message += $"从Tushare增量更新数据任务计划已经启动，{DateTime.Now.ToString()}\r\n";
 
             SetIsStartAllTask();
         }
@@ -244,14 +214,14 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
 
             //任务
             IJobDetail job = JobBuilder.Create<InDailyTradeDataFromSinaJob>()
-                .WithIdentity("DailyTradeDataFromSinaTaskCron").Build();
+                .WithIdentity("InDailyTradeDataFromSinaJob").Build();
             job.JobDataMap.Add(Constant.ServiceProvider, _serviceProvider);
 
             ITrigger trigger = TriggerBuilder.Create().
-              WithCronSchedule(_collectorConfig.DailyTradeDataTaskFromSinaCron).StartNow().Build();
+              WithCronSchedule(_collectorConfig.InDTDFromSinaTaskCron).StartNow().Build();
 
             TaskUtil.Scheduler.ScheduleJob(job, trigger);
-            Message += $"从新浪增量更新每日日线交易数据任务计划已经启动，{DateTime.Now.ToString()}\r\n";
+            Message += $"从新浪增量更新日线交易数据任务计划已经启动，{DateTime.Now.ToString()}\r\n";
 
             SetIsStartAllTask();
         }
@@ -266,50 +236,24 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
             {
                 StartIDTDFromSinaTask();
             }
-            if (!IsStartInDailyTradeData)
-            {
-                StartIDTDTask();
-            }
-            if (!IsStartInStockDailyIndicator)
-            {
-                StartIDITask();
-            }
+           
 
-            if (!IsInSyncTrunover)
+            if (!IsInDataFromTushare)
             {
-                StartInSyncTrunover();
+                StartInDataFromTushareTask();
             }
 
             IsStartInDailyTradeDataFromSina = true;
-            IsStartInDailyTradeData = true;
-            IsStartInStockDailyIndicator = true;
-            IsInSyncTrunover = true;
+            IsInDataFromTushare = true;
+           
         }
 
-        public void StartInSyncTrunover()
-        {
-            IsInSyncTrunover = true;
-
-            //任务
-            IJobDetail job = JobBuilder.Create<InSyncTrunoverJob>()
-                .WithIdentity("InSyncTurnoverTaskCron").Build();
-            job.JobDataMap.Add(Constant.ServiceProvider, _serviceProvider);
-
-            ITrigger trigger = TriggerBuilder.Create().
-              WithCronSchedule(_collectorConfig.InSyncTurnoverTaskCron).StartNow().Build();
-
-            TaskUtil.Scheduler.ScheduleJob(job, trigger);
-            Message += $"增量同步换手率数据任务计划已经启动，{DateTime.Now.ToString()}\r\n";
-
-            SetIsStartAllTask();
-        }
+       
 
         private void SetIsStartAllTask()
         {
             if (IsStartInDailyTradeDataFromSina && 
-                IsStartInDailyTradeData &&
-                IsStartInStockDailyIndicator&&
-                IsInSyncTrunover )
+                IsInDataFromTushare )
             {
                 IsStartAllTask = true;
             }

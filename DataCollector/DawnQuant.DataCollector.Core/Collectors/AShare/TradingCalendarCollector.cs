@@ -76,7 +76,7 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
             }
         }
 
-        public void CollectHistoryTradingCalendar()
+        public void CollectHistoryTradingCalendarFromTushare()
         {
             GrpcChannel channel = GrpcChannel.ForAddress(_apiUrl, new GrpcChannelOptions
             {

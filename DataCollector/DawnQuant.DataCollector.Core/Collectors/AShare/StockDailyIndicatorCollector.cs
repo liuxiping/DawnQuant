@@ -37,50 +37,65 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
         int _threadCount = 5;
 
         public event Action ProgressChanged;
+        protected void OnProgressChanged()
+        {
+            if (ProgressChanged != null)
+            {
+                ProgressChanged();
+            }
+        }
 
         public string StockId { get; set; }
         public string Msg { get; set ; }
         public List<string> UnCompleteStocks { get; set ; }
 
 
-        /// <summary>
-        /// 数据清洗
-        /// </summary>
+   
        
-
-        public void CollectHistoryStockDailyIndicator()
+        /// <summary>
+        /// 从Tushare 采集所有每日指标数据
+        /// </summary>
+        public void CollectHistoryStockDailyIndicatorFromTushare()
         {
-            GrpcChannel channel = GrpcChannel.ForAddress(_apiUrl);
-            List<string> alltscodes = new List<string>();
-            List<string> completetscodes = new List<string>();
-            try
+            using (GrpcChannel channel = GrpcChannel.ForAddress(_apiUrl))
             {
-                object lockObj = new object();
-
                 var client = new BasicStockInfoApi.BasicStockInfoApiClient(channel);
 
                 Metadata meta = new Metadata();
                 meta.AddAuthorization(_passportProvider.AccessToken);
 
-                var response = client.GetAllTSCodes(new Empty(),meta);
+                var response = client.GetAllTSCodes(new Empty(), meta);
 
+                CollectHistoryStockDailyIndicatorFromTushare(response.TSCodes.ToList(), channel);
+            }
+        }
 
-                alltscodes.AddRange(response.TSCodes);
+        public void CollectHistoryStockDailyIndicatorFromTushare(List<string> stocks, GrpcChannel channel=null)
+        {
+            if (channel == null)
+            {
+                channel = GrpcChannel.ForAddress(_apiUrl);
+            }
+            
+            List<string> completetscodes = new List<string>();
 
-                int allCount = response.TSCodes.Count;
+            try
+            {
+                object lockObj = new object();
+                int allCount = stocks.Count;
+                int complete = 0;
 
                 //分片分别开启多个线程采集
-                int length = (int)Math.Ceiling(response.TSCodes.Count / (float)_threadCount);
+                int length = (int)Math.Ceiling(stocks.Count / (float)_threadCount);
 
                 List<List<string>> lists = new List<List<string>>();
 
                 for (int i = 0; i < _threadCount; i++)
                 {
-                    lists.Add(response.TSCodes.Skip(i * length).Take(length).ToList());
+                    lists.Add(stocks.Skip(i * length).Take(length).ToList());
                 }
-                List<Task> tasks = new List<Task>();
 
-                int complete = 0;
+                List<Task> tasks = new List<Task>();
                 //开启多个线程采集日线数据
                 foreach (var spiltTSCodes in lists)
                 {
@@ -88,13 +103,13 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
                     {
                         foreach (var tscode in spiltTSCodes)
                         {
-                            CollectSingleStockDailyIndicator(tscode, channel);
+                            CollectSingleStockDailyIndicatorFromTushare(tscode, channel);
                             lock (lockObj)
                             {
                                 complete++;
                                 completetscodes.Add(tscode);
                             }
-                            Msg = $"每日指标已经成功采集{complete}个股票，总共{allCount}个股票"; 
+                            Msg = $"每日指标已经成功采集{complete}个股票，总共{allCount}个股票";
                             OnProgressChanged();
 
                         }
@@ -109,7 +124,7 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
             }
             finally
             {
-                UnCompleteStocks = alltscodes.Except(completetscodes).ToList();
+                UnCompleteStocks = stocks.Except(completetscodes).ToList();
                 if (channel != null)
                 {
                     channel.Dispose();
@@ -117,16 +132,10 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
             }
         }
 
-        protected void OnProgressChanged()
+        private void CollectSingleStockDailyIndicatorFromTushare(string tscode, GrpcChannel channel)
         {
-            if (ProgressChanged != null)
-            {
-                ProgressChanged();
-            }
-        }
+            
 
-        private void CollectSingleStockDailyIndicator(string tscode, GrpcChannel channel)
-        {
             var client = new BasicStockInfoApi.BasicStockInfoApiClient(channel);
 
             Metadata meta = new Metadata();
@@ -174,6 +183,12 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
             }
         }
 
+        /// <summary>
+        /// 保存每日指标数据
+        /// </summary>
+        /// <param name="dailyResponseModels"></param>
+        /// <param name="tscode"></param>
+        /// <param name="channel"></param>
         public void SaveSingleStockDailyIndicator(List<DailyBasicResponseModel> dailyResponseModels,string tscode,GrpcChannel channel)
         {
             List<StockDailyIndicatorDto> stockDailyIndicators = new List<StockDailyIndicatorDto>();
@@ -228,61 +243,5 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
             }
         }
 
-        public void CollectHistoryStockDailyIndicator(List<string> stocks)
-        {
-            GrpcChannel channel = GrpcChannel.ForAddress(_apiUrl);
-            List<string> completetscodes = new List<string>();
-            try
-            {
-                object lockObj = new object();
-                int allCount = stocks.Count;
-                int complete = 0;
-
-                //分片分别开启多个线程采集
-                int length = (int)Math.Ceiling(stocks.Count / (float)_threadCount);
-
-                List<List<string>> lists = new List<List<string>>();
-
-                for (int i = 0; i < _threadCount; i++)
-                {
-                    lists.Add(stocks.Skip(i * length).Take(length).ToList());
-                }
-
-                List<Task> tasks = new List<Task>();
-                //开启多个线程采集日线数据
-                foreach (var spiltTSCodes in lists)
-                {
-                    var t = new Task(() =>
-                    {
-                        foreach (var tscode in spiltTSCodes)
-                        {
-                            CollectSingleStockDailyIndicator(tscode, channel);
-                            lock (lockObj)
-                            {
-                                complete++;
-                                completetscodes.Add(tscode);
-                            }
-                            Msg = $"每日指标已经成功采集{complete}个股票，总共{allCount}个股票";
-                            OnProgressChanged();
-
-                        }
-                    });
-
-                    tasks.Add(t);
-                    t.Start();
-
-                }
-
-                Task.WaitAll(tasks.ToArray());
-            }
-            finally
-            {
-                UnCompleteStocks = stocks.Except(completetscodes).ToList();
-                if (channel != null)
-                {
-                    channel.Dispose();
-                }
-            }
-        }
     }
 }

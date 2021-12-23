@@ -26,7 +26,7 @@ namespace DawnQuant.DataCollector.Core.Job
         }
 
 
-        private async void CollectInDailyTradeDataFromSina(IServiceProvider serviceProvider)
+        private  void CollectInDailyTradeDataFromSina(IServiceProvider serviceProvider)
         {
             using (var scope = serviceProvider.CreateScope())
             {
@@ -47,16 +47,8 @@ namespace DawnQuant.DataCollector.Core.Job
                     {
                         var jobMessageUtility = scope.ServiceProvider.GetService<JobMessageUtil>();
 
-
-
-                        //collector.CollectInDTDFromSinaProgressChanged += (msg) =>
-                        //{
-                        //    jobMessageUtility.OnDailyTradeDataJobProgressChanged(msg);
-                        //};
-
-
                         jobMessageUtility.OnInDailyTradeDataFromSinaJobStarted();
-                        await collector.CollectIncrementDailyTradeDataFromSinaAsync(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
+                         collector.CollectInDailyTradeDataFromSina(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
                         jobMessageUtility.OnInDailyTradeDataFromSinaJobCompleted();
 
                     }

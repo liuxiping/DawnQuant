@@ -12,7 +12,7 @@
              xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
              x:Class="DawnQuant.App.Views.AShare.StrategyScheduledTask.StrategyScheduledTaskView"
              mc:Ignorable="d"  FontSize="15"
-             d:DesignHeight="800" d:DesignWidth="800">
+             d:DesignHeight="1000" d:DesignWidth="1000">
     <UserControl.Resources>
         <lc:BoolToVisibilityConverter x:Key="btovConcerter"></lc:BoolToVisibilityConverter>
     </UserControl.Resources>
@@ -153,8 +153,9 @@
                 <CheckBox  IsChecked="{Binding IsJoinServerScheduleTask}" FontSize="15" HorizontalAlignment="Left" Padding="5"  Margin="5"  Grid.Row="7" Content="服务器自动执行计划任务" Grid.Column="1"></CheckBox>
                 <CheckBox  Unchecked="_chkIsJoinClientScheduleTask_Unchecked" Checked="_chkIsJoinClientScheduleTask_Checked" x:Name="_chkIsJoinClientScheduleTask" IsChecked="{Binding IsJoinClientScheduleTask}" FontSize="15" HorizontalAlignment="Left" Padding="5"  Margin="5"  Grid.Row="8" Content="客户端定时执行计划任务" Grid.Column="1"></CheckBox>
 
-                <TextBlock Visibility="Collapsed" x:Name="_txtClientScheduleTime" Padding="5"  Margin="5" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="0">客户端定时时间：</TextBlock>
-                <dxe:TimePicker Visibility="Collapsed"  Name="_tpClientScheduleTime" HorizontalAlignment="Left"  DateTime="{Binding ClientScheduleTime,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   Padding="5"  Margin="5" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="3"></dxe:TimePicker>
+                <TextBlock Visibility="Collapsed" x:Name="_txtClientScheduleTime" Padding="5"  Margin="5" HorizontalAlignment="Right" Grid.Row="9" Grid.Column="0">客户端定时计划Cron：</TextBlock>
+                <!--<dxe:TimePicker Visibility="Collapsed"  Name="_tpClientScheduleTime" HorizontalAlignment="Left"  DateTime="{Binding ClientScheduleTime,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"   Padding="5"  Margin="5" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="3"></dxe:TimePicker>-->
+                <TextBox  Visibility="Collapsed"  Name="_tpClientScheduleCron" Text="{Binding ClientScheduleCron}" Padding="5"  Margin="5" Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="3"    ></TextBox>
 
 
                 <TextBlock Padding="5"  Margin="5" HorizontalAlignment="Right" Grid.Row="10" Grid.Column="0">排序</TextBlock>

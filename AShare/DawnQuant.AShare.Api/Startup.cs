@@ -118,8 +118,8 @@ namespace DawnQuant.AShare.Api
                 endpoints.MapGrpcService<IndustryService>();
                 endpoints.MapGrpcService<StockTradeDataService>();
                 endpoints.MapGrpcService<StockDailyIndicatorService>();
-                endpoints.MapGrpcService<HolderNumberService>();
-                endpoints.MapGrpcService<Top10FloatHolderService>();
+                endpoints.MapGrpcService<HolderService>();
+              
 
 
                 //策略服务基础数据

@@ -40,25 +40,32 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
         /// 收集上市公司基本信息
         /// </summary>
         /// <param name="id"></param>
-        public void CollectAllCompanyInfo( )
+        public void CollectAllCompanyInfoFromTushare( )
         {
 
-            TuShare tu = new TuShare(_tushareUrl, _tushareToken);
+            try
+            {
+                TuShare tu = new TuShare(_tushareUrl, _tushareToken);
+                StockCompanyRequestModel requestModelSSE = new StockCompanyRequestModel();
+                requestModelSSE.Exchange = StockEntityConst.SSE;
+                var taskSSE = tu.GetData(requestModelSSE);
+                taskSSE.Wait();
 
-            StockCompanyRequestModel requestModelSSE = new StockCompanyRequestModel();
-            requestModelSSE.Exchange = StockEntityConst.SSE;
-            var taskSSE = tu.GetData(requestModelSSE);
-            taskSSE.Wait();
+                SaveCompanyInfo(taskSSE.Result);
 
-            SaveCompanyInfo(taskSSE.Result);
+                StockCompanyRequestModel requestModelSZSE = new StockCompanyRequestModel();
+                requestModelSZSE.Exchange = StockEntityConst.SZSE;
+                var taskSZSE = tu.GetData(requestModelSZSE);
+                taskSZSE.Wait();
 
-            StockCompanyRequestModel requestModelSZSE = new StockCompanyRequestModel();
-            requestModelSZSE.Exchange = StockEntityConst.SZSE;
-            var taskSZSE = tu.GetData(requestModelSZSE);
-            taskSZSE.Wait();
-
-            SaveCompanyInfo(taskSZSE.Result);
-           
+                SaveCompanyInfo(taskSZSE.Result);
+            }
+            catch (Exception ex)
+            {
+                string msg = "采集上市公司信息发生错误：\r\n" + ex.Message + "\r\n" + ex.StackTrace;
+                _logger.LogError(msg);
+                throw;
+            }
 
         }
 

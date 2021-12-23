@@ -66,10 +66,15 @@ namespace DawnQuant.App.Models.AShare.UserProfile
         /// </summary>
         public bool IsJoinClientScheduleTask { get; set; }
 
-        /// <summary>
-        /// 客户端定时执行时间
-        /// </summary>
-        public DateTime? ClientScheduleTime { get; set; }
+        ///// <summary>
+        ///// 客户端定时执行时间
+        ///// </summary>
+        //public DateTime? ClientScheduleTime { get; set; }
+
+        
+
+        [MaxLength(255)]
+       public string ClientScheduleCron { get; set; }
 
 
         /// <summary>

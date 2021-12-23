@@ -41,6 +41,7 @@
     <None Remove="Assets\Images\refresh.png" />
     <None Remove="Assets\Images\scheduledtask.png" />
     <None Remove="Assets\Images\setting.png" />
+    <None Remove="Assets\Images\setting1.png" />
     <None Remove="Assets\Images\show.png" />
     <None Remove="Assets\Images\strategy.png" />
     <None Remove="Assets\Images\subjectandhot.png" />
@@ -65,6 +66,7 @@
     <Resource Include="Assets\Images\refresh.png" />
     <Resource Include="Assets\Images\scheduledtask.png" />
     <Resource Include="Assets\Images\setting.png" />
+    <Resource Include="Assets\Images\setting1.png" />
     <Resource Include="Assets\Images\show.png" />
     <Resource Include="Assets\Images\strategy.png" />
     <Resource Include="Assets\Images\subjectandhot.png" />
@@ -118,7 +120,6 @@
   <ItemGroup>
     <Folder Include="Models\AShare\Strategy\Executor\SelectScope\Index\" />
     <Folder Include="Models\AShare\Strategy\Executor\SelectScope\MarketType\" />
-    <Folder Include="ViewModels\AShare\Setting\" />
   </ItemGroup>
 
   <ItemGroup>

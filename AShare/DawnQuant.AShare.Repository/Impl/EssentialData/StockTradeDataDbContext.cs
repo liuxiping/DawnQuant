@@ -11,11 +11,8 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
 {
     public class StockTradeDataDbContext:DbContext
     {
-       
-
         public StockTradeDataDbContext(DbContextOptions<StockTradeDataDbContext> options,
-            string ts_Code,
-            KCycle stockKCycle) : base(options)
+            string ts_Code,KCycle stockKCycle) : base(options)
         {
             TS_Code = ts_Code;
 
@@ -47,7 +44,6 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
       
         public DbSet<StockTradeData> StockTradeDatas { get; set; }
 
-
         private string GetStockTradeDataTableName()
         {
             string tableName = "";
@@ -78,7 +74,6 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
         public string TableName => GetStockTradeDataTableName(); 
 
 
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.ReplaceService<IModelCacheKeyFactory, DynamicModelCacheKeyFactory>();
@@ -96,12 +91,7 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
                 entity.HasKey(t =>  t.TradeDateTime);
                 entity.HasIndex(t => t.TradeDateTime);
             });
-
-           
            
         }
-
-
-        
     }
 }

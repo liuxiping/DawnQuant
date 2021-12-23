@@ -13,33 +13,18 @@ namespace DawnQuant.AShare.Entities.UserProfile
     {
         public override long GetKeyValue()
         {
-            return Id;
+            return UserId;
         }
-
-
-        /// <summary>
-        /// 主键
-        /// </summary>
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long Id { get; set; }
-
 
         /// <summary>
         /// 用户ID
         /// </summary>
+        [Key] 
         public long UserId { get; set; }
-
-        /// <summary>
-        /// 配置key
-        /// </summary>
-        [MaxLength(255)]
-        public string Key { get; set; }
 
         /// <summary>
         /// 配置信息的json 
         /// </summary>
-        [MaxLength(65535)]
         public string Content { get; set; }
     }
 }

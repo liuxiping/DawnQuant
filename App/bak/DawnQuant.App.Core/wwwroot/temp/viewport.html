@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .cantainer {
+            width: 300px;
+            height: 150px;
+            background-color: #ddd;
+            margin: 0 auto;
+            overflow: scroll;
+        }
+        
+        table {
+            border-collapse: collapse;
+        }
+        
+        table td {
+            border: 1px solid skyblue;
+        }
+    </style>
+
+    <script>
+        function scrolltt9() {
+            let r9 = document.getElementById("r9");
+            r9.scrollIntoView(false);
+        }
+
+        function scrolltt3() {
+            let r3 = document.getElementById("r3");
+            r3.scrollIntoView(true);
+        }
+    </script>
+</head>
+
+<body>
+    <div class="cantainer">
+        <table>
+            <tbody>
+                <tr>
+                    <td>111</td>
+                </tr>
+                <tr>
+                    <td>222</td>
+                </tr>
+                <tr id="r3">
+                    <td>333</td>
+                </tr>
+                <tr>
+                    <td>444</td>
+                </tr>
+                <tr>
+                    <td>555</td>
+                </tr>
+                <tr id="r6">
+                    <td>666</td>
+                </tr>
+                <tr>
+                    <td>777</td>
+                </tr>
+                <tr>
+                    <td>888</td>
+                </tr>
+                <tr id="r9">
+                    <td>999</td>
+                </tr>
+                <tr>
+                    <td>100</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <button onclick="scrolltt9()">scroll 9</button>
+    <button onclick="scrolltt3()">scroll 3</button>
+</body>
+
+</html>

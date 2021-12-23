@@ -53,11 +53,25 @@ namespace DawnQuant.App.Views.AShare
             {
                 //开启客户端执行策略任务
                 TaskUtil.StartStrategyScheduledTask();
+
+                //开启后台自动更新数据
+                TaskUtil.StartDataUpdateScheduledTask();
             });
 
             //计划任务执行消息
             var jobMessageUtility = IOCUtil.Container.Resolve<JobMessageUtil>();
+
+            jobMessageUtility.DataUpdateScheduledTaskJobCompleted += JobMessageUtility_DataUpdateScheduledTaskJobCompleted;
             jobMessageUtility.StrategyScheduledTaskCompleted += JobMessageUtility_StrategyScheduledTaskCompleted;
+        }
+
+        private void JobMessageUtility_DataUpdateScheduledTaskJobCompleted()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                Model.ShowDataUpdateScheduledTaskCompletedNofify();
+
+            });
         }
 
 
