@@ -56,7 +56,7 @@ namespace DawnQuant.App.ViewModels.AShare.StockStrategy
         /// <summary>
         /// 加载策略分类与策略
         /// </summary>
-        public async void LoadCategoriesIncludeStrategies()
+        public async Task LoadCategoriesIncludeStrategies()
         {
             ObservableCollection<StockStrategyCategory> categories = null;
             await Task.Run(() =>

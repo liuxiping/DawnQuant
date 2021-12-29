@@ -23,8 +23,8 @@ namespace DawnQuant.DataCollector.Core.Job
             {
                 IServiceProvider serviceProvider = (IServiceProvider)context.MergedJobDataMap.Get(Constant.ServiceProvider);
 
-                var t1 = Task.Run(() => { CollectInDailyTradeData(serviceProvider); });
-                var t2 = Task.Run(() => { CollectInStockDailyIndicator(serviceProvider); });
+                var t1 = CollectInDailyTradeData(serviceProvider);
+                var t2 = CollectInStockDailyIndicator(serviceProvider);
 
                 Task.WaitAll(t1, t2);
 
@@ -38,7 +38,7 @@ namespace DawnQuant.DataCollector.Core.Job
         /// 采集增量日线数据
         /// </summary>
         /// <param name="serviceProvider"></param>
-        private  void CollectInDailyTradeData(IServiceProvider serviceProvider)
+        private  async Task CollectInDailyTradeData(IServiceProvider serviceProvider)
         {
             using (var scope = serviceProvider.CreateScope())
             {
@@ -49,7 +49,7 @@ namespace DawnQuant.DataCollector.Core.Job
                     var jobMessageUtility = scope.ServiceProvider.GetService<JobMessageUtil>();
 
                     jobMessageUtility.OnInDailyTradeDataJobStarted();
-                     collector.CollectInDailyTradeDataFromTushare(DateTime.Now);
+                    await collector.CollectInDailyTradeDataFromTushare(DateTime.Now);
                     jobMessageUtility.OnInDailyTradeDataJobCompleted();
                 }
             }
@@ -61,7 +61,7 @@ namespace DawnQuant.DataCollector.Core.Job
         /// 采集每日指标
         /// </summary>
         /// <param name="serviceProvider"></param>
-        private void CollectInStockDailyIndicator(IServiceProvider serviceProvider)
+        private async Task CollectInStockDailyIndicator(IServiceProvider serviceProvider)
         {
             using (var scope = serviceProvider.CreateScope())
             {
@@ -72,7 +72,7 @@ namespace DawnQuant.DataCollector.Core.Job
                     var jobMessageUtility = scope.ServiceProvider.GetService<JobMessageUtil>();
 
                     jobMessageUtility.OnInStockDailyIndicatorJobStarted();
-                    collector.CollectInStockDailyIndicatorFromTushare(DateTime.Now);
+                    await collector.CollectInStockDailyIndicatorFromTushare(DateTime.Now);
                     jobMessageUtility.OnInStockDailyIndicatorJobCompleted();
                 }
             }

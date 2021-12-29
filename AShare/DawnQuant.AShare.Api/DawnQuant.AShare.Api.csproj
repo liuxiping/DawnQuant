@@ -7,9 +7,13 @@
 
   <ItemGroup>
     <Compile Remove="logs\**" />
+    <Compile Remove="ref\**" />
     <Content Remove="logs\**" />
+    <Content Remove="ref\**" />
     <EmbeddedResource Remove="logs\**" />
+    <EmbeddedResource Remove="ref\**" />
     <None Remove="logs\**" />
+    <None Remove="ref\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,8 +22,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="DawnQuant.AShare.Strategy.dll" />
+    <None Remove="Protos\EssentialData\BellwetherApi.proto" />
     <None Remove="Protos\EssentialData\HolderApi.proto" />
+    <None Remove="Protos\EssentialData\PerformanceForecastApi.proto" />
     <None Remove="Protos\EssentialData\ReversionFactorApi.proto" />
+    <None Remove="Protos\EssentialData\SubjectAndHotApi.proto" />
     <None Remove="Protos\EssentialData\Top10FloatHolderApi.proto" />
     <None Remove="Protos\SyncToy_a74b51fc-14e0-4c1f-8048-92502a6d3f82.dat" />
     <None Remove="Protos\UserProfile\BellwetherStockApi.proto" />
@@ -61,6 +69,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Protobuf Include="Protos\EssentialData\PerformanceForecastApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\EssentialData\SubjectAndHotApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\EssentialData\BellwetherApi.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\EssentialData\HolderApi.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\EssentialData\BasicStockInfoApi.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\EssentialData\Common.proto" GrpcServices="Server" />

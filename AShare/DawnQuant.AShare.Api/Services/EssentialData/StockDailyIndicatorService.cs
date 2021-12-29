@@ -49,6 +49,38 @@ namespace DawnQuant.AShare.Api.EssentialData
              });
         }
 
+        public override Task BatchSaveStockDailyIndicator(BatchSaveStockDailyIndicatorRequest request, IServerStreamWriter<BatchSaveStockDailyIndicatorResponse> responseStream, ServerCallContext context)
+        {
+            return Task.Run(() => 
+            {
+                if (request.Entities != null && request.Entities.Count > 0)
+                {
+                    int complete = 0;
+                    int count = request.Entities.Count;
+                    foreach (var entity in request.Entities)
+                    {
+                        using (var stockDailyIndicatorRepository = _stockDailyIndicatorRepositoryFunc(entity.TSCode))
+                        {
+
+                            var data = _imapper.Map<BFSE.StockDailyIndicator>(entity.Entity);
+
+                            stockDailyIndicatorRepository.Save(data);
+                        }
+
+                        complete++;
+
+                        //第一个最后一个 每隔20通知
+                        if (complete == 1 || complete % 100 == 0 || complete == count)
+                        {
+                            responseStream.WriteAsync(new  BatchSaveStockDailyIndicatorResponse { TotalCount = count, CompletCount = complete });
+
+                        }
+                    }
+                }
+                
+            });
+        }
+
         public override async Task GetStockDailyIndicator(GetStockDailyIndicatorRequest request, IServerStreamWriter<GetStockDailyIndicatorResponse> responseStream, ServerCallContext context)
         {
 

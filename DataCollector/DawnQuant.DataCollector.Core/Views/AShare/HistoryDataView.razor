@@ -9,6 +9,18 @@
                     <tr>
                         <td  colspan=2> @ViewModel.IndustryProgress</td>
                     </tr>
+                     <tr>
+                        <td  colspan=2> @ViewModel.HolderProgress</td>
+                    </tr>
+                     <tr>
+                        <td  colspan=2> @ViewModel.AnalyseBellwetherFromTHSLightspotProgress</td>
+                    </tr>
+                      <tr>
+                        <td  colspan=2> @ViewModel.AnalyseBellwetherFromTHSIndustryCompareProgress</td>
+                    </tr>
+                      <tr>
+                        <td  colspan=2> @ViewModel.PerformanceForecastProgress</td>
+                    </tr>
                     <tr>
                         <td  colspan=2>@ViewModel.DailyTradeDataProgress</td>
                     </tr>
@@ -31,10 +43,7 @@
         <div>
             <div>
                 <button @onclick="CollectTC"  disabled="@ViewModel.IsCollectTradingCalendar" class="btn-blue">采集交易日历</button>
-
                 <button @onclick="CollectDTDAndDI"   disabled="@ViewModel.IsCollectDTDAndDI"  class="btn-blue">采集日线数据和每日指标</button>
-
-
                 <button @onclick="CollectStockInfo"   disabled="@ViewModel.IsCollectStockInfo"  class="btn-blue">采集所有股票信息</button>
 
             </div>
@@ -43,6 +52,13 @@
             <div>
              <button @onclick="RestoreCollectIndustry" disabled="@ViewModel.IsRestoreIndustry" class="btn-green">采集行业分类(继续)</button>
              <button @onclick="CollectIndustry" disabled="@ViewModel.IsCollectIndustry" class="btn-green">采集行业分类</button>
+
+             <button @onclick="CollectHolder" disabled="@ViewModel.IsCollectHolder" class="btn-green">采集股东信息</button>
+
+             <button @onclick="CollectPerformanceForecast" disabled="@ViewModel.IsCollectPerformanceForecast" class="btn-green">采集盈利预测</button>
+
+             <button @onclick="AnalyseBellwether" disabled="@ViewModel.IsAnalyseBellwether" class="btn-green">分析提取龙头股</button>
+
             </div>
         </div>
         <div>

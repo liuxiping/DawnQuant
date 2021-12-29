@@ -17,7 +17,7 @@ namespace DawnQuant.App
     {
         public App()
         {
-            Startup += App_Startup;
+          //  Startup += App_Startup;
             Exit += App_Exit;
 
             _logger = IOCUtil.Container.Resolve<ILogger<App>>();

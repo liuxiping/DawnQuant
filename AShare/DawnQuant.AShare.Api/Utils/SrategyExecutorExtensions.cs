@@ -24,8 +24,8 @@ namespace DawnQuant.AShare.Api.Utils
             {
 
                 if (t != typeof(ISelectScopeExecutor) && t != typeof(IFactorExecutor) &&
-                    (t.IsAssignableTo(typeof(ISelectScopeExecutor)) ||
-                    t.IsAssignableTo(typeof(IFactorExecutor)) )
+                    (t.IsAssignableTo(typeof(IFactorExecutor)) ||
+                    t.IsAssignableTo(typeof(ISelectScopeExecutor)) )
                     )
                 {
                     services.AddScoped(t);

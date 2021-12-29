@@ -92,7 +92,7 @@ namespace DawnQuant.AShare.Api.Data
 
                     #endregion
 
-                    #region
+                    #region 用户数据
                     var self = categoryRepository.Insert(new SelectScopeMetadataCategory
                     {
                         Id=2,
@@ -141,13 +141,91 @@ namespace DawnQuant.AShare.Api.Data
                     });
                     #endregion
 
+                    #region  指数
                     var index = categoryRepository.Insert(new SelectScopeMetadataCategory
                     {
                         Id=3,
                         Name = "指数",
                         SortNum = 3
                     });
-                  
+                    #endregion
+
+                    #region 特色数据
+                    var special = categoryRepository.Insert(new SelectScopeMetadataCategory
+                    {
+                        Id = 4,
+                        Name = "特色数据",
+                        SortNum = 4
+                    });
+
+                    scoper.Insert(new SelectScopeMetadata
+                    {
+                        Id = 4001,
+                        CategoryId = special.Id,
+                        Name = "龙头股(同花顺公司亮点提取数据)",
+                        ImplAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ImplClassName = "DawnQuant.AShare.Strategy.Executor.SelectScope.BellwetherFromTHSCompanyLightspotExecutor",
+                        SortNum = 1
+                    });
+
+                    scoper.Insert(new SelectScopeMetadata
+                    {
+                        Id = 4002,
+                        CategoryId = special.Id,
+                        Name = "龙头股(同花顺行业对比提取数据)",
+                        ImplAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ImplClassName = "DawnQuant.AShare.Strategy.Executor.SelectScope.BellwetherFromTHSIndustryCompareExecutor",
+                        SortNum = 2
+                    });
+
+                    scoper.Insert(new SelectScopeMetadata
+                    {
+                        Id = 4003,
+                        CategoryId = special.Id,
+                        Name = "业绩预测(同花顺盈利预测提取数据)",
+                        ImplAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ImplClassName = "DawnQuant.AShare.Strategy.Executor.SelectScope.PerformanceForecastFromTHSExecutor",
+                        ParameterAssemblyName= "DawnQuant.AShare.Strategy.dll",
+                        ParameterClassName= "DawnQuant.AShare.Strategy.Executor.SelectScope.PerformanceForecastFromTHSExecutorParameter",
+                        SortNum = 3
+                    });
+
+                    #endregion
+
+                    #region 主力跟踪
+                   
+                    var mainForceTrace = categoryRepository.Insert(new SelectScopeMetadataCategory
+                    {
+                        Id = 5,
+                        Name = "主力跟踪",
+                        SortNum = 5
+                    });
+
+                    scoper.Insert(new SelectScopeMetadata
+                    {
+                        Id = 5001,
+                        CategoryId = mainForceTrace.Id,
+                        Name = "股东人数追踪",
+                        ImplAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ImplClassName = "DawnQuant.AShare.Strategy.Executor.SelectScope.HolderNumberExecutor",
+                        ParameterAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ParameterClassName = "DawnQuant.AShare.Strategy.Executor.SelectScope.HolderNumberExecutorParameter",
+                        SortNum = 1
+                    });
+
+                    scoper.Insert(new SelectScopeMetadata
+                    {
+                        Id = 5001,
+                        CategoryId = mainForceTrace.Id,
+                        Name = "10大流通股追踪",
+                        ImplAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ImplClassName = "DawnQuant.AShare.Strategy.Executor.SelectScope.Top10FloatHolderExecutor",
+                        ParameterAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ParameterClassName = "DawnQuant.AShare.Strategy.Executor.SelectScope.Top10FloatHolderExecutorParameter",
+                        SortNum = 2
+                    });
+                    #endregion
+
                 }
             }
         }
@@ -167,7 +245,7 @@ namespace DawnQuant.AShare.Api.Data
 
                 if (!factorMetadataCategoryRepository.Entities.Any())
                 {
-                    //财务指标
+                    #region 财务指标
                     var f = factorMetadataCategoryRepository.Insert(new FactorMetadataCategory
                         {  Id=1, Name = "财务指标", SortNum = 1 });
 
@@ -230,9 +308,9 @@ namespace DawnQuant.AShare.Api.Data
                         ParameterClassName = "DawnQuant.AShare.Strategy.Executor.Factor.DVFactorExecutorParameter",
                         SortNum = 5,
                     });
+                    #endregion
 
-
-                    //技术指标
+                    #region 技术指标
                     var ti = factorMetadataCategoryRepository.Insert(new FactorMetadataCategory 
                     { Id=2, Name = "技术指标", SortNum = 2 });
                     factorMetadataRepository.Insert(new FactorMetadata
@@ -359,14 +437,40 @@ namespace DawnQuant.AShare.Api.Data
                         ParameterClassName = "DawnQuant.AShare.Strategy.Executor.Factor.HammerFactorExecutorParameter",
                         SortNum = 10
                     });
+                    #endregion
 
-                    //主力指标
+                    # region 主力跟踪
                     var mainForce = factorMetadataCategoryRepository.Insert(new FactorMetadataCategory
-                    { Id = 3, Name = "主力指标", SortNum = 3 });
+                    { Id = 3, Name = "主力跟踪", SortNum = 4 });
 
-                    //排除指标
+                    factorMetadataRepository.Insert(new FactorMetadata
+                    {
+                        Id = 3001,
+                        CategoryId = mainForce.Id,
+                        Name = "股东人数追踪",
+                        ImplAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ImplClassName = "DawnQuant.AShare.Strategy.Executor.Factor.HolderNumberExecutor",
+                        ParameterAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ParameterClassName = "DawnQuant.AShare.Strategy.Executor.Factor.HolderNumberExecutorParameter",
+                        SortNum = 1
+                    });
+
+                    factorMetadataRepository.Insert(new FactorMetadata
+                    {
+                        Id = 3001,
+                        CategoryId = mainForce.Id,
+                        Name = "10大流通股追踪",
+                        ImplAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ImplClassName = "DawnQuant.AShare.Strategy.Executor.Factor.Top10FloatHolderExecutor",
+                        ParameterAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ParameterClassName = "DawnQuant.AShare.Strategy.Executor.Factor.Top10FloatHolderExecutorParameter",
+                        SortNum = 2
+                    });
+                    #endregion
+
+                    # region 排除指标
                     var ex = factorMetadataCategoryRepository.Insert(new FactorMetadataCategory 
-                    {  Id=4,Name = "排除指标", SortNum = 4 });
+                    {  Id=4,Name = "排除指标", SortNum = 5 });
                     factorMetadataRepository.Insert(new FactorMetadata
                     {
                         Id = 4001,
@@ -412,6 +516,46 @@ namespace DawnQuant.AShare.Api.Data
                         ParameterClassName = "DawnQuant.AShare.Strategy.Executor.Factor.SubjectAndHotFactorExecutorParameter",
                         SortNum = 4
                     });
+
+                    #endregion
+
+                    #region 特色数据
+                    var special = factorMetadataCategoryRepository.Insert(new FactorMetadataCategory
+                    { Id = 5, Name = "特色数据", SortNum = 3 });
+
+                    factorMetadataRepository.Insert(new FactorMetadata
+                    {
+                        Id = 5001,
+                        CategoryId = special.Id,
+                        Name = "龙头股(同花顺公司亮点提取数据)",
+                        ImplAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ImplClassName = "DawnQuant.AShare.Strategy.Executor.Factor.BellwetherFromTHSCompanyLightspotExecutor",
+                        SortNum = 1
+                    });
+
+                    factorMetadataRepository.Insert(new FactorMetadata
+                    {
+                        Id = 5002,
+                        CategoryId = special.Id,
+                        Name = "龙头股(同花顺行业对比提取数据)",
+                        ImplAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ImplClassName = "DawnQuant.AShare.Strategy.Executor.Factor.BellwetherFromTHSIndustryCompareExecutor",
+                        SortNum = 2
+                    });
+
+                    factorMetadataRepository.Insert(new FactorMetadata
+                    {
+                        Id = 5003,
+                        CategoryId = special.Id,
+                        Name = "业绩预测(同花顺盈利预测提取数据)",
+                        ImplAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ImplClassName = "DawnQuant.AShare.Strategy.Executor.Factor.PerformanceForecastFromTHSExecutor",
+                        ParameterAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ParameterClassName = "DawnQuant.AShare.Strategy.Executor.Factor.PerformanceForecastFromTHSExecutorParameter",
+                        SortNum = 3
+                    });
+
+                    #endregion
                 }
             }
         }

@@ -37,7 +37,9 @@ namespace DawnQuant.AShare.Api.EssentialData
 
             return Task.Run(() =>
              {
-                 response.TSCodes.AddRange(_basicStockInfoRepository.Entities.Select(p => p.TSCode));
+                 response.TSCodes.AddRange(_basicStockInfoRepository.Entities
+                     .Where(p=>p.ListedStatus!=StockEssentialDataConst.DeListing)
+                     .Select(p => p.TSCode));
                  return response;
              });
 
@@ -55,7 +57,6 @@ namespace DawnQuant.AShare.Api.EssentialData
 
         }
 
-      
 
         public override Task<Empty> UpdateIndustry(UpdateIndustryRequest request, ServerCallContext context)
         {
@@ -92,7 +93,6 @@ namespace DawnQuant.AShare.Api.EssentialData
                 return response;
             });
         }
-
 
 
         public override Task<GetSuggestStocksResponse> GetSuggestStocks(GetSuggestStocksRequest request, ServerCallContext context)
@@ -141,7 +141,18 @@ namespace DawnQuant.AShare.Api.EssentialData
         }
 
 
+        public override Task<GetThreeStockByIndustryResponse> GetThreeStockByIndustry(GetThreeStockByIndustryRequest request, ServerCallContext context)
+        {
+            return Task.Run(() =>
+             {
+                 GetThreeStockByIndustryResponse response = new GetThreeStockByIndustryResponse();
+                 var tscodes = _basicStockInfoRepository.Entities.Where(p => p.IndustryId == request.IndustryId &&
+                 p.ListedStatus == StockEssentialDataConst.Listing).Select(p => p.TSCode).Take(3).ToList();
 
+                 response.TSCodes.AddRange(tscodes);
+                 return response;
+             });
+        }
 
 
     }

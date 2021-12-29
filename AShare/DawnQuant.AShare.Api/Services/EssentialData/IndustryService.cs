@@ -3,6 +3,7 @@ using DawnQuant.AShare.Entities;
 using DawnQuant.AShare.Entities.EssentialData;
 using DawnQuant.AShare.Repository.Abstract;
 using DawnQuant.AShare.Repository.Abstract.EssentialData;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
 using System;
@@ -31,16 +32,16 @@ namespace DawnQuant.AShare.Api.EssentialData
 
         public override Task<SaveIndustryResponse> SaveIndustry(SaveIndustryRequest request, ServerCallContext context)
         {
-            SaveIndustryResponse response = new SaveIndustryResponse();
 
-            Task.Run(() =>
-            {
-                var ins = _industryRepository.Save(_imapper.Map<Industry>(request.Entity));
-                response.Entity = _imapper.Map<IndustryDto>(ins);
-                return response;
-            });
+            return Task.Run(() =>
+             {
+                 SaveIndustryResponse response = new SaveIndustryResponse();
+                 var ins = _industryRepository.Save(_imapper.Map<Industry>(request.Entity));
+                 response.Entity = _imapper.Map<IndustryDto>(ins);
+                 return response;
+             });
 
-            return base.SaveIndustry(request, context);
+
         }
 
 
@@ -58,6 +59,27 @@ namespace DawnQuant.AShare.Api.EssentialData
             });
         }
 
+
+        /// <summary>
+        /// 获取第三级行业
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override Task<GetThreeLevelIndustriesResponse> GetThreeLevelIndustries(Empty request, ServerCallContext context)
+        {
+
+            return Task.Run(() =>
+             {
+                 GetThreeLevelIndustriesResponse response = new GetThreeLevelIndustriesResponse();
+
+                 var ins = _industryRepository.Entities.Where(p => p.Level == 3);
+
+                 response.Entities.AddRange(_imapper.Map<IEnumerable<IndustryDto>>(ins));
+
+                 return response;
+             });
+        }
     } 
     
 }

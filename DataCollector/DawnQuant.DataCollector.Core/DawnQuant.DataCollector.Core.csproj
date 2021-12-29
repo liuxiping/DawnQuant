@@ -18,6 +18,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Collectors\AShare\IncrementalDataCollector.cs~RF6561655.TMP" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<SupportedPlatform Include="browser" />
 	</ItemGroup>
 

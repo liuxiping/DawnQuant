@@ -12,6 +12,9 @@ package DawnQuant.AShare.Api.EssentialData;
 // 每日指标
 service StockDailyIndicatorApi {
   rpc SaveStockDailyIndicator(SaveStockDailyIndicatorRequest) returns (google.protobuf.Empty);
+
+  rpc BatchSaveStockDailyIndicator(BatchSaveStockDailyIndicatorRequest) returns (stream BatchSaveStockDailyIndicatorResponse);
+
   rpc GetStockDailyIndicator(GetStockDailyIndicatorRequest) returns (stream  GetStockDailyIndicatorResponse);
 }
 
@@ -22,6 +25,25 @@ message SaveStockDailyIndicatorRequest{
 
 }
 
+message BatchSaveStockDailyIndicatorRequest
+{
+    	repeated SingleStockDailyIndicator Entities=1;
+}
+
+message BatchSaveStockDailyIndicatorResponse
+{
+     //总数
+    int32 TotalCount=1;
+
+    //完成数
+    int32 CompletCount=2;
+}
+
+message SingleStockDailyIndicator
+{
+    string TSCode=1;
+	StockDailyIndicatorDto Entity=2;
+}
 message GetStockDailyIndicatorRequest
 {
 string TSCode=1;

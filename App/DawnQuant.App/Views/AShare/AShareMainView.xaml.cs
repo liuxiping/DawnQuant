@@ -37,10 +37,15 @@ namespace DawnQuant.App.Views.AShare
     /// </summary>
     public partial class AShareMainView : UserControl
     {
+
+        AShareDataMaintainService _aShareDataMaintainService;
+
         public AShareMainView()
         {
             InitializeComponent();
             DataContext = ViewModelSource.Create<AShareMainViewModel>();
+            _aShareDataMaintainService = IOCUtil.Container.Resolve<AShareDataMaintainService>();
+
         }
 
         public AShareMainViewModel Model { get { return (AShareMainViewModel)DataContext; } }
@@ -56,6 +61,18 @@ namespace DawnQuant.App.Views.AShare
 
                 //开启后台自动更新数据
                 TaskUtil.StartDataUpdateScheduledTask();
+               
+            });
+
+
+            //后台更新数据
+            Task.Run(() =>
+            {
+                if (_aShareDataMaintainService.IsOpen())
+                {
+                    _aShareDataMaintainService.DownLoadStockData(1);
+                    JobMessageUtility_DataUpdateScheduledTaskJobCompleted();
+                }
             });
 
             //计划任务执行消息

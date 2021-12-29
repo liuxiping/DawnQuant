@@ -30,7 +30,7 @@ namespace DawnQuant.AShare.Entities.EssentialData
         /// 公告日期
         /// </summary>
         [DataType(DataType.Date)]
-        public DateTime ReportingPeriod { get; set; }
+        public DateTime EndDate { get; set; }
      
 
         /// <summary>

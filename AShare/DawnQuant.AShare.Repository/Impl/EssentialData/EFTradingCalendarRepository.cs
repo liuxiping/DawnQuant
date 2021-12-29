@@ -24,7 +24,7 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
             {
                 //保存数据
 
-                var tradingCalendar = _dbContext.Entities.Where(p => p.Exchange == entity.Exchange &&
+                var tradingCalendar = _entityContext.Entities.Where(p => p.Exchange == entity.Exchange &&
                   p.Date == entity.Date).SingleOrDefault();
 
                 if (tradingCalendar!=null)
@@ -35,10 +35,10 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
                 }
                 else
                 {
-                    _dbContext.Entities.Add(entity);
+                    _entityContext.Entities.Add(entity);
                 }
             }
-            _dbContext.SaveChanges();
+            _entityContext.SaveChanges();
             return entities;
         }
 
@@ -46,7 +46,7 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
         public override TradingCalendar Save(TradingCalendar entity)
         {
             //保存数据
-            var tradingCalendar = _dbContext.Entities.Where(p => p.Exchange == entity.Exchange &&
+            var tradingCalendar = _entityContext.Entities.Where(p => p.Exchange == entity.Exchange &&
                  p.Date == entity.Date).SingleOrDefault();
 
             if (tradingCalendar != null)
@@ -57,10 +57,10 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
             }
             else
             {
-                _dbContext.Entities.Add(entity);
+                _entityContext.Entities.Add(entity);
             }
 
-            _dbContext.SaveChanges();
+            _entityContext.SaveChanges();
             return entity;
         }
 

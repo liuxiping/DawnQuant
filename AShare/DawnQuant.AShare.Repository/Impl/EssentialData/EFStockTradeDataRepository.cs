@@ -68,7 +68,7 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
         /// </summary>
         public void Empty()
         {
-            StockTradeDataDbContext dbContext =(StockTradeDataDbContext)_dbContext.Context;
+            StockTradeDataDbContext dbContext =(StockTradeDataDbContext)_entityContext.Context;
 
             string emptySql = $"delete  from `{dbContext.TableName}`";
 

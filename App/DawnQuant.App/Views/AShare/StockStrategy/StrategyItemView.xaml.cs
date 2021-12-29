@@ -71,7 +71,7 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
 
             //更新界面
 
-            UpdateCategoriesIncludeStrategies();
+            UpdateCategoriesIncludeStrategies(null);
         }
 
         /// <summary>
@@ -86,53 +86,105 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
             StrategySetupWindow strategySetupWindow = new StrategySetupWindow();
 
             //编辑状态初始化参数
-            strategySetupWindow.Model.Strategy = Model.Strategy;
+            strategySetupWindow.Model.InitStrategy = Model.Strategy;
 
-            if (strategySetupWindow.ShowDialog() == true)
+            strategySetupWindow.Model.Finished += () =>
             {
-                UpdateCategoriesIncludeStrategies();
-            }
+                UserProfile.StockStrategy strategy = ((StrategySetupWindowModel)(strategySetupWindow.DataContext)).FinishStrategy;
 
-           
+                UpdateCategoriesIncludeStrategies(strategy);
+            };
+
+            strategySetupWindow.ShowDialog();
+
         }
 
         /// <summary>
         /// 更新数据
         /// </summary>
-        private void UpdateCategoriesIncludeStrategies()
+        private async void UpdateCategoriesIncludeStrategies(UserProfile.StockStrategy strategy)
         {
             //更新界面
             StockStrategyView ssv = ControlsSearchUtil.GetParentObject<StockStrategyView>(this);
 
-            long cid = 0;
-
-            if (_acStrategyList.SelectedItem is UserProfile.StockStrategy ss)
+            if (strategy != null)
             {
-                cid = ss.CategoryId;
-            }
+                await ssv.Model.LoadCategoriesIncludeStrategies();
 
-            if (_acStrategyList.SelectedItem is UserProfile.StockStrategyCategory ssc)
-            {
-                cid = ssc.Id;
-            }
-
-            ssv.Model.LoadCategoriesIncludeStrategies();
-
-
-            ///展开分类
-            for (int index = 0; index < _acStrategyList.Items.Count; index++)
-            {
-                var ca = (StockStrategyCategory)_acStrategyList.Items[index];
-                if (ca.Id == cid)
+                //展开分类
+                for (int index = 0; index < _acStrategyList.Items.Count; index++)
                 {
-                    _acStrategyList.SelectedItem = _acStrategyList.Items[index];
-                    _acStrategyList.ExpandItem(_acStrategyList.Items[index]);
-                    break;
+                    var ca = (StockStrategyCategory)_acStrategyList.Items[index];
+                    if (ca.Id == strategy.CategoryId)
+                    {
+                        _acStrategyList.SelectedItem = _acStrategyList.Items[index];
+                        _acStrategyList.ExpandItem(_acStrategyList.Items[index]);
+                        break;
+                    }
                 }
+                //设置选择
+                bool isFind = false;
+                foreach (var c in _acStrategyList.Items)
+                {
+                    var tssc = (StockStrategyCategory)c;
+
+                    if (tssc.StockStrategies != null && tssc.StockStrategies.Count > 0)
+                    {
+                        for (int index = 0; index < tssc.StockStrategies.Count; index++)
+                        {
+                            var tss = tssc.StockStrategies[index];
+                            if (tss.Id == strategy.Id)
+                            {
+                                _acStrategyList.SelectedItem = tssc.StockStrategies[index];
+                                isFind = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (isFind)
+                    {
+                        break;
+                    }
+                }
+
+            }
+            else
+            {
+                long cid = 0;
+
+                if (_acStrategyList.SelectedItem is UserProfile.StockStrategy ss)
+                {
+                    cid = ss.CategoryId;
+                }
+
+                if (_acStrategyList.SelectedItem is UserProfile.StockStrategyCategory ssc)
+                {
+                    cid = ssc.Id;
+                }
+
+               await ssv.Model.LoadCategoriesIncludeStrategies();
+
+
+                ///展开分类
+                for (int index = 0; index < _acStrategyList.Items.Count; index++)
+                {
+                    var ca = (StockStrategyCategory)_acStrategyList.Items[index];
+                    if (ca.Id == cid)
+                    {
+                        _acStrategyList.SelectedItem = _acStrategyList.Items[index];
+                        _acStrategyList.ExpandItem(_acStrategyList.Items[index]);
+                        break;
+                    }
+                }
+
+                ///设置选择
+                SetSelectStockStrategy();
             }
 
-            ///设置选择
-            SetSelectStockStrategy();
+
+
+
+
         }
 
         private void _btnExecuteStrategy_Click(object sender, RoutedEventArgs e)

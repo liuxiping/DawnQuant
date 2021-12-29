@@ -26,4 +26,8 @@
     <ProjectReference Include="..\DawnQuant.AShare.Repository\DawnQuant.AShare.Repository.csproj" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(ProjectDir)bin\Debug\net6.0\DawnQuant.AShare.Strategy.dll&quot; &quot;$(ProjectDir)..\DawnQuant.AShare.Api&quot; /y /e " />
+  </Target>
+
 </Project>

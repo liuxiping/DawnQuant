@@ -44,67 +44,7 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
         }
 
 
-        /// <summary>
-        /// 获取单个行业信息
-        /// </summary>
-        /// <param name="tsCode"></param>
-        /// <param name="channel"></param>
-        private void CollectSingleStockIndustryFromTHS(string tsCode, GrpcChannel channel)
-        {
-
-            string id = tsCode.Substring(0, 6);
-            //获取行业分类
-            string fieldUrl = string.Concat(@"http://basic.10jqka.com.cn/", id, @"/field.html");
-
-            HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(fieldUrl);
-
-            using (WebResponse webResponse = request.GetResponse())
-            {
-                HtmlParser htmlParser = new HtmlParser();
-                var dom = htmlParser.ParseDocument(webResponse.GetResponseStream());
-
-                var industryNode = dom.QuerySelector(".page9table .threecate span");
-
-                if (industryNode != null)
-                {
-                    string industryInfo = industryNode.InnerHtml.Trim();
-                    var industrys = industryInfo.Split("--");
-                    var first = industrys[0].Trim();
-                    var second = industrys[1].Trim();
-                    var three = industrys[2].Trim();
-                    three = three.Substring(0, three.IndexOf("（"));
-
-                    var clientIndustry = new IndustryApi.IndustryApiClient(channel);
-
-                    Metadata meta = new Metadata();
-                    meta.AddAuthorization(_passportProvider.AccessToken);
-
-                    var industry = clientIndustry.ParseIndustry(new ParseIndustryRequest
-                    {
-                        First = first,
-                        Second = second,
-                        Three = three
-                    }, meta);
-
-                    var clientBasicStockInfo = new BasicStockInfoApi.BasicStockInfoApiClient(channel);
-
-                    clientBasicStockInfo.UpdateIndustry(new UpdateIndustryRequest
-                    {
-                        IndustryId = industry.Entity.Id,
-                        TSCode = tsCode
-                    }, meta);
-
-                }
-                else
-                {
-                    _logger.LogError($"提取不到股票代码为{id}的行业信息");
-                }
-
-
-
-            }
-        }
-
+      
         /// <summary>
         /// 从同花顺提取行业数据
         /// </summary>
@@ -187,6 +127,69 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
                 }
             }
         }
+
+        /// <summary>
+        /// 获取单个行业信息
+        /// </summary>
+        /// <param name="tsCode"></param>
+        /// <param name="channel"></param>
+        private void CollectSingleStockIndustryFromTHS(string tsCode, GrpcChannel channel)
+        {
+
+            string id = tsCode.Substring(0, 6);
+            //获取行业分类
+            string fieldUrl = string.Concat(@"http://basic.10jqka.com.cn/", id, @"/field.html");
+
+
+            using (HttpClient client = new HttpClient())
+            {
+                var t = client.GetStreamAsync(fieldUrl);
+                t.Wait();
+                HtmlParser htmlParser = new HtmlParser();
+                var dom = htmlParser.ParseDocument(t.Result);
+
+                var industryNode = dom.QuerySelector(".page9table .threecate span");
+
+                if (industryNode != null)
+                {
+                    string industryInfo = industryNode.InnerHtml.Trim();
+                    var industrys = industryInfo.Split("--");
+                    var first = industrys[0].Trim();
+                    var second = industrys[1].Trim();
+                    var three = industrys[2].Trim();
+                    three = three.Substring(0, three.IndexOf("（"));
+
+                    var clientIndustry = new IndustryApi.IndustryApiClient(channel);
+
+                    Metadata meta = new Metadata();
+                    meta.AddAuthorization(_passportProvider.AccessToken);
+
+                    var industry = clientIndustry.ParseIndustry(new ParseIndustryRequest
+                    {
+                        First = first,
+                        Second = second,
+                        Three = three
+                    }, meta);
+
+                    var clientBasicStockInfo = new BasicStockInfoApi.BasicStockInfoApiClient(channel);
+
+                    clientBasicStockInfo.UpdateIndustry(new UpdateIndustryRequest
+                    {
+                        IndustryId = industry.Entity.Id,
+                        TSCode = tsCode
+                    }, meta);
+
+                }
+                else
+                {
+                    _logger.LogError($"提取不到股票代码为{id}的行业信息");
+                }
+
+
+
+            }
+        }
+
     }
 }
 

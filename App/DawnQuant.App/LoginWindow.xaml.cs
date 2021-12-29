@@ -91,12 +91,17 @@ namespace DawnQuant.App
                     var ss = IOCUtil.Container.Resolve<SettingService>();
                     App.AShareSetting = ss.GetSetting();
 
+                    MainWindow main=new MainWindow();
+
+                    main.Show();
+
                     //登录成功 更新数据
                     this.ShowInTaskbar = false;
                     Visibility = Visibility.Hidden;
-                    DownloadDataWindow loadDataWindow = new DownloadDataWindow();
-                    loadDataWindow.IsCreateFromLogin = true;
-                    loadDataWindow.Show();
+
+                   // DownloadDataWindow loadDataWindow = new DownloadDataWindow();
+                   // loadDataWindow.IsCreateFromLogin = true;
+                   // loadDataWindow.Show();
                     this.Close();
                 }
                 else if (cancelLogging)

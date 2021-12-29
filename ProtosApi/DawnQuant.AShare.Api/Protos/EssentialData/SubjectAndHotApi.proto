@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "Protos/EssentialData/Common.proto";
+
+
+option csharp_namespace = "DawnQuant.AShare.Api.EssentialData";
+
+package DawnQuant.AShare.Api.EssentialData;
+
+
+//龙头股
+service SubjectAndHotApi {
+  
+//保存龙头股
+  rpc SaveSubjectAndHots(SaveSubjectAndHotsRequest) returns (google.protobuf.Empty);
+
+}
+
+
+message SaveSubjectAndHotsRequest
+{
+    repeated  SubjectAndHotDto Entities=1;
+}

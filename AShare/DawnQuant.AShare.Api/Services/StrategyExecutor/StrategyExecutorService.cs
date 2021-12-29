@@ -71,11 +71,12 @@ namespace DawnQuant.AShare.Api.StrategyExecutor
                 {
                     foreach (var tscode in re)
                     {
-                        var e = _basicStockInfoRepository.Entities.Where(p => p.TSCode == tscode).FirstOrDefault();
+                        var e = _basicStockInfoRepository.Entities.Where(p => p.TSCode == tscode && !p.StockName.Contains("退")).FirstOrDefault();
 
                         if (e != null)
                         {
                             string indus = _industryRepository.Entities.Where(p => p.Id == e.IndustryId).Select(p => p.Name).SingleOrDefault();
+
                             response.Entities.Add(new ExecuteStrategyResult { TSCode = e.TSCode, Name = e.StockName, Industry = indus ?? "" });
                         }
                     }
@@ -96,7 +97,7 @@ namespace DawnQuant.AShare.Api.StrategyExecutor
                 {
                     foreach (var tscode in re)
                     {
-                        var e = _basicStockInfoRepository.Entities.Where(p => p.TSCode == tscode).FirstOrDefault();
+                        var e = _basicStockInfoRepository.Entities.Where(p => p.TSCode == tscode && !p.StockName.Contains("退")).FirstOrDefault();
 
                         if (e != null)
                         {

@@ -75,16 +75,24 @@ namespace DawnQuant.App
             }
             await Task.Run(() =>
             {
-                //更新数据自选股数据
 
-                //删除数据
-                if (IsDownloadAllData)
+                // 交易日更新数据
+                if (IsCreateFromLogin )
                 {
-                    string dataPath = System.IO.Path.Combine(Environment.CurrentDirectory, "Data");
-                    Directory.Delete(dataPath, true);
+                    if (_aShareDataMaintainService.IsOpen())
+                    {
+                      //  _aShareDataMaintainService.DownLoadStockData();
+                    }
                 }
-
-                _aShareDataMaintainService.DownLoadStockData();
+                else//用户手动更新数据
+                {
+                    if (IsDownloadAllData)
+                    {
+                        string dataPath = System.IO.Path.Combine(Environment.CurrentDirectory, "Data");
+                        Directory.Delete(dataPath, true);
+                    }
+                    _aShareDataMaintainService.DownLoadStockData();
+                }
 
 
             }).ConfigureAwait(true);

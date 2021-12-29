@@ -16,7 +16,10 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
         TradingCalendarCollector _tradingCalendarCollector;
         CompanyCollector _companyCollector;
         IndustryCollector _industryCollector;
+        HolderCollector _holderCollector;
 
+        BellwetherAnalyseCollector _bellwetherAnalyseCollector;
+        PerformanceForecastCollector _performanceForecastCollector;
 
         DailyStockTradeDataCollector _dailyStockTradeDataCollector;
         StockDailyIndicatorCollector _stockDailyIndicatorCollector;
@@ -25,11 +28,39 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
             TradingCalendarCollector tradingCalendarCollector,
             CompanyCollector companyCollector, IndustryCollector industryCollector,
             DailyStockTradeDataCollector dailyStockTradeDataCollector,
-            StockDailyIndicatorCollector stockDailyIndicatorCollector)
+            StockDailyIndicatorCollector stockDailyIndicatorCollector,
+            HolderCollector holderCollector,
+            PerformanceForecastCollector performanceForecastCollector,
+            BellwetherAnalyseCollector bellwetherAnalyseCollector)
         {
             _basicStockInfoCollector = basicStockInfoCollector;
             _tradingCalendarCollector = tradingCalendarCollector;
             _companyCollector = companyCollector;
+            _holderCollector= holderCollector;
+            _bellwetherAnalyseCollector = bellwetherAnalyseCollector;
+            _performanceForecastCollector = performanceForecastCollector;
+
+            _performanceForecastCollector.CollectPerformanceForecastProgressChanged += (msg) =>
+            {
+                PerformanceForecastProgress = msg;
+                OnPerformanceForecastProgressChange();
+            };
+            _bellwetherAnalyseCollector.AnalyseBellwetherFromTHSLightspotProgressChanged += (msg) =>
+              {
+                  AnalyseBellwetherFromTHSLightspotProgress = msg;
+                  OnAnalyseBellwetherFromTHSLightspotProgressChange();
+              };
+            _bellwetherAnalyseCollector.AnalyseBellwetherFromTHSIndustryCompareProgressChanged += (msg) =>
+              {
+                  AnalyseBellwetherFromTHSIndustryCompareProgress = msg;
+                  OnAnalyseBellwetherFromTHSIndustryCompareProgressChange();
+              };
+
+            _holderCollector.CollectHolderNumberProgressChanged += (msg)=>
+            {
+                IndustryProgress = msg;
+                OnHolderProgressChange();
+            };
 
             _industryCollector = industryCollector;
             _industryCollector.ProgressChanged += () =>
@@ -69,6 +100,7 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
 
 
 
+
         //通知更新视图
         public event Action ViewNeedUpdate;
 
@@ -81,11 +113,21 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
         #region  采集消息通知
 
         public event Action IndustryProgressChange;
+        public event Action HolderProgressChange;
         public event Action StockDailyIndicatorProgressChange;
         public event Action DailyTradeDataProgressChange;
         public event Action SyncTurnoverProgressChange;
         public event Action DataCleaningProgressChange;
+        public event Action AnalyseBellwetherFromTHSLightspotProgressChange;
+        public event Action AnalyseBellwetherFromTHSIndustryCompareProgressChange;
 
+        public event Action PerformanceForecastProgressChange;
+
+
+        protected void OnPerformanceForecastProgressChange()
+        {
+            PerformanceForecastProgressChange?.Invoke();
+        }
         protected void OnSyncTurnoverChangeChange()
         {
             SyncTurnoverProgressChange?.Invoke();
@@ -94,6 +136,11 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
         protected void OnIndustryProgressChange()
         {
             IndustryProgressChange?.Invoke();
+        }
+
+        protected void OnHolderProgressChange()
+        {
+            HolderProgressChange?.Invoke();
         }
 
         protected void OnStockDailyIndicatorProgressChange()
@@ -110,10 +157,20 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
         {
             DataCleaningProgressChange?.Invoke();
         }
+
+        protected void OnAnalyseBellwetherFromTHSLightspotProgressChange()
+        {
+            AnalyseBellwetherFromTHSLightspotProgressChange?.Invoke();
+        }
+
+        protected void OnAnalyseBellwetherFromTHSIndustryCompareProgressChange()
+        {
+            AnalyseBellwetherFromTHSIndustryCompareProgressChange?.Invoke();
+        }
         #endregion
 
 
-        //状态标识
+        #region //状态标识
         public bool IsCollectStockInfo { get; set; } = false;
 
         public bool IsCollectDTDAndDI { get; set; } = false;
@@ -121,11 +178,15 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
         public bool IsCollectIndustry { get; set; } = false;
         public bool IsRestoreIndustry { get; set; } = false;
 
+        public bool IsAnalyseBellwether { get; set; } = false;
+
+        public bool IsCollectPerformanceForecast { get; set; } = false;
         public bool IsCollectDailyStockTradeData { get; set; } = false;
 
-       /// <summary>
-       /// 数据清理
-       /// </summary>
+        public bool IsCollectHolder { get; set; } = false;
+        /// <summary>
+        /// 数据清理
+        /// </summary>
         public bool IsDataCleaning { get; set; } = false;
         public bool IsRestoreDailyStockTradeData { get; set; } = false;
 
@@ -136,7 +197,9 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
 
 
         public bool IsSyncTurnover { get; set; } = false;
+        #endregion
 
+        #region 通知消息
         /// <summary>
         /// 运行时消息
         /// </summary>
@@ -147,6 +210,27 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
         /// </summary>
         public string IndustryProgress { get; set; }
 
+
+        /// <summary>
+        /// 分析采集龙头股(同花顺公司亮点)进度
+        /// </summary>
+        public string AnalyseBellwetherFromTHSLightspotProgress { get; set; }
+
+        /// <summary>
+        /// 分析采集龙头股（行业对比）进度
+        /// </summary>
+        public string AnalyseBellwetherFromTHSIndustryCompareProgress { get; set; }
+
+        /// <summary>
+        /// 股东信息
+        /// </summary>
+        public string HolderProgress { get; set; }
+
+
+        /// <summary>
+        /// 盈利预测
+        /// </summary>
+        public string PerformanceForecastProgress { get; set; }
         /// <summary>
         /// 采集日线历史数据
         /// </summary>
@@ -165,7 +249,7 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
         public string DataCleaningProgress { get; set; }
 
 
-
+        #endregion
 
 
         /// <summary>
@@ -306,7 +390,34 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
         }
 
 
-       
+       public async Task CollectHolder()
+        {
+            Message += $"开始采集股东信息，{DateTime.Now.ToString()}\r\n";
+            OnViewNeedUpdate();
+            IsCollectHolder = true;
+            var t = Task.Run(() =>
+            {
+                _holderCollector.CollectHolderFromTHS();
+
+            });
+            await t;
+            if (t.Exception != null)
+            {
+                //出现异常 //保存为完成的任务
+                File.WriteAllText("data/holder.txt", JsonSerializer.Serialize<List<string>>(_holderCollector.UnCompleteStocks));
+
+                Message += $"采集股东信息过程中发生异常，{DateTime.Now.ToString()}\r\n";
+                Message += t.Exception.Message + "\r\n" + t.Exception.StackTrace + "\r\n";
+                OnViewNeedUpdate();
+            }
+            else
+            {
+                Message += $"成功采集股东信息，{DateTime.Now.ToString()}\r\n";
+                OnViewNeedUpdate();
+            }
+
+            IsCollectHolder = false;
+        }
 
 
         /// <summary>
@@ -342,6 +453,106 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
 
         }
 
+
+        public async Task CollectPerformanceForecast()
+        {
+            Message += $"开始采集盈利预测，{DateTime.Now.ToString()}\r\n";
+            OnViewNeedUpdate();
+            IsCollectPerformanceForecast = true;
+            var t = Task.Run(() =>
+            {
+                _performanceForecastCollector.CollectPerformanceForecastFromTHS();
+
+            });
+            await t;
+            if (t.Exception != null)
+            {
+                //出现异常 //保存为完成的任务
+                File.WriteAllText("data/performanceforecast.txt", JsonSerializer.Serialize<List<string>>(_industryCollector.UnCompleteStocks));
+
+                Message += $"采集采集盈利预测过程中发生异常，{DateTime.Now.ToString()}\r\n";
+                Message += t.Exception.Message + "\r\n" + t.Exception.StackTrace + "\r\n";
+                OnViewNeedUpdate();
+            }
+            else
+            {
+                Message += $"成功采集盈利预测，{DateTime.Now.ToString()}\r\n";
+                OnViewNeedUpdate();
+            }
+
+            IsCollectPerformanceForecast = false;
+        }
+
+
+        /// <summary>
+        /// 行业信息
+        /// </summary>
+        public async Task AnalyseBellwether()
+        {
+            IsAnalyseBellwether = true;
+            await AnalyseBellwetherFromTHSLightspot();
+            await AnalyseBellwetherFromTHSIndustryCompare();
+            IsAnalyseBellwether = false;
+        }
+
+        public async Task AnalyseBellwetherFromTHSLightspot()
+        {
+            Message += $"开始分析采集龙头股(同花顺公司亮点)，{DateTime.Now.ToString()}\r\n";
+            OnViewNeedUpdate();
+         
+            var t = Task.Run(() =>
+            {
+                //公司亮点关键字分析
+                _bellwetherAnalyseCollector.AnalyseBellwetherFromTHSCompanyLightspot();
+
+            });
+            await t;
+            if (t.Exception != null)
+            {
+                //出现异常 //保存为完成的任务
+                File.WriteAllText("data/bellwether.txt", JsonSerializer.Serialize<List<string>>(_industryCollector.UnCompleteStocks));
+
+                Message += $"分析采集龙头股(同花顺公司亮点)过程中发生异常，{DateTime.Now.ToString()}\r\n";
+                Message += t.Exception.Message + "\r\n" + t.Exception.StackTrace + "\r\n";
+                OnViewNeedUpdate();
+            }
+            else
+            {
+                Message += $"成功分析采集龙头股(同花顺公司亮点)，{DateTime.Now.ToString()}\r\n";
+                OnViewNeedUpdate();
+            }
+
+           
+        }
+
+        public async Task AnalyseBellwetherFromTHSIndustryCompare()
+        {
+            Message += $"开始分析采集龙头股(同花顺行业对比)，{DateTime.Now.ToString()}\r\n";
+            OnViewNeedUpdate();
+          
+            var t = Task.Run(() =>
+            {
+                //行业对比
+                _bellwetherAnalyseCollector.AnalyseBellwetherFromTHSIndustryCompare();
+            });
+            await t;
+            if (t.Exception != null)
+            {
+                //出现异常 //保存为完成的任务
+                File.WriteAllText("data/industrycompare.txt", JsonSerializer.Serialize<List<string>>(_industryCollector.UnCompleteStocks));
+
+                Message += $"分析采集龙头股(同花顺行业对比)过程中发生异常，{DateTime.Now.ToString()}\r\n";
+                Message += t.Exception.Message + "\r\n" + t.Exception.StackTrace + "\r\n";
+                OnViewNeedUpdate();
+            }
+            else
+            {
+                Message += $"成功分析采集龙头股(同花顺行业对比)，{DateTime.Now.ToString()}\r\n";
+                OnViewNeedUpdate();
+            }
+
+            
+        }
 
         /// <summary>
         /// 恢复采集行业信息

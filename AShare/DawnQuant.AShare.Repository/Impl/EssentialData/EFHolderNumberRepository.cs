@@ -1,6 +1,7 @@
 ﻿using DawnQuant.AShare.Entities.EssentialData;
 using DawnQuant.AShare.Repository.Abstract.EssentialData;
 using DawnQuant.Repository;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,15 +22,22 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
         {
 
             //查询数据是否存在
-            var holderNumber = _dbContext.Entities.Where(p => p.TSCode == entity.TSCode &&
-              p.ReportingPeriod == entity.ReportingPeriod).SingleOrDefault();
+            var holderNumber = _entityContext.Entities.Where(p => p.TSCode == entity.TSCode &&
+              p.EndDate == entity.EndDate).AsNoTracking().SingleOrDefault();
 
             if (holderNumber != null)
             {
                 //更新Id
                 entity.Id = holderNumber.Id;
+                var s = _entityContext.Entities.Attach(entity);
+                s.State = EntityState.Modified;
+            }
+            else
+            {
+                _entityContext.Entities.Add(entity);
             }
 
+            _entityContext.SaveChanges();
             return base.Save(entity);
         }
 
@@ -38,16 +46,24 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
             foreach (var entity in entities)
             {
                 //查询数据是否存在
-                var holderNumber = _dbContext.Entities.Where(p => p.TSCode == entity.TSCode &&
-                  p.ReportingPeriod == entity.ReportingPeriod ).SingleOrDefault();
+                var holderNumber = _entityContext.Entities.Where(p => p.TSCode == entity.TSCode &&
+                  p.EndDate == entity.EndDate).AsNoTracking().SingleOrDefault();
 
                 if (holderNumber != null)
                 {
                     //更新Id
                     entity.Id = holderNumber.Id;
+                    var s = _entityContext.Entities.Attach(entity);
+                    s.State = EntityState.Modified;
+                }
+                else
+                {
+                    _entityContext.Entities.Add(entity);
                 }
             }
-            return base.Save(entities);
+            _entityContext.SaveChanges();
+            return entities;
+
         }
     }
 }

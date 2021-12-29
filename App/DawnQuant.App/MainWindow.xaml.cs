@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using Autofac;
 using DevExpress.Mvvm.POCO;
 using DawnQuant.App.ViewModels;
+using DawnQuant.App.Services.AShare;
 
 namespace DawnQuant.App
 {
@@ -25,10 +26,13 @@ namespace DawnQuant.App
     /// </summary>
     public partial class MainWindow : DXTabbedWindow
     {
+
         public MainWindow()
         {
             InitializeComponent();
             DataContext = ViewModelSource.Create<MainWindowModel>();
+
+
         }
 
         private void _mainWindow_Unloaded(object sender, RoutedEventArgs e)
@@ -52,8 +56,8 @@ namespace DawnQuant.App
             this.Visibility = Visibility.Visible;
             this.ShowInTaskbar = true;
             WindowState = WindowState.Maximized;
-           // this.Show();
-            this.Activate();
+            this.Show();
+     //       this.Activate();
         }
 
         private void _biExit_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)

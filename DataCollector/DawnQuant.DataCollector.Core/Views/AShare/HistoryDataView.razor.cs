@@ -21,15 +21,11 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
             ViewModel.StockDailyIndicatorProgressChange += UpdateNotifyMessage;
             ViewModel.SyncTurnoverProgressChange += UpdateNotifyMessage;
             ViewModel.DataCleaningProgressChange += UpdateNotifyMessage;
-            ViewModel.ViewNeedUpdate += ViewModel_ViewNeedUpdate;
-        }
-
-        private void ViewModel_ViewNeedUpdate()
-        {
-            InvokeAsync(() =>
-            {
-                StateHasChanged();
-            });
+            ViewModel.HolderProgressChange += UpdateNotifyMessage;
+            ViewModel.ViewNeedUpdate += UpdateNotifyMessage;
+            ViewModel.AnalyseBellwetherFromTHSLightspotProgressChange+= UpdateNotifyMessage;
+            ViewModel.AnalyseBellwetherFromTHSIndustryCompareProgressChange+= UpdateNotifyMessage;
+            ViewModel.PerformanceForecastProgressChange += UpdateNotifyMessage;
         }
 
         private void UpdateNotifyMessage()
@@ -39,9 +35,6 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
                 StateHasChanged();
             });
         }
-
-
-       
 
         [Inject]
         private HistoryDataViewModel ViewModel { get; set; }
@@ -86,6 +79,35 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
             StateHasChanged();
         }
 
+        /// <summary>
+        /// 股东相关信息
+        /// </summary>
+        private async void CollectHolder()
+        {
+            await ViewModel.CollectHolder();
+            StateHasChanged();
+        }
+
+
+
+
+        /// <summary>
+        /// 采集盈利预测
+        /// </summary>
+        private async void CollectPerformanceForecast()
+        {
+            await ViewModel.CollectPerformanceForecast();
+            StateHasChanged();
+        }
+
+        /// <summary>
+        /// 分析龙头股
+        /// </summary>
+        private async void AnalyseBellwether()
+        {
+            await ViewModel.AnalyseBellwether();
+            StateHasChanged();
+        }
         /// <summary>
         /// 行业
         /// </summary>

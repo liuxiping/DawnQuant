@@ -10,9 +10,9 @@ namespace DawnQuant.App.Models.AShare.Strategy.Executor
     public abstract class ExecutorParameter
     {
 
-        public ExecutorParameter( )
+        public ExecutorParameter()
         {
-            
+
         }
         public virtual void Initialize(string json)
         {
@@ -25,7 +25,10 @@ namespace DawnQuant.App.Models.AShare.Strategy.Executor
             }
 
         }
+
         public abstract string Serialize();
-       
+        
     }
+
+
 }

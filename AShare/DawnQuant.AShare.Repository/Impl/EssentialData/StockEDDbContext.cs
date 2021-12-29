@@ -40,6 +40,22 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
         //十大流通股
         public DbSet<Top10FloatHolder> Top10FloatHolders { get; set; }
 
+        /// <summary>
+        /// 龙头股
+        /// </summary>
+        public DbSet<Bellwether> Bellwethers { get; set; }
+
+
+        /// <summary>
+        /// 题材热点
+        /// </summary>
+        public DbSet<SubjectAndHot> SubjectAndHots { get; set;}
+
+        /// <summary>
+        /// 业绩预测
+        /// </summary>
+        public DbSet<PerformanceForecast> PerformanceForecasts { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -72,7 +88,35 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
             });
 
 
+            modelBuilder.Entity<HolderNumber>(en =>
+            {
+                en.HasIndex(p =>new { p.TSCode, p.EndDate }).IsUnique();
 
+            });
+
+            modelBuilder.Entity<Top10FloatHolder>(en =>
+            {
+                en.HasIndex(p => new { p.TSCode, p.EndDate ,p.HolderName}).IsUnique();
+
+            });
+
+            modelBuilder.Entity<Bellwether>(en =>
+            {
+                en.HasIndex(p => new { p.TSCode, p.Source }).IsUnique();
+
+            });
+
+            modelBuilder.Entity<SubjectAndHot>(en =>
+            {
+                en.HasIndex(p => new { p.TSCode, p.Source }).IsUnique();
+
+            });
+
+            modelBuilder.Entity<PerformanceForecast>(en =>
+            {
+                en.HasIndex(p => new { p.TSCode, p.EndDate, p.Source }).IsUnique();
+
+            });
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

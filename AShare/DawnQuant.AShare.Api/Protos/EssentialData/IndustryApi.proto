@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
 import "Protos/EssentialData/Common.proto";
 option csharp_namespace = "DawnQuant.AShare.Api.EssentialData";
 
@@ -13,6 +14,8 @@ service IndustryApi {
 
   rpc  ParseIndustry(ParseIndustryRequest) returns (ParseIndustryResponse);
 
+  //获取第三级行业
+  rpc  GetThreeLevelIndustries(google.protobuf.Empty) returns (GetThreeLevelIndustriesResponse);
 }
 
 
@@ -38,6 +41,11 @@ message ParseIndustryResponse
     IndustryDto Entity=1;
 }
 
+
+message GetThreeLevelIndustriesResponse
+{
+    repeated  IndustryDto Entities=1;
+}
 
 
 

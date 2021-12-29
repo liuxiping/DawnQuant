@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "Protos/EssentialData/Common.proto";
+
+
+option csharp_namespace = "DawnQuant.AShare.Api.EssentialData";
+
+package DawnQuant.AShare.Api.EssentialData;
+
+
+
+//业绩预测
+service PerformanceForecastApi {
+  
+//保存龙头股
+  rpc SavePerformanceForecasts(SavePerformanceForecastsRequest) returns (google.protobuf.Empty);
+
+}
+
+
+message SavePerformanceForecastsRequest
+{
+    repeated  PerformanceForecastDto Entities=1;
+}
+
+
+
+
+

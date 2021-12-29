@@ -8,6 +8,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\AShare\Strategy\Executor\Factor\MainForceTrace\**" />
+    <Compile Remove="Models\AShare\Strategy\Executor\Factor\Special\**" />
+    <Content Remove="Models\AShare\Strategy\Executor\Factor\MainForceTrace\**" />
+    <Content Remove="Models\AShare\Strategy\Executor\Factor\Special\**" />
+    <EmbeddedResource Remove="Models\AShare\Strategy\Executor\Factor\MainForceTrace\**" />
+    <EmbeddedResource Remove="Models\AShare\Strategy\Executor\Factor\Special\**" />
+    <None Remove="Models\AShare\Strategy\Executor\Factor\MainForceTrace\**" />
+    <None Remove="Models\AShare\Strategy\Executor\Factor\Special\**" />
+    <Page Remove="Models\AShare\Strategy\Executor\Factor\MainForceTrace\**" />
+    <Page Remove="Models\AShare\Strategy\Executor\Factor\Special\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Converter\SelStockInfosConverter.cs" />
     <Compile Remove="Models\AShare\Strategy\Executor\Factor\Exclusive\ExcludeCategories.cs" />
     <Compile Remove="Models\AShare\Strategy\Executor\Factor\Technical\HardenCountFactorParameter.cs" />
@@ -92,6 +105,7 @@
     <PackageReference Include="IdentityModel" Version="5.2.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1054.31" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Quartz" Version="3.3.3" />
     <PackageReference Include="Serilog" Version="2.10.0" />

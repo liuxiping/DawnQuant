@@ -33,7 +33,7 @@
                     <ColumnDefinition ></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <dxlc:GroupBox Header="选股范围列表"   Padding="0" BorderThickness="1,1,1,0" >
-                    <dxg:TreeViewControl SearchPanelNullText="搜索"  ShowSearchPanel="True" Name="_treeAll"  AutoExpandAllNodes="True" ItemsSource="{Binding AllSelectScopes}"
+                    <dxg:TreeViewControl SearchPanelNullText="搜索"  ShowBorder="False" ShowSearchPanel="True" Name="_treeAll"  AutoExpandAllNodes="True" ItemsSource="{Binding AllSelectScopes}"
                        ChildNodesPath="SelectScopeMetadatas" MouseDoubleClick="_treeAll_MouseDoubleClick"
                        TreeViewFieldName="Name"  >
                     </dxg:TreeViewControl>

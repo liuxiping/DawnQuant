@@ -12,14 +12,17 @@
 
   <ItemGroup>
     <None Remove="Protos\EssentialData\BasicStockInfoApi.proto" />
+    <None Remove="Protos\EssentialData\BellwetherApi.proto" />
     <None Remove="Protos\EssentialData\Common.proto" />
     <None Remove="Protos\EssentialData\CompanyApi.proto" />
     <None Remove="Protos\EssentialData\HolderApi.proto" />
     <None Remove="Protos\EssentialData\HolderNumberApi.proto" />
     <None Remove="Protos\EssentialData\IndustryApi.proto" />
+    <None Remove="Protos\EssentialData\PerformanceForecastApi.proto" />
     <None Remove="Protos\EssentialData\ReversionFactorApi.proto" />
     <None Remove="Protos\EssentialData\StockDailyIndicatorApi.proto" />
     <None Remove="Protos\EssentialData\StockTradeDataApi.proto" />
+    <None Remove="Protos\EssentialData\SubjectAndHotApi.proto" />
     <None Remove="Protos\EssentialData\Top10FloatHolderApi.proto" />
     <None Remove="Protos\EssentialData\TradingCalendarApi.proto" />
     <None Remove="Protos\StrategyExecutor\StrategyExecutorApi.proto" />
@@ -55,13 +58,16 @@
 
   <ItemGroup>
     <Protobuf Include="Protos\EssentialData\BasicStockInfoApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\EssentialData\BellwetherApi.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\EssentialData\Common.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\EssentialData\CompanyApi.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\EssentialData\HolderApi.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\EssentialData\IndustryApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\EssentialData\PerformanceForecastApi.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\EssentialData\ReversionFactorApi.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\EssentialData\StockDailyIndicatorApi.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\EssentialData\StockTradeDataApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\EssentialData\SubjectAndHotApi.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\EssentialData\TradingCalendarApi.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\StrategyExecutor\StrategyExecutorApi.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\StrategyMetadata\Common.proto" GrpcServices="Client" />

@@ -9,6 +9,7 @@
              DataContextChanged="_financialChart_DataContextChanged"
              xmlns:localConverter="clr-namespace:DawnQuant.App.Converter"
              xmlns:lColorizer="clr-namespace:DawnQuant.App.Colorizer"
+             xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
              mc:Ignorable="d"  Name="_financialChart" Loaded="_financialChart_Loaded"
              d:DesignHeight="450" d:DesignWidth="800" FontSize="15">
     <UserControl.Resources>
@@ -52,7 +53,10 @@
         </dx:ThemedBorder>
         <Grid x:Name="_gdContent" Grid.Row="1">
             <Grid x:Name="_gdF10" Visibility="{Binding VA, ConverterParameter=F10, Converter={StaticResource vaConverter}}" >
-                <WebBrowser Name="_wbStockInfo"    />
+
+                <wv2:WebView2 Name="_wvStockInfo"></wv2:WebView2>
+                <!--<WebBrowser x:Name="_wbStockInfo"></WebBrowser>-->
+
             </Grid>
             <Grid  Grid.Row="1" Name="_gdChart" Visibility="{Binding VA , ConverterParameter=Chart, Converter={StaticResource vaConverter}}">
                 <dxc:ChartControl x:Name="_fchart"    CustomDrawCrosshair="_fchart_CustomDrawCrosshair"

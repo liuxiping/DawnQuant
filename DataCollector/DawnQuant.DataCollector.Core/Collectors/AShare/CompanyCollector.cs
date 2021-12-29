@@ -18,8 +18,7 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
     {
 
         public CompanyCollector(ILogger logger, CollectorConfig config,
-           IPassportProvider passportProvider
-            )
+           IPassportProvider passportProvider )
         {
             _logger = logger;
             _passportProvider = passportProvider;

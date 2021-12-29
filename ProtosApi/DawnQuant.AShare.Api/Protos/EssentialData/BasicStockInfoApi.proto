@@ -29,6 +29,10 @@ service BasicStockInfoApi {
 
   //相同行业的股票
   rpc GetSameIndustryStocks(GetSameIndustryStocksRequest) returns (GetSameIndustryStocksResponse);
+
+  //根据行业获取三个股票
+  rpc GetThreeStockByIndustry(GetThreeStockByIndustryRequest) returns (GetThreeStockByIndustryResponse);
+
 }
 
 
@@ -93,7 +97,16 @@ message  GetSameIndustryStocksResponse
 }
 
 
+message GetThreeStockByIndustryRequest
+{
+    int32 IndustryId=1;
+}
 
+
+message GetThreeStockByIndustryResponse
+{
+    repeated string TSCodes=1;
+}
 
 
 

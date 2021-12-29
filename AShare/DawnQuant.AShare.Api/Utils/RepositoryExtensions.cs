@@ -121,8 +121,18 @@ namespace DawnQuant.AShare.Api.Utils
             services.AddScoped<ICompanyRepository, EFCompanyRepository>();
             services.AddScoped<IIndustryRepository, EFIndustryRepository>();
             services.AddScoped<ITradingCalendarRepository, EFTradingCalendarRepository>();
+
+            //股东相关
             services.AddScoped<IHolderNumberRepository, EFHolderNumberRepository>();
-            services.AddScoped<ITop10FloatHolderRepository, EFTop10FloatHolderRepository>();
+            services.AddScoped<ITop10FloatHolderRepository,   EFTop10FloatHolderRepository>();
+
+            //龙头题材热点
+            services.AddScoped<IBellwetherRepository, EFBellwetherRepository>();
+            services.AddScoped<ISubjectAndHotRepository, EFSubjectAndHotRepository>();
+
+            //业绩预测
+            services.AddScoped<IPerformanceForecastRepository, EFPerformanceForecastRepository>();
+
 
             //注册交易数据DBContext创建函数
             services.AddSingleton(provider =>

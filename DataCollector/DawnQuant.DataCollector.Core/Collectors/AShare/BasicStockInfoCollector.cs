@@ -47,6 +47,7 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
 
                 //实例化股票列表 接口：stock_basic 的Model
                 StoreBasicRequestModel modelSSEL = new StoreBasicRequestModel();
+
                 //设置交易所 SSE上交所 SZSE深交所 HKEX港交所(未上线)
                 modelSSEL.Exchange = StockEntityConst.SSE;
                 //设置上市状态： L上市 D退市 P暂停上市，默认L
@@ -56,12 +57,12 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
                 taskSSEL.Wait();
                 SaveBasicStockInfo(taskSSEL.Result);
 
-                StoreBasicRequestModel modelSSED = new StoreBasicRequestModel();
-                modelSSED.Exchange = StockEntityConst.SSE;
-                modelSSED.ListStatus = StockEntityConst.DeListing;
-                var taskSSED = tu.GetData(modelSSED);
-                taskSSED.Wait();
-                SaveBasicStockInfo(taskSSED.Result);
+                //StoreBasicRequestModel modelSSED = new StoreBasicRequestModel();
+                //modelSSED.Exchange = StockEntityConst.SSE;
+                //modelSSED.ListStatus = StockEntityConst.DeListing;
+                //var taskSSED = tu.GetData(modelSSED);
+                //taskSSED.Wait();
+                //SaveBasicStockInfo(taskSSED.Result);
 
                 StoreBasicRequestModel modelSSEP = new StoreBasicRequestModel();
                 modelSSEP.Exchange = StockEntityConst.SSE;
@@ -86,12 +87,12 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
                 taskSZSEP.Wait();
                 SaveBasicStockInfo(taskSZSEP.Result);
 
-                StoreBasicRequestModel modelSZSED = new StoreBasicRequestModel();
-                modelSZSED.Exchange = StockEntityConst.SZSE;
-                modelSZSED.ListStatus = StockEntityConst.DeListing;
-                var taskSZSED = tu.GetData(modelSZSED);
-                taskSZSED.Wait();
-                SaveBasicStockInfo(taskSZSED.Result);
+                //StoreBasicRequestModel modelSZSED = new StoreBasicRequestModel();
+                //modelSZSED.Exchange = StockEntityConst.SZSE;
+                //modelSZSED.ListStatus = StockEntityConst.DeListing;
+                //var taskSZSED = tu.GetData(modelSZSED);
+                //taskSZSED.Wait();
+                //SaveBasicStockInfo(taskSZSED.Result);
             }
             catch (Exception ex)
             {

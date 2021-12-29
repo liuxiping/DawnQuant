@@ -42,7 +42,15 @@ namespace DawnQuant.DataCollector.Core.Utils
 
                 config.InDataFromTushareTaskCron = configuration["InDataFromTushareTaskCron"];
                 config.InDTDFromSinaTaskCron = configuration["InDTDFromSinaTaskCron"];
-               
+
+
+                //龙头股关键词
+                config.BellwetherKeyWords = new List<string>();
+                var keys=configuration["BellwetherKeyWords"].Split(",").ToList(); 
+                foreach (var key in keys)
+                {
+                    config.BellwetherKeyWords.Add(key.Trim());
+                }
 
                 return config;
 
@@ -53,11 +61,16 @@ namespace DawnQuant.DataCollector.Core.Utils
             serviceCollection.AddSingleton<BasicStockInfoCollector>();
             serviceCollection.AddSingleton<CompanyCollector>();
             serviceCollection.AddSingleton<IndustryCollector>();
+            serviceCollection.AddSingleton<HolderCollector>();
             serviceCollection.AddSingleton<TradingCalendarCollector>();
+            serviceCollection.AddSingleton<BellwetherAnalyseCollector>();
+            serviceCollection.AddSingleton<PerformanceForecastCollector>();
+
 
             serviceCollection.AddSingleton<DailyStockTradeDataCollector>();
             serviceCollection.AddSingleton<StockDailyIndicatorCollector>();
             serviceCollection.AddSingleton<IncrementalDataCollector>();
+           
 
 
             //认证信息

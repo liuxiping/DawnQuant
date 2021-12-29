@@ -45,7 +45,6 @@ namespace DawnQuant.AShare.Strategy.Executor
             {
 
                 //选股范围
-                // var selectScope = _selectScopeMetadataRepository.Entities.Where(p => p.Id == descriptor.MetadataId).SingleOrDefault();
                  var selectScope = serviceScope.ServiceProvider.
                     GetService<ISelectScopeMetadataRepository>().Entities.
                     Where(p => p.Id == descriptor.MetadataId).SingleOrDefault();
@@ -75,7 +74,6 @@ namespace DawnQuant.AShare.Strategy.Executor
             foreach(FactorExecutorInsDescriptor descriptor in _strategyInsDescriptor.FactorInsDescriptors)
             {
                 //股票选择器
-                // var factor = _factorMetadataRepository.Entities.Where(p => p.Id == descriptor.MetadataId).SingleOrDefault();
                 var factor = serviceScope.ServiceProvider.GetService<IFactorMetadataRepository>()
                     .Entities.Where(p => p.Id == descriptor.MetadataId).SingleOrDefault();
                 if (factor != null)

@@ -37,8 +37,8 @@ namespace DawnQuant.AShare.Api.EssentialData
                  GetHolderNumberResponse response = new GetHolderNumberResponse();
 
                  var data = _holderNumberRepository.Entities.Where(p => p.TSCode == request.TSCode &&
-                  p.ReportingPeriod >= _imapper.Map<DateTime>(request.SartDate) &&
-                  p.ReportingPeriod <= _imapper.Map<DateTime>(request.EndDate));
+                  p.EndDate >= _imapper.Map<DateTime>(request.SartDate) &&
+                  p.EndDate <= _imapper.Map<DateTime>(request.EndDate));
 
                  if(response!=null && response.Entities.Count>0)
                  {
@@ -57,10 +57,19 @@ namespace DawnQuant.AShare.Api.EssentialData
 
                  if(request.Entities!=null && request.Entities.Count>0)
                  {
-                     var data = _imapper.Map<IEnumerable<HolderNumber>>(request.Entities);
+                     //先清空老数据
+
+                    var od = _holderNumberRepository.Entities.Where(p => p.TSCode == request.Entities[0].TSCode);
+                     if (od != null && od.Count() > 0)
+                     {
+                         _holderNumberRepository.Delete(od);
+                     }
+
+                    var data = _imapper.Map<IEnumerable<HolderNumber>>(request.Entities);
+
                     var rdata= _holderNumberRepository.Save(data);
 
-                     response.Entities.AddRange(_imapper.Map<IEnumerable<HolderNumberDto>>(rdata));
+                    response.Entities.AddRange(_imapper.Map<IEnumerable<HolderNumberDto>>(rdata));
                  }
 
                  return response;
@@ -94,6 +103,13 @@ namespace DawnQuant.AShare.Api.EssentialData
 
                 if (request.Entities != null && request.Entities.Count > 0)
                 {
+                    //先清空老数据
+                    var od = _top10FloatHolderRepository.Entities.Where(p => p.TSCode == request.Entities[0].TSCode);
+                    if (od != null && od.Count() > 0)
+                    {
+                        _top10FloatHolderRepository.Delete(od);
+                    }
+
                     var data = _imapper.Map<IEnumerable<Top10FloatHolder>>(request.Entities);
                     var rdata = _top10FloatHolderRepository.Save(data);
 

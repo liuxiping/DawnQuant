@@ -10,35 +10,35 @@ namespace DawnQuant.Repository
     public class EFCoreRepositoryBase<TEntity, Tkey> : IRepository<TEntity, Tkey>
         where TEntity : BaseEntity<Tkey>
     {
-       protected EntityDbContext<TEntity, Tkey> _dbContext;
+       protected EntityDbContext<TEntity, Tkey> _entityContext;
 
         public EFCoreRepositoryBase(DbContext dbContext)
         {
-            _dbContext = new EntityDbContext<TEntity, Tkey>(dbContext);
+            _entityContext = new EntityDbContext<TEntity, Tkey>(dbContext);
         }
 
-        public  IQueryable<TEntity> Entities => _dbContext.Entities;
+        public  IQueryable<TEntity> Entities => _entityContext.Entities;
 
         public virtual  TEntity Delete(Tkey id)
         {
-            TEntity entity = _dbContext.Entities.Find(id);
+            TEntity entity = _entityContext.Entities.Find(id);
             if (entity != null)
             {
-                _dbContext.Entities.Remove(entity);
+                _entityContext.Entities.Remove(entity);
             }
-            _dbContext.SaveChanges();
+            _entityContext.SaveChanges();
             return entity;
         }
 
         public virtual TEntity Delete(TEntity entity)
         {
 
-            entity = _dbContext.Entities.Find(entity.GetKeyValue());
+            entity = _entityContext.Entities.Find(entity.GetKeyValue());
             if (entity != null)
             {
-                _dbContext.Entities.Remove(entity);
+                _entityContext.Entities.Remove(entity);
             }
-            _dbContext.SaveChanges();
+            _entityContext.SaveChanges();
             return entity;
         }
 
@@ -52,23 +52,23 @@ namespace DawnQuant.Repository
             List<TEntity> delEntities = new List<TEntity>();
             foreach (TEntity entity in entities)
             {
-                var delEntity = _dbContext.Entities.Find(entity.GetKeyValue());
+                var delEntity = _entityContext.Entities.Find(entity.GetKeyValue());
                 if (entity != null)
                 {
                     delEntities.Add(delEntity);
-                    _dbContext.Entities.Remove(entity);
+                    _entityContext.Entities.Remove(entity);
                 }
 
 
             }
-            _dbContext.SaveChanges();
+            _entityContext.SaveChanges();
             return delEntities;
         }
 
         public virtual TEntity Insert(TEntity entity)
         {
-            _dbContext.Entities.Add(entity);
-            _dbContext.SaveChanges();
+            _entityContext.Entities.Add(entity);
+            _entityContext.SaveChanges();
             return entity;
         }
 
@@ -76,27 +76,27 @@ namespace DawnQuant.Repository
         {
             foreach (TEntity entity in entities)
             {
-                _dbContext.Entities.Add(entity);
+                _entityContext.Entities.Add(entity);
             }
-            _dbContext.SaveChanges();
+            _entityContext.SaveChanges();
             return entities;
         }
 
         public virtual TEntity Save(TEntity entity)
         {
             //保存数据
-            if (_dbContext.Entities.Contains(entity))
+            if (_entityContext.Entities.Contains(entity))
             {
 
-                var s = _dbContext.Entities.Attach(entity);
+                var s = _entityContext.Entities.Attach(entity);
                 s.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             }
             else
             {
-                _dbContext.Entities.Add(entity);
+                _entityContext.Entities.Add(entity);
             }
 
-            _dbContext.SaveChanges();
+            _entityContext.SaveChanges();
 
             return entity;
         }
@@ -106,26 +106,26 @@ namespace DawnQuant.Repository
             foreach (var entity in entities)
             {
                 //保存数据
-                if (_dbContext.Entities.Contains(entity))
+                if (_entityContext.Entities.Contains(entity))
                 {
 
-                    var s = _dbContext.Entities.Attach(entity);
+                    var s = _entityContext.Entities.Attach(entity);
                     s.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 }
                 else
                 {
-                    _dbContext.Entities.Add(entity);
+                    _entityContext.Entities.Add(entity);
                 }
             }
-            _dbContext.SaveChanges();
+            _entityContext.SaveChanges();
             return entities;
         }
 
         public virtual TEntity Update(TEntity entity)
         {
-            var s = _dbContext.Entities.Attach(entity);
+            var s = _entityContext.Entities.Attach(entity);
             s.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-            _dbContext.SaveChanges();
+            _entityContext.SaveChanges();
             return entity;
         }
 
@@ -133,10 +133,10 @@ namespace DawnQuant.Repository
         {
             foreach (var entity in entities)
             {
-                var s = _dbContext.Entities.Attach(entity);
+                var s = _entityContext.Entities.Attach(entity);
                 s.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             }
-            _dbContext.SaveChanges();
+            _entityContext.SaveChanges();
             return entities;
         }
 
@@ -161,7 +161,7 @@ namespace DawnQuant.Repository
             if (disposing)
             {
                 //TODO:释放本对象中管理的托管资源
-                _dbContext.Dispose();
+                _entityContext.Dispose();
             }
             //TODO:释放非托管资源
 

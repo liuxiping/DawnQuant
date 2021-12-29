@@ -74,11 +74,11 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void _btnCategoryMgr_Click(object sender, RoutedEventArgs e)
+        private async void _btnCategoryMgr_Click(object sender, RoutedEventArgs e)
         {
             StrategyCategoryMgrWindow mgrWindow = new StrategyCategoryMgrWindow();
             mgrWindow.ShowDialog();
-            Model.LoadCategoriesIncludeStrategies();
+            await Model.LoadCategoriesIncludeStrategies();
         }
 
         /// <summary>
@@ -86,43 +86,30 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnNewStrategy_Click(object sender, RoutedEventArgs e)
+        private  void btnNewStrategy_Click(object sender, RoutedEventArgs e)
         {
             StrategySetupWindow strategySetupWindow = new StrategySetupWindow();
 
-            if (strategySetupWindow.ShowDialog() == true)
+            //更新界面
+            strategySetupWindow.Model.Finished += async () =>
             {
-                long cid = 0;
-                UserProfile.StockStrategy stockStrategy = null;
+                UserProfile.StockStrategy strategy = ((StrategySetupWindowModel)(strategySetupWindow.DataContext)).FinishStrategy;
 
-                if (_acStrategyList.SelectedItem is UserProfile.StockStrategy ss)
+                if (strategy != null)
                 {
-                    cid = ss.CategoryId;
-                    stockStrategy = ss;
-                }
+                    await Model.LoadCategoriesIncludeStrategies();
 
-                if (_acStrategyList.SelectedItem is UserProfile.StockStrategyCategory ssc)
-                {
-                    cid = ssc.Id;
-                }
-
-                Model.LoadCategoriesIncludeStrategies();
-
-                //展开分类
-                for (int index = 0; index < _acStrategyList.Items.Count; index++)
-                {
-                    var ca = (StockStrategyCategory)_acStrategyList.Items[index];
-                    if (ca.Id == cid)
+                    //展开分类
+                    for (int index = 0; index < _acStrategyList.Items.Count; index++)
                     {
-                        _acStrategyList.SelectedItem = _acStrategyList.Items[index];
-                        _acStrategyList.ExpandItem(_acStrategyList.Items[index]);
-                        break;
+                        var ca = (StockStrategyCategory)_acStrategyList.Items[index];
+                        if (ca.Id == strategy.CategoryId)
+                        {
+                            _acStrategyList.SelectedItem = _acStrategyList.Items[index];
+                            _acStrategyList.ExpandItem(_acStrategyList.Items[index]);
+                            break;
+                        }
                     }
-                }
-
-                //设置选择
-                if (stockStrategy != null)
-                {
                     bool isFind = false;
                     foreach (var c in _acStrategyList.Items)
                     {
@@ -133,7 +120,7 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
                             for (int index = 0; index < tssc.StockStrategies.Count; index++)
                             {
                                 var tss = tssc.StockStrategies[index];
-                                if (tss.Id == stockStrategy.Id)
+                                if (tss.Id == strategy.Id)
                                 {
                                     _acStrategyList.SelectedItem = tssc.StockStrategies[index];
                                     isFind = true;
@@ -146,18 +133,12 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
                             break;
                         }
                     }
+
                 }
+            };
 
-               
-            }
+            strategySetupWindow.ShowDialog();
         }
-
-        private void StrategySetupWindow_Closed(object sender, EventArgs e)
-        {
-            
-
-        }
-
 
 
 

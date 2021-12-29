@@ -31,18 +31,32 @@ namespace DawnQuant.App.ViewModels.AShare.StockStrategy
         }
 
 
-        UserProfile.StockStrategy _strategy;
-        public UserProfile.StockStrategy Strategy
+        UserProfile.StockStrategy _initStrategy;
+
+        /// <summary>
+        /// 初始化策略
+        /// </summary>
+        public UserProfile.StockStrategy InitStrategy
         {
-            get { return _strategy; }
+            get { return _initStrategy; }
             set
             {
-                if (SetProperty(ref _strategy, value, nameof(Strategy)))
+                if (SetProperty(ref _initStrategy, value, nameof(InitStrategy)))
                 {
                     InitStrategyExecutorInsDescriptor();
                 }
             }
 
+        }
+
+
+        /// <summary>
+        /// 编辑完成之后返回的策略
+        /// </summary>
+        public UserProfile.StockStrategy FinishStrategy
+        {
+            get;
+            set;
         }
 
         /// <summary>
@@ -54,9 +68,9 @@ namespace DawnQuant.App.ViewModels.AShare.StockStrategy
             //初始数据
             StrategyExecutorInsDescriptor instance = null;
 
-            if (!string.IsNullOrEmpty(_strategy?.StockStragyContent))
+            if (!string.IsNullOrEmpty(_initStrategy?.StockStragyContent))
             {
-                instance = JsonSerializer.Deserialize<StrategyExecutorInsDescriptor>(_strategy.StockStragyContent);
+                instance = JsonSerializer.Deserialize<StrategyExecutorInsDescriptor>(_initStrategy.StockStragyContent);
             }
 
             var scopeModel = new SelectScopeViewModel(instance?.SelectScopeInsDescriptors);
@@ -66,11 +80,11 @@ namespace DawnQuant.App.ViewModels.AShare.StockStrategy
             FactorViewModel = factorModel;
 
 
-            if (_strategy != null)
+            if (_initStrategy != null)
             {
                 var basicInfoModel = new StrategyBasicInfoViewModel(
-                    new Tuple<string, string, long,int>(_strategy.Name, _strategy.Desc,
-                    _strategy.CategoryId, _strategy.SortNum));
+                    new Tuple<string, string, long,int>(_initStrategy.Name, _initStrategy.Desc,
+                    _initStrategy.CategoryId, _initStrategy.SortNum));
 
                 BasicInfoViewModel = basicInfoModel;
 
@@ -130,16 +144,27 @@ namespace DawnQuant.App.ViewModels.AShare.StockStrategy
             stockStrategy.CategoryId = BasicInfoViewModel.CurSelStockStrategyCategory.Id;
             stockStrategy.CreateTime = DateTime.Now;
             stockStrategy.StockStragyContent = JsonSerializer.Serialize(strategyInsDescriptor);
-            if (_strategy != null)
+            if (_initStrategy != null)
             {
-                stockStrategy.Id = _strategy.Id;
+                stockStrategy.Id = _initStrategy.Id;
             }
 
             await Task.Run(() =>
              {
-                 var ss = _stockStrategyService.SaveStockStrategy(stockStrategy);
+                 FinishStrategy = _stockStrategyService.SaveStockStrategy(stockStrategy);
              }).ConfigureAwait(true);
 
+
+            //保存数据成功 通知
+            OnFinished();
+
+
+        }
+
+        public event Action Finished;
+        protected void OnFinished()
+        {
+            Finished?.Invoke();
         }
     }
 }

@@ -26,6 +26,8 @@ namespace DawnQuant.App.Services.AShare
         private readonly IMapper _mapper;
         private readonly SelfSelService _selfSelService;
 
+        private readonly ILogger _logger;
+
         private readonly BellwetherService _bellwetherService;
         private readonly SubjectAndHotService _subjectAndHotService;
 
@@ -39,6 +41,8 @@ namespace DawnQuant.App.Services.AShare
 
             _bellwetherService = IOCUtil.Container.Resolve<BellwetherService>();
             _subjectAndHotService = IOCUtil.Container.Resolve<SubjectAndHotService>();
+
+            _logger = IOCUtil.Container.Resolve<ILogger>();
         }
 
         /// <summary>
@@ -53,7 +57,7 @@ namespace DawnQuant.App.Services.AShare
         /// <summary>
         /// 下载股票相关数据
         /// </summary>
-        public void DownLoadStockData()
+        public void DownLoadStockData(int threadCount = 5)
         {
             //自选股
             var items = _selfSelService.GetSelfSelectStocksByUser(_passportProvider.UserId);
@@ -69,11 +73,11 @@ namespace DawnQuant.App.Services.AShare
 
             tsCodes=tsCodes.Distinct().ToList();
 
-            DownLoadStockData(tsCodes);
+            DownLoadStockData(tsCodes, threadCount);
 
         }
        
-        public void DownLoadStockData(List<string> tsCodes)
+        public void DownLoadStockData(List<string> tsCodes, int threadCount = 5)
         {
             tsCodes = tsCodes.Distinct().ToList();
 
@@ -84,8 +88,6 @@ namespace DawnQuant.App.Services.AShare
 
             //下载交易数据
             List<Task> tasks = new List<Task>();
-
-            int threadCount = 5;
 
             if (tsCodes.Count <= threadCount)
             {
@@ -224,7 +226,7 @@ namespace DawnQuant.App.Services.AShare
         /// </summary>
         /// <param name="tsCode"></param>
         /// <param name="stockKCycle"></param>
-        private void DownLoadStockTradeData(string tsCode)
+        private async void DownLoadStockTradeData(string tsCode)
         {
             //判断本地是否有数据
             string filename = Helper.GetStockTradeDataFileName(tsCode, KCycle.Day); 
@@ -232,34 +234,78 @@ namespace DawnQuant.App.Services.AShare
             //增量更新
             if (File.Exists(filename))
             {
-                DateTime last = DateTime.Now;
-                using (FileStream fs = new FileStream(filename, FileMode.Open))
-                {
-                    BinaryReader br = new BinaryReader(fs);
+                //读取全部数据
+                var datas=ReadAllStockTradeData(tsCode);
 
-                    //定位到末尾
-                    br.BaseStream.Seek(0, SeekOrigin.End);
-                    //最后一行
-                    br.BaseStream.Seek(-8, SeekOrigin.End);
-
-                    //最后的数据日期
-                    last = DateTime.FromBinary(br.ReadInt64());
-                }
-
-                var start = DateTime.SpecifyKind(last.AddSeconds(1), DateTimeKind.Utc);
+                var start = DateTime.SpecifyKind(datas.Last().TradeDateTime, DateTimeKind.Utc);
                 var end = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
-                List<StockTradeData> datas =  GetStockTradeDataFromServer(tsCode, KCycle.Day, start, end);
 
-                if (datas.Count > 0)
+                List<StockTradeData> indatas = GetStockTradeDataFromServer(tsCode, KCycle.Day, start, end);
+
+                //合并数据
+
+                if(indatas != null && indatas.Count>0)
                 {
-                    //保存数据 二进制定长方式模式
-                    using (FileStream fs = new FileStream(filename, FileMode.Append))
+                    indatas= indatas.OrderBy(p=>p.TradeDateTime).ToList();
+
+                    foreach (var indata in indatas)
                     {
-                        BinaryWriter bw = new BinaryWriter(fs);
-                        WriteStockTradeData(bw, datas);
-                        bw.Close();
+                       var d= datas.Find(p=>p.TradeDateTime==indata.TradeDateTime);
+                        if (d != null)
+                        {
+                            datas.Remove(d);
+                           
+                        }
+                        datas.Add(indata);
+                    }
+
+                    int tryCount=0; 
+                    //重试10次 
+                    while (tryCount<10)
+                    {
+                        try
+                        {
+                            //保存数据 二进制定长方式模式
+                            using (FileStream fs = new FileStream(filename, FileMode.Create))
+                            {
+                                //排序
+                                datas = datas.OrderBy(p => p.TradeDateTime).ToList();
+                                BinaryWriter bw = new BinaryWriter(fs);
+                                WriteStockTradeData(bw, datas);
+                                bw.Close();
+                                break;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogError($"写入{tsCode}的股票交易数据发生错误：\r\n{ex.Message}\r\n{ex.StackTrace}");
+                            Task.Delay(500).Wait();
+                            tryCount++;
+                        }
                     }
                 }
+                #region
+                //using (FileStream fs = new FileStream(filename, FileMode.Open))
+                //{
+                //    BinaryReader br = new BinaryReader(fs);
+
+                //    //定位到末尾
+                //    br.BaseStream.Seek(0, SeekOrigin.End);
+                //    //最后一行
+                //    br.BaseStream.Seek(-8, SeekOrigin.End);
+
+                //    //最后的数据日期
+                //    last = DateTime.FromBinary(br.ReadInt64());
+
+                //    //读取全部数据
+
+                //}
+                //  var end = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
+                //  List<StockTradeData> datas = GetStockTradeDataFromServer(tsCode, KCycle.Day, start, end);
+
+                #endregion
+
+                
 
             }
             else//下载全部数据
@@ -401,6 +447,42 @@ namespace DawnQuant.App.Services.AShare
             }, meta);
             isOpen = tr.IsOpen;
             return isOpen;
+        }
+
+
+        /// <summary>
+        /// 读取本地交易数据
+        /// </summary>
+        /// <param name="tsCode"></param>
+        /// <param name="kCycle"></param>
+        /// <returns></returns>
+        private List<StockTradeData> ReadAllStockTradeData(string tsCode,KCycle kCycle= KCycle.Day)
+        {
+            List<StockTradeData> datas = new List<StockTradeData>();
+           
+            string filename = Helper.GetStockTradeDataFileName(tsCode, kCycle);
+            using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                BinaryReader br = new BinaryReader(fs);
+
+                while (br.BaseStream.Position < br.BaseStream.Length)
+                {
+                    StockTradeData d = new StockTradeData();
+                    d.Open = br.ReadDouble();
+                    d.Close = br.ReadDouble();
+                    d.High = br.ReadDouble();
+                    d.Low = br.ReadDouble();
+                    d.Volume = br.ReadDouble();
+                    d.Amount = br.ReadDouble();
+                    d.PreClose = br.ReadDouble();
+                    d.Turnover = br.ReadDouble();
+                    d.TurnoverFree = br.ReadDouble();
+                    d.AdjustFactor = br.ReadDouble();
+                    d.TradeDateTime = DateTime.FromBinary(br.ReadInt64());
+                    datas.Add(d);
+                }
+            }
+            return datas;
         }
 
     }

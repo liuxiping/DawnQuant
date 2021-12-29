@@ -89,7 +89,7 @@ namespace DawnQuant.App.Utils
             {
                 var u = App.AShareSetting.DataUpdateSetting;
 
-                if (string.IsNullOrEmpty(u.TaskCron))
+                if (!string.IsNullOrEmpty(u.TaskCron))
                 {
                     var logger = IOCUtil.Container.Resolve<ILogger>();
                     try

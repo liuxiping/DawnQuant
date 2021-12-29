@@ -27,44 +27,56 @@ namespace DawnQuant.App.Job
                     if (dm.IsOpen() && App.AShareSetting!=null &&
                     App.AShareSetting.DataUpdateSetting!=null)
                     {
-                        List<string> tsCodes = new List<string>();
 
-                        long userId =IOCUtil.Container.Resolve<IPassportProvider>().UserId;
+                        var now = DateTime.Now;
+                        var s1 = new DateTime(now.Year, now.Month, now.Day, 9, 30, 0);
+                        var e1 = new DateTime(now.Year, now.Month, now.Day, 11, 50, 0);
 
-                        //获取需要更新的TSCode
-                        var us = App.AShareSetting.DataUpdateSetting;
+                        var s2 = new DateTime(now.Year, now.Month, now.Day, 13, 0, 0);
+                        var e2 = new DateTime(now.Year, now.Month, now.Day, 15, 20, 0);
 
-                        if(us.UpdateBellwether)
+                        if ((now > s1 && now < e1) || (now > s2 && now < e2))
                         {
-                            var bs = IOCUtil.Container.Resolve<BellwetherService>();
-                            tsCodes.AddRange(bs.GetBellwetherStocksByUser(userId).Select(p => p.TSCode));
 
-                        }
-                        if (us.UpdateSubjectAndHot)
-                        {
-                            var ahs = IOCUtil.Container.Resolve<SubjectAndHotService>();
-                            tsCodes.AddRange(ahs.GetSubjectAndHotStocksByUser(userId).Select(p => p.TSCode));
-                        }
+                            List<string> tsCodes = new List<string>();
 
-                        if(us.SelfSelCategories!=null && us.SelfSelCategories.Count()>0)
-                        {
-                            var selfSelService = IOCUtil.Container.Resolve<SelfSelService>();
-                            foreach (var cat in us.SelfSelCategories)
+                            long userId = IOCUtil.Container.Resolve<IPassportProvider>().UserId;
+
+                            //获取需要更新的TSCode
+                            var us = App.AShareSetting.DataUpdateSetting;
+
+                            if (us.UpdateBellwether)
                             {
-                                tsCodes.AddRange(selfSelService.GetSelfSelectStocksByCategory(cat).Select(p => p.TSCode));
+                                var bs = IOCUtil.Container.Resolve<BellwetherService>();
+                                tsCodes.AddRange(bs.GetBellwetherStocksByUser(userId).Select(p => p.TSCode));
+
                             }
-                        }
+                            if (us.UpdateSubjectAndHot)
+                            {
+                                var ahs = IOCUtil.Container.Resolve<SubjectAndHotService>();
+                                tsCodes.AddRange(ahs.GetSubjectAndHotStocksByUser(userId).Select(p => p.TSCode));
+                            }
 
-                        tsCodes= tsCodes.Distinct().ToList();
+                            if (us.SelfSelCategories != null && us.SelfSelCategories.Count() > 0)
+                            {
+                                var selfSelService = IOCUtil.Container.Resolve<SelfSelService>();
+                                foreach (var cat in us.SelfSelCategories)
+                                {
+                                    tsCodes.AddRange(selfSelService.GetSelfSelectStocksByCategory(cat).Select(p => p.TSCode));
+                                }
+                            }
+
+                            tsCodes = tsCodes.Distinct().ToList();
 
 
-                        if(tsCodes.Count()>0)
-                        {
-                            dm.DownLoadStockData(tsCodes);
+                            if (tsCodes.Count() > 0)
+                            {
+                                dm.DownLoadStockData(tsCodes,1);
 
-                            //消息通知
-                            var jobc = IOCUtil.Container.Resolve<JobMessageUtil>();
-                            jobc.OnDataUpdateScheduledTaskJobCompleted();
+                                //消息通知
+                                var jobc = IOCUtil.Container.Resolve<JobMessageUtil>();
+                                jobc.OnDataUpdateScheduledTaskJobCompleted();
+                            }
                         }
                         
                     }

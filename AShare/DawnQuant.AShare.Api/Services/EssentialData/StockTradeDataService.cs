@@ -173,6 +173,54 @@ namespace DawnQuant.AShare.Api.EssentialData
            
         }
 
+
+        public override Task BatchSaveInSTDAndCAF(BatchSaveInSTDAndCAFRequest request, IServerStreamWriter<BatchSaveInSTDAndCAFReponse> responseStream, ServerCallContext context)
+        {
+            return Task.Run(() => 
+            {
+            if (request.Entities.Any())
+            { int complete = 0;
+                int count = request.Entities.Count;
+                foreach (var entity in request.Entities)
+                {
+                    var kCycle = _imapper.Map<KCycle>(entity.KCycle);
+
+                    //只支持日线
+                    if (kCycle == KCycle.Day)
+                    {
+                        using (var stockTradeDataRepository = _stockTradeDataRepositoryFunc(entity.TSCode, kCycle))
+                        {
+                            var data = _imapper.Map<StockTradeData>(entity.Entity);
+
+                            //计算复权因子
+                            //获取当前数据的前一个交易数据
+                            var predata = stockTradeDataRepository.Entities.Where(p => p.TradeDateTime < data.TradeDateTime)
+                            .OrderByDescending(p => p.TradeDateTime).Take(1).FirstOrDefault();
+                            if (predata != null)
+                            {
+                                double gain = (data.Close - data.PreClose) / data.PreClose;
+                                data.AdjustFactor = predata.AdjustFactor * (1 + gain);
+
+                            }
+                            stockTradeDataRepository.Save(data);
+                        }
+                    }
+                    complete++;
+
+                    //第一个最后一个 每隔20通知
+                    if (complete == 1 || complete % 100 == 0 ||complete==count)
+                        {
+                            responseStream.WriteAsync(new BatchSaveInSTDAndCAFReponse { TotalCount = count,CompletCount=complete });
+
+                        }
+                    }
+
+
+                }
+            });
+        
+        }
+
         public override async Task GetTradeData(GetTradeDataRequest request, IServerStreamWriter<GetTradeDataResponse> responseStream, ServerCallContext context)
         {
             var kCycle = _imapper.Map<KCycle>(request.KCycle);
@@ -765,9 +813,12 @@ namespace DawnQuant.AShare.Api.EssentialData
                                     complete++;
                                 }
 
-                                InSyncTurnoverResponse response = new InSyncTurnoverResponse();
-                                response.Message = $"增量同步换手率已经成功完成{complete}个股票，总共{allCount}个股票";
-                                responseStream.WriteAsync(response);
+                                if (complete == 1 || complete % 100 == 0 || complete == allCount)
+                                {
+                                    InSyncTurnoverResponse response = new InSyncTurnoverResponse();
+                                    response.Message = $"增量同步换手率已经成功完成{complete}个股票，总共{allCount}个股票";
+                                    responseStream.WriteAsync(response);
+                                }
 
                             }
                         }
@@ -833,6 +884,11 @@ namespace DawnQuant.AShare.Api.EssentialData
                                     tdr.Delete(datas);
                                 }
 
+                                //重新计算复权因子
+
+                                var alldatas = tdr.Entities.OrderBy(p => p.TradeDateTime).ToList();
+                                AdjustCalculator.CalculateAllAdjustFactor(alldatas);
+                                tdr.Save(alldatas);
                                 lock (lockObj)
                                 {
                                     complete++;
