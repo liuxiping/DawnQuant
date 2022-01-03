@@ -63,7 +63,7 @@
     <StackPanel  HorizontalAlignment="Right" WindowChrome.IsHitTestVisibleInChrome="True"
                  VerticalAlignment="Center" Orientation="Horizontal">
         <Menu >
-            <MenuItem  Padding="0" Name="_miUpdateData"  ToolTip="下载交易数据" Click="_miUpdateData_Click" >
+            <MenuItem  Padding="0" Name="_miUpdateData"  ToolTip="下载交易数据"  Command="{Binding DownloadAllDataCommand}" >
                 <MenuItem.Header>
                     <TextBlock  Margin="0 0 0 0" FontSize="18" Padding="0 0 0 0" HorizontalAlignment="Center" 
                                 Text="&#xe604;"  

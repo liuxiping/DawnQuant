@@ -41,6 +41,8 @@ namespace DawnQuant.App.ViewModels.AShare.SelfSelStock
             CopyRelateStockCodeCommand = new DelegateCommand(CopyRelateStockCode);
             CopyRelateStockNameCommand = new DelegateCommand(CopyRelateStockName);
 
+            EmptySelfSelectCategoryCommand=new DelegateCommand(EmptySelfSelectCategory);
+
             //初始化 加载自选分类数据
             RefreshSelfSelectStockCategories();
         }
@@ -346,6 +348,22 @@ namespace DawnQuant.App.ViewModels.AShare.SelfSelStock
 
         }
 
+        /// <summary>
+        /// 清空分类下的所有股票
+        /// </summary>
+        public DelegateCommand EmptySelfSelectCategoryCommand { set; get; }
+        private async void EmptySelfSelectCategory()
+        {
+            if(CurSelCategory != null)
+            {
+                await Task.Run(() =>
+                {
+                    _selfSelService.EmptySelfSelectCategory(CurSelCategory.Id);
+                }).ConfigureAwait(true);
+
+                Stocks.Clear();
+            }
+        }
         /// <summary>
         /// 删除股票
         /// </summary>

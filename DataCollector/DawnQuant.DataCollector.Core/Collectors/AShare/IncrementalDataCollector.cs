@@ -131,7 +131,7 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
         /// 从新浪更新实时数据
         /// </summary>
         /// <param name="date"></param>
-        public async  void CollectInDailyTradeDataFromSina(DateTime date)
+        public async  Task CollectInDailyTradeDataFromSina(DateTime date)
         {
             string msg;
 
@@ -139,14 +139,14 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
 
             try
             {
-                msg = $"正在从Sina获取增量线数据...";
+                msg = $"正在从Sina获取增量日线数据...";
                 _jobMessageUtil.OnDailyTradeDataJobProgressChanged(msg);
 
                 var datas =   CollectInDailyTradeDataFromSina(date, channel);
 
                 int allCount = datas.Count;
 
-                msg = $"从Sina成功获取{allCount}个增量线数据...";
+                msg = $"从Sina成功获取{allCount}个增量日线数据...";
                 _jobMessageUtil.OnDailyTradeDataJobProgressChanged(msg);
 
                 var client = new StockTradeDataApi.StockTradeDataApiClient(channel);
@@ -173,13 +173,13 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
                     {
                         var response = call.ResponseStream.Current;
                         msg = $"正在保存增量日线数据(Sina)，已经成功保存{response.CompletCount}个，总共{response.TotalCount}个";
-                        _jobMessageUtil.OnStockDailyIndicatorJobProgressChanged(msg);
+                        _jobMessageUtil.OnDailyTradeDataJobProgressChanged(msg);
                     }
                 }
 
                 msg = $"保存增量日线数据(Sina)已完成，总共保存{datas.Count}个";
 
-                _jobMessageUtil.OnStockDailyIndicatorJobProgressChanged(msg);
+                _jobMessageUtil.OnDailyTradeDataJobProgressChanged(msg);
 
 
 
@@ -428,7 +428,10 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
                 {
                     while (await call.ResponseStream.MoveNext())
                     {
-                       var  msg = call.ResponseStream.Current.Message;
+                        var response = call.ResponseStream.Current;
+
+                        var msg = $"增量同步换手率已经完成{response.CompletCount}个股票，总共{response.TotalCount}个股票"; 
+
                         _jobMessageUtil.OnInSyncTrunoverJobProgressChanged(msg);
                     }
                 }

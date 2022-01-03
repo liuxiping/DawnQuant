@@ -110,7 +110,7 @@ namespace DawnQuant.App.Utils
 
 
             //消息中间件
-            builder.RegisterType<JobMessageUtil>().SingleInstance();
+            builder.RegisterType<MessageUtil>().SingleInstance();
 
 
             Container = builder.Build();

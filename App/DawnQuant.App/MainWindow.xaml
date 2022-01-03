@@ -13,7 +13,7 @@
         ShowIcon="True"  Closing="_mainWindow_Closing" ShowTitle="False" Unloaded="_mainWindow_Unloaded"
         mc:Ignorable="d" Name="_mainWindow"  WindowState="Maximized"
         Loaded="_mainWindow_Loaded" Icon="/Assets/Icons/app.ico"
-        Title="DawnQuant" Height="450" Width="800">
+        Title="DawnQuant" Height="450" Width="800" Margin="0" Padding="0">
     <dx:DXWindow.HeaderItems>
         <LayoutView:HeaderView></LayoutView:HeaderView>
     </dx:DXWindow.HeaderItems>
@@ -31,9 +31,18 @@
         </dx:NotifyIconService>
     </dxmvvm:Interaction.Behaviors>
 
-    <dx:DXTabControl TabContentCacheMode="CacheAllTabs" Padding="0" Margin="0">
-        <dx:DXTabItem FontSize="15" Header="沪深股市" >
-            <AShareViews:AShareMainView></AShareViews:AShareMainView>
-        </dx:DXTabItem>
-    </dx:DXTabControl>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <dx:DXTabControl TabContentCacheMode="CacheAllTabs" Padding="0" Margin="-7 0 -7 0">
+            <dx:DXTabItem FontSize="15" Header="沪深股市" >
+                <AShareViews:AShareMainView></AShareViews:AShareMainView>
+            </dx:DXTabItem>
+        </dx:DXTabControl>
+        <LayoutView:FooterView Grid.Row="1"  Padding="0"></LayoutView:FooterView>
+    </Grid>
+   
+    
 </dx:DXTabbedWindow>

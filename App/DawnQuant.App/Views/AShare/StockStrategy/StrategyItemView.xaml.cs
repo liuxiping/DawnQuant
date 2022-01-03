@@ -2,6 +2,7 @@
 using DawnQuant.App.Utils;
 using DawnQuant.App.ViewModels.AShare.StockStrategy;
 using DevExpress.Xpf.Accordion;
+using DevExpress.Xpf.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,11 +68,16 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
 
         private async void _btnDel_Click(object sender, RoutedEventArgs e)
         {
-            await Model.DelStrategyCommand.ExecuteAsync(null);
+            if (DXMessageBox.Show("是否删除策略？",
+                "温馨提示", MessageBoxButton.YesNo,
+                MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                await Model.DelStrategyCommand.ExecuteAsync(null);
+                //更新界面
 
-            //更新界面
+                UpdateCategoriesIncludeStrategies(null);
+            };
 
-            UpdateCategoriesIncludeStrategies(null);
         }
 
         /// <summary>

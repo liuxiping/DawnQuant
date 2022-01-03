@@ -28,7 +28,7 @@ namespace DawnQuant.App.Job
                     //执行策略
                     _scheduledTaskService.ExecuteStrategyScheduledTask(task);
                     //通知策略执行执行完成
-                    var jobc = IOCUtil.Container.Resolve<JobMessageUtil>();
+                    var jobc = IOCUtil.Container.Resolve<MessageUtil>();
                     jobc.OnStrategyScheduledTaskCompleted(task);
 
                 });

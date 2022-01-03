@@ -46,7 +46,7 @@
                         </StackPanel>
                     </Grid>
                 </dxlc:GroupBox.Header>
-                <dx:ThemedBorder BorderThickness="0,0,0,1">
+                <dx:ThemedBorder BorderThickness="0,0,0,0">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition></RowDefinition>
@@ -81,7 +81,7 @@
             </dxlc:GroupBox>
 
 
-            <dxlc:GroupBox FontSize="15" Grid.Column="1" Name="_gbStockList" BorderThickness="1,0,1,1"  Padding="0" Margin="0">
+            <dxlc:GroupBox FontSize="15" Grid.Column="1" Name="_gbStockList" BorderThickness="1,0,1,0"  Padding="0" Margin="0">
                 <dxlc:GroupBox.Header>
                     <Grid VerticalAlignment="Center" Height="23">
                         <TextBlock  VerticalAlignment="Center" Margin="-5,0,0,0" Text="符合当前策略的股票列表"></TextBlock>
@@ -96,12 +96,16 @@
                     </Grid>
                 </dxlc:GroupBox.Header>
                 <Grid   x:Name="_gdStockList">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                      
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
                     <dxg:GridControl  CustomUnboundColumnData="_gcStockList_CustomUnboundColumnData"   x:Name="_gcStockList"  ShowBorder="False" SelectedItem="{Binding CurSelStock, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                  ItemsSource="{Binding Stocks}">
+                                  ItemsSource="{Binding Stocks}" Grid.ColumnSpan="2">
                         <dxg:GridControl.View>
                             <dxg:TableView x:Name="_watchStockList" AllowEditing="False" FadeSelectionOnLostFocus="False"
                                AllowPerPixelScrolling="True" ShowGroupPanel="False" AllowGrouping="True" 
@@ -117,7 +121,7 @@
                                 </dxg:TableView.ContextMenu>
                             </dxg:TableView>
                         </dxg:GridControl.View>
-                        <dxg:GridColumn Header="序号" FieldName="#" Width="40" UnboundType="Integer"></dxg:GridColumn>
+                        <dxg:GridColumn Header="序号" FieldName="#" Width="45" UnboundType="Integer"></dxg:GridColumn>
                         <dxg:GridColumn Header="代码" FieldName="TSCode"    Width="70">
                             <dxg:GridColumn.CellTemplate>
                                 <DataTemplate>
@@ -132,7 +136,7 @@
 
                 </Grid>
             </dxlc:GroupBox>
-            <dx:ThemedBorder Grid.Column="2"  BorderThickness="0,0,0,1">
+            <dx:ThemedBorder Grid.Column="2"  BorderThickness="0,0,0,0">
                 <Grid  x:Name="_gdChart" >
                     <Grid.ContextMenu>
                         <ContextMenu>

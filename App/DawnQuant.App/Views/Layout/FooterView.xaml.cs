@@ -1,4 +1,7 @@
 ﻿
+using Autofac;
+using DawnQuant.App.Models;
+using DawnQuant.App.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,21 +35,72 @@ namespace DawnQuant.App.Views.Layout
         {
             App.Current?.Dispatcher?.Invoke(() =>
             {
-                txtCurTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                txtCurTime.Text = DateTime.Now.ToString("HH:mm:ss");
             });
             
         }
 
         Timer _timer;
 
-        private void MvxWpfView_Loaded(object sender, RoutedEventArgs e)
+        private void FooterView_Loaded(object sender, RoutedEventArgs e)
         {
+            if (AppLocalConfig.Instance.LastUpdateAllDataDateTime != null)
+            {
+                imgLastUpdateTime.Visibility = Visibility.Visible;
+                var dt = AppLocalConfig.Instance.LastUpdateAllDataDateTime.Value.ToString("yyyy-MM-dd HH:mm");
+                txtLastUpdateTime.Text = $"上次全部数据更新时间：{dt}";
+            }
+
+            var notify = IOCUtil.Container.Resolve<MessageUtil>();
+
+            notify.DownloadAShareDataProgress += (complete, total) =>
+           {
+              
+               string msg = $"正在下载交易数据，已经完成{complete}个，总共{total}个";
+
+               Dispatcher.Invoke(() =>
+               {
+                   
+                   imgNotify.Visibility = Visibility.Visible;
+                   txtNotify.Text = msg;
+               });
+
+           };
+
+            notify.DownloadAShareDataComplete += (isALL) => 
+            {
+                if (isALL)
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        var dt = AppLocalConfig.Instance.LastUpdateAllDataDateTime.Value.ToString("yyyy-MM-dd HH:mm");
+
+                        var msg = $"全部数据更新完成,更新时间{dt}";
+                        txtNotify.Text = msg;
+
+                        txtLastUpdateTime.Text = $"上次全部数据更新时间：{dt}";
+                    });
+
+                }
+                else
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        var dt = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+                        var msg = $"策略数据更新完成,更新时间{dt}";
+                        txtNotify.Text = msg;
+                    });
+                }
+
+
+            };
+
             _timer = new Timer(1000);
             _timer.Elapsed += Timer_Elapsed;
             _timer.Start();
         }
 
-        private void MvxWpfView_Unloaded(object sender, RoutedEventArgs e)
+        private void FooterView_Unloaded(object sender, RoutedEventArgs e)
         {
             _timer.Stop();
         }

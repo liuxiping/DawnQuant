@@ -217,5 +217,20 @@ namespace DawnQuant.App.Services.AShare
 
 
         }
+
+
+        public void EmptySelfSelectCategory(long id)
+        {
+            var client = new SelfSelectStockApi.SelfSelectStockApiClient(_grpcChannelSet.AShareGrpcChannel);
+
+            Metadata meta = new Metadata();
+            meta.AddAuthorization(_passportProvider?.AccessToken);
+
+            DelSelfSelectStocksByCategoryRequest request = new DelSelfSelectStocksByCategoryRequest()
+            { CategoryId= id};
+            client.DelSelfSelectStocksByCategory(request , meta);
+
+
+        }
     }
 }

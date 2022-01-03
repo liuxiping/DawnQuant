@@ -27,17 +27,11 @@ namespace DawnQuant.App
     /// </summary>
     public partial class DownloadDataWindow : Window
     {
-        AShareDataMaintainService _aShareDataMaintainService;
         public DownloadDataWindow()
         {
             InitializeComponent();
-            IsCreateFromLogin = true;
-            IsDownloadAllData = false;
-
-            _aShareDataMaintainService = IOCUtil.Container.Resolve<AShareDataMaintainService>();
-            _aShareDataMaintainService.DownLoadStockDataProgress += _aShareDataMaintainService_DownLoadStockDataProgress;
-
             DataContext = new DownloadDataWindowModel();
+            Model.DownlaodDataComplete += Model_DownlaodDataComplete;
 
         }
 
@@ -53,79 +47,38 @@ namespace DawnQuant.App
 
             }
         }
-        /// <summary>
-        /// 时候是登录窗体创建的
-        /// </summary>
-        public bool IsCreateFromLogin { get; set; }
 
-        /// <summary>
-        /// 时候是登录窗体创建的
-        /// </summary>
-        public bool IsDownloadAllData { get; set; }
-
-        private async void _downloadDataWindow_Loaded(object sender, RoutedEventArgs e)
+        private void _downloadDataWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if (IsCreateFromLogin)
-            {
-                this.ShowInTaskbar = true;
-            }
-            else
-            {
-                this.ShowInTaskbar = true;
-            }
-            await Task.Run(() =>
-            {
 
-                // 交易日更新数据
-                if (IsCreateFromLogin )
-                {
-                    if (_aShareDataMaintainService.IsOpen())
-                    {
-                      //  _aShareDataMaintainService.DownLoadStockData();
-                    }
-                }
-                else//用户手动更新数据
-                {
-                    if (IsDownloadAllData)
-                    {
-                        string dataPath = System.IO.Path.Combine(Environment.CurrentDirectory, "Data");
-                        Directory.Delete(dataPath, true);
-                    }
-                    _aShareDataMaintainService.DownLoadStockData();
-                }
+        }
 
-
-            }).ConfigureAwait(true);
-
-            if (IsCreateFromLogin)
-            {
-                var mainWindow = new MainWindow();
-
-                this.ShowInTaskbar = false;
-                Visibility = Visibility.Hidden;
-                mainWindow.Show();
-            }
+        /// <summary>
+        /// 数据下载完成 
+        /// </summary>
+        private void Model_DownlaodDataComplete()
+        {
             Close();
         }
 
-        private void _aShareDataMaintainService_DownLoadStockDataProgress(string msg)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                Model.Progress = msg;
-            });
-
-        }
-
-        private void _downloadDataWindow_Closed(object sender, EventArgs e)
-        {
-            _aShareDataMaintainService.DownLoadStockDataProgress -= _aShareDataMaintainService_DownLoadStockDataProgress;
-        }
     }
 
 
     public class DownloadDataWindowModel : ViewModelBase
     {
+        AShareDataMaintainService _aShareDataMaintainService;
+        SettingService _settingService;
+
+        public DownloadDataWindowModel()
+        {
+            _aShareDataMaintainService = IOCUtil.Container.Resolve<AShareDataMaintainService>();
+            _aShareDataMaintainService.DownLoadStockDataProgress += _aShareDataMaintainService_DownLoadStockDataProgress;
+            _settingService = IOCUtil.Container.Resolve<SettingService>();
+
+            //下载数据
+            DownlaodData();
+        }
+
         string _progress = "正在下载交易数据,请稍后...";
         public string Progress
         {
@@ -137,6 +90,48 @@ namespace DawnQuant.App
             {
                 SetProperty(ref _progress, value, nameof(Progress));
             }
+        }
+
+        public event Action DownlaodDataComplete;
+        protected void OnDownlaodDataComplete()
+        {
+            DownlaodDataComplete?.Invoke();
+        }
+
+
+        private void _aShareDataMaintainService_DownLoadStockDataProgress(int complete, int total)
+        {
+            App.Current.Dispatcher.Invoke(() =>
+            {
+                Progress = $"正在下载交易数据，已经完成{complete}个，总共{total}个";
+
+            });
+
+        }
+     
+        /// <summary>
+        /// 下载交易数据
+        /// </summary>
+        /// <returns></returns>
+        private Task DownlaodData()
+        {
+            return Task.Run(() =>
+            {
+                string dataPath = System.IO.Path.Combine(Environment.CurrentDirectory, "Data");
+                Directory.Delete(dataPath, true);
+
+                App.IsUpdateAllAShareData = true;
+
+                _aShareDataMaintainService.DownLoadStockData();
+
+                App.AShareSetting.LastUpdateAllDataDateTime = DateTime.Now;
+                _settingService.SaveSetting(App.AShareSetting.Serialize());
+
+                App.IsUpdateAllAShareData = false;
+
+                OnDownlaodDataComplete();
+            });
+
         }
     }
 }

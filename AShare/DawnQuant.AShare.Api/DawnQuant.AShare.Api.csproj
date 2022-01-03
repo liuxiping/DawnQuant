@@ -29,6 +29,7 @@
     <None Remove="Protos\EssentialData\ReversionFactorApi.proto" />
     <None Remove="Protos\EssentialData\SubjectAndHotApi.proto" />
     <None Remove="Protos\EssentialData\Top10FloatHolderApi.proto" />
+    <None Remove="Protos\SyncToy_82a3c6fe-87e8-415a-af31-38997a8f26bf.dat" />
     <None Remove="Protos\SyncToy_a74b51fc-14e0-4c1f-8048-92502a6d3f82.dat" />
     <None Remove="Protos\UserProfile\BellwetherStockApi.proto" />
     <None Remove="Protos\UserProfile\BellwetherStockCategoryApi.proto" />

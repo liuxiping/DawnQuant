@@ -330,6 +330,17 @@ namespace DawnQuant.App.Views.AShare.SelfSelStock
 
         }
         #endregion
+
+        private void _btnEmptyStocks_Click(object sender, RoutedEventArgs e)
+        {
+           if( DXMessageBox.Show("是否清空当前分类下所有股票？", 
+               "温馨提示", MessageBoxButton.YesNo,
+               MessageBoxImage.Question)== MessageBoxResult.Yes)
+            {
+                Model.EmptySelfSelectCategoryCommand.Execute(null);
+            };
+
+        }
     }
 }
 

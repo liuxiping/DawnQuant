@@ -271,7 +271,6 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
         /// </summary>
         public async Task CalculateAllAdjustFactorAsync()
         {
-            string msg = "";
             GrpcChannel channel = GrpcChannel.ForAddress(_apiUrl);
             try
             {
@@ -284,7 +283,8 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
                 {
                     while (await call.ResponseStream.MoveNext())
                     {
-                        msg = call.ResponseStream.Current.Message;
+                        var response = call.ResponseStream.Current;
+                        var msg = $"计算复权因子已经完成{response.CompletCount}个股票，总共{response.TotalCount}个股票";
                         OnDailyStockTradeDataJobProgressChanged(msg);
                     }
 
@@ -305,7 +305,6 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
         /// <returns></returns>
         public async Task DataCleaningAsync()
         {
-            string msg = "";
             GrpcChannel channel = GrpcChannel.ForAddress(_apiUrl);
             try
             {
@@ -318,7 +317,10 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
                 {
                     while (await call.ResponseStream.MoveNext())
                     {
-                        msg = call.ResponseStream.Current.Message;
+                        var response=call.ResponseStream.Current;
+
+                        var msg = $"数据清洗已经完成{response.CompletCount}个股票，总共{response.TotalCount}个股票";
+
                         OnDataCleaningJobProgressChanged(msg);
                     }
                 }
@@ -337,7 +339,6 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
         /// </summary>
         public async Task SyncTurnoverAsync()
         {
-            string msg="";
             GrpcChannel channel = GrpcChannel.ForAddress(_apiUrl);
             try
             {
@@ -350,7 +351,8 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
                 {
                     while (await call.ResponseStream.MoveNext())
                     {
-                        msg = call.ResponseStream.Current.Message;
+                       var response = call.ResponseStream.Current;
+                        var msg = $"同步换手率已经完成{response.CompletCount}个股票，总共{response.TotalCount}个股票";
                         OnDataCleaningJobProgressChanged(msg);
                     }
                 }

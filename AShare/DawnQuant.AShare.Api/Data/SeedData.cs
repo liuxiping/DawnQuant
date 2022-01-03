@@ -425,6 +425,17 @@ namespace DawnQuant.AShare.Api.Data
                         SortNum = 9
                     });
 
+                    factorMetadataRepository.Insert(new FactorMetadata
+                    {
+                        Id = 2010,
+                        CategoryId = ti.Id,
+                        Name = "上吊线",
+                        ImplAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ImplClassName = "DawnQuant.AShare.Strategy.Executor.Factor.HammerFactorExecutor",
+                        ParameterAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ParameterClassName = "DawnQuant.AShare.Strategy.Executor.Factor.HammerFactorExecutorParameter",
+                        SortNum = 10
+                    });
 
                     factorMetadataRepository.Insert(new FactorMetadata
                     {
@@ -497,11 +508,11 @@ namespace DawnQuant.AShare.Api.Data
                     {
                         Id = 4003,
                         CategoryId = ex.Id,
-                        Name = "排除市场龙头",
+                        Name = "排除市场龙头(用户数据)",
                         ImplAssemblyName = "DawnQuant.AShare.Strategy.dll",
-                        ImplClassName = "DawnQuant.AShare.Strategy.Executor.Factor.BellwetherFactorExecutor",
+                        ImplClassName = "DawnQuant.AShare.Strategy.Executor.Factor.ExcludeBellwetherFactorExecutor",
                         ParameterAssemblyName = "DawnQuant.AShare.Strategy.dll",
-                        ParameterClassName = "DawnQuant.AShare.Strategy.Executor.Factor.BellwetherFactorExecutorParameter",
+                        ParameterClassName = "DawnQuant.AShare.Strategy.Executor.Factor.ExcludeBellwetherFactorExecutorParameter",
                         SortNum = 3
                     });
 
@@ -509,12 +520,22 @@ namespace DawnQuant.AShare.Api.Data
                     {
                         Id = 4004,
                         CategoryId = ex.Id,
-                        Name = "排除题材热点",
+                        Name = "排除题材热点(用户数据)",
                         ImplAssemblyName = "DawnQuant.AShare.Strategy.dll",
-                        ImplClassName = "DawnQuant.AShare.Strategy.Executor.Factor.SubjectAndHotFactorExecutor",
+                        ImplClassName = "DawnQuant.AShare.Strategy.Executor.Factor.ExcludeSubjectAndHotFactorExecutor",
                         ParameterAssemblyName = "DawnQuant.AShare.Strategy.dll",
-                        ParameterClassName = "DawnQuant.AShare.Strategy.Executor.Factor.SubjectAndHotFactorExecutorParameter",
+                        ParameterClassName = "DawnQuant.AShare.Strategy.Executor.Factor.ExcludeSubjectAndHotFactorExecutorParameter",
                         SortNum = 4
+                    });
+
+                    factorMetadataRepository.Insert(new FactorMetadata
+                    {
+                        Id = 4005,
+                        CategoryId = ex.Id,
+                        Name = "排除科创板",
+                        ImplAssemblyName = "DawnQuant.AShare.Strategy.dll",
+                        ImplClassName = "DawnQuant.AShare.Strategy.Executor.Factor.ExcludeStarBoardMarketStocksExecutor",
+                        SortNum =5
                     });
 
                     #endregion

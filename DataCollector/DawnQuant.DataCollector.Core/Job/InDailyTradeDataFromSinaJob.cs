@@ -13,20 +13,20 @@ namespace DawnQuant.DataCollector.Core.Job
 
         public Task Execute(IJobExecutionContext context)
         {
-            return Task.Run(() =>
+            return Task.Run(async () =>
             {
 
                 IServiceProvider serviceProvider = (IServiceProvider)context.MergedJobDataMap.Get(Constant.ServiceProvider);
 
 
 
-                CollectInDailyTradeDataFromSina(serviceProvider);
+               await CollectInDailyTradeDataFromSina(serviceProvider);
 
             });
         }
 
 
-        private  void CollectInDailyTradeDataFromSina(IServiceProvider serviceProvider)
+        private  async Task CollectInDailyTradeDataFromSina(IServiceProvider serviceProvider)
         {
             using (var scope = serviceProvider.CreateScope())
             {
@@ -48,7 +48,7 @@ namespace DawnQuant.DataCollector.Core.Job
                         var jobMessageUtility = scope.ServiceProvider.GetService<JobMessageUtil>();
 
                         jobMessageUtility.OnInDailyTradeDataFromSinaJobStarted();
-                         collector.CollectInDailyTradeDataFromSina(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
+                        await collector.CollectInDailyTradeDataFromSina(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
                         jobMessageUtility.OnInDailyTradeDataFromSinaJobCompleted();
 
                     }

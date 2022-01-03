@@ -10,14 +10,6 @@ namespace DawnQuant.App.Models.AShare.Strategy.Executor.Factor
 {
     public class HammerFactorExecutorParameter: ExecutorParameter
     {
-        public HammerFactorExecutorParameter()
-        {
-           
-            KCycle = SupportedKCycle.日线;
-            TradeDateTime = null;
-            LookBackCycleCount = 3;
-        }
-
 
         public override string Serialize()
         {
@@ -25,21 +17,28 @@ namespace DawnQuant.App.Models.AShare.Strategy.Executor.Factor
         }
 
         [DisplayName("K线周期")]
-        public SupportedKCycle KCycle { get; set; }
+        public SupportedKCycle KCycle { get; set; } = SupportedKCycle.日线;
 
 
         /// <summary>
         /// 最近交易周期数据
         /// </summary>
-        [DisplayName("最近交易周期数")]
-        public int LookBackCycleCount { get; set; }
+        [DisplayName("交易周期数(最小为6)")]
+        public int LookBackCycleCount { get; set; } = 6;
+
 
         /// <summary>
-        /// 最近交易周期数据
+        /// 满足条件的次数
         /// </summary>
-        [DisplayName("交易时间,交易时间为空取最近交易日期")]
-        public DateTime? TradeDateTime { get; set; }
+        [DisplayName("出现锤子线次数")]
+        public int MeetCount { get; set; } = 1;
 
+
+        /// <summary>
+        /// 最近一个交易日期是否满足
+        /// </summary>
+        [DisplayName("最近一个周期是否是锤子线")]
+        public bool IsLatestTradeDateTimeMeet { get; set; } = false;
 
         public enum SupportedKCycle
         {

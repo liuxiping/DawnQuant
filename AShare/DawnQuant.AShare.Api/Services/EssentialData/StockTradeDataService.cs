@@ -208,7 +208,7 @@ namespace DawnQuant.AShare.Api.EssentialData
                     complete++;
 
                     //第一个最后一个 每隔20通知
-                    if (complete == 1 || complete % 100 == 0 ||complete==count)
+                    if (complete == 1 || complete % 20 == 0 ||complete==count)
                         {
                             responseStream.WriteAsync(new BatchSaveInSTDAndCAFReponse { TotalCount = count,CompletCount=complete });
 
@@ -473,8 +473,6 @@ namespace DawnQuant.AShare.Api.EssentialData
         }
 
 
-
-
         private void CalculateAllAdjustFactorOnDailyData(IServerStreamWriter<CalculateAllAdjustFactorResponse> responseStream)
         {
 
@@ -518,9 +516,13 @@ namespace DawnQuant.AShare.Api.EssentialData
                                  complete++;
                              }
 
-                             CalculateAllAdjustFactorResponse response = new CalculateAllAdjustFactorResponse();
-                             response.Message = $"全量计算复权因子已经成功完成{complete}个股票，总共{allCount}个股票";
-                             responseStream.WriteAsync(response);
+                             //第一个最后一个 每隔10通知
+                             if (complete == 1 || complete % 10 == 0 || complete == allCount)
+                             {
+                                 CalculateAllAdjustFactorResponse response = new CalculateAllAdjustFactorResponse()
+                                 { CompletCount = allCount, TotalCount = allCount };
+                                 responseStream.WriteAsync(response);
+                             }
 
                          }
                      }
@@ -531,10 +533,6 @@ namespace DawnQuant.AShare.Api.EssentialData
             Task.WaitAll(tasks.ToArray());
         }
 
-        private void CalculateAllAdjustFactorOn5MData()
-        {
-            throw new NotImplementedException();
-        }
 
 
         /// <summary>
@@ -608,9 +606,13 @@ namespace DawnQuant.AShare.Api.EssentialData
                                     complete++;
                                 }
 
-                                CalculateInsAdjustFactorResponse response = new CalculateInsAdjustFactorResponse();
-                                response.Message = $"增量计算复权因子已经成功完成{complete}个股票，总共{allCount}个股票";
-                                responseStream.WriteAsync(response);
+                                //第一个最后一个 每隔20通知
+                                if (complete == 1 || complete % 20 == 0 || complete == allCount)
+                                {
+                                    CalculateInsAdjustFactorResponse response = new CalculateInsAdjustFactorResponse()
+                                    { CompletCount = complete, TotalCount = allCount };
+                                    responseStream.WriteAsync(response);
+                                }
                             }
                         }
                     }
@@ -708,9 +710,13 @@ namespace DawnQuant.AShare.Api.EssentialData
                                         complete++;
                                     }
 
-                                    SyncTurnoverResponse response = new SyncTurnoverResponse();
-                                    response.Message = $"同步换手率已经成功完成{complete}个股票，总共{allCount}个股票";
-                                    responseStream.WriteAsync(response);
+                                    //第一个最后一个 每隔10通知
+                                    if (complete == 1 || complete % 10 == 0 || complete == allCount)
+                                    {
+                                        SyncTurnoverResponse response = new SyncTurnoverResponse()
+                                        { CompletCount = complete, TotalCount = allCount };
+                                        responseStream.WriteAsync(response);
+                                    }
                                 }
                                 else
                                 {
@@ -729,6 +735,13 @@ namespace DawnQuant.AShare.Api.EssentialData
         }
 
 
+        /// <summary>
+        /// 增量同步换手率
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="responseStream"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public override Task InSyncTurnover(Empty request, IServerStreamWriter<InSyncTurnoverResponse> responseStream, ServerCallContext context)
         {
             return Task.Run(() =>
@@ -813,10 +826,10 @@ namespace DawnQuant.AShare.Api.EssentialData
                                     complete++;
                                 }
 
-                                if (complete == 1 || complete % 100 == 0 || complete == allCount)
+                                if (complete == 1 || complete % 20 == 0 || complete == allCount)
                                 {
-                                    InSyncTurnoverResponse response = new InSyncTurnoverResponse();
-                                    response.Message = $"增量同步换手率已经成功完成{complete}个股票，总共{allCount}个股票";
+                                    InSyncTurnoverResponse response = new InSyncTurnoverResponse() 
+                                    { CompletCount=complete,TotalCount=allCount };
                                     responseStream.WriteAsync(response);
                                 }
 
@@ -894,9 +907,13 @@ namespace DawnQuant.AShare.Api.EssentialData
                                     complete++;
                                 }
 
-                                DataCleaningResponse response = new DataCleaningResponse();
-                                response.Message = $"清洗数据已经成功完成{complete}个股票，总共{allCount}个股票";
-                                responseStream.WriteAsync(response);
+                                //第一个最后一个 每隔10通知
+                                if (complete == 1 || complete % 10 == 0 || complete == allCount)
+                                {
+                                    DataCleaningResponse response = new DataCleaningResponse()
+                                    { CompletCount = complete, TotalCount = allCount };
+                                    responseStream.WriteAsync(response);
+                                }
                             }
                         }
 

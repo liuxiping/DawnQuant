@@ -7,19 +7,17 @@ using System.Threading.Tasks;
 
 namespace DawnQuant.AShare.Strategy.Executor.Factor
 {
-   public class BellwetherFactorExecutor : IFactorExecutor
+   public class ExcludeBellwetherFactorExecutor : IFactorExecutor
     {
         public object Parameter { get; set; }
 
         private readonly IBellwetherStockRepository _bellwetherStockRepository;
 
 
-        public BellwetherFactorExecutor(IBellwetherStockRepository bellwetherStockRepository)
+        public ExcludeBellwetherFactorExecutor(IBellwetherStockRepository bellwetherStockRepository)
         {
             _bellwetherStockRepository = bellwetherStockRepository;
         }
-
-      
 
         public List<string> Execute(List<string> tsCodes)
         {
@@ -29,7 +27,7 @@ namespace DawnQuant.AShare.Strategy.Executor.Factor
             }
             else
             {
-                BellwetherFactorExecutorParameter pa = (BellwetherFactorExecutorParameter)Parameter;
+                ExcludeBellwetherFactorExecutorParameter pa = (ExcludeBellwetherFactorExecutorParameter)Parameter;
                 var temp = _bellwetherStockRepository.Entities.Where(p => p.UserId == pa.UserId).Select(p => p.TSCode).ToList();
 
                 //排除

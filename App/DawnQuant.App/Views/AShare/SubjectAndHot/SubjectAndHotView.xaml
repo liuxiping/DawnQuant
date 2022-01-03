@@ -18,7 +18,7 @@
             <ColumnDefinition ></ColumnDefinition>
             <ColumnDefinition  Width="auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <dxlc:GroupBox  Padding="0" BorderThickness="0,0,1,1">
+        <dxlc:GroupBox  Padding="0" BorderThickness="0,0,1,0">
             <dxlc:GroupBox.Header>
                 <Grid Height="23">
                     <Grid.ColumnDefinitions>
@@ -62,7 +62,7 @@
 
             </Grid>
         </dxlc:GroupBox>
-        <dxlc:GroupBox  Padding="0" BorderThickness="0,0,1,1" Grid.Column="1" >
+        <dxlc:GroupBox  Padding="0" BorderThickness="0,0,1,0" Grid.Column="1" >
             <dxlc:GroupBox.Header>
                 <Grid    Height="23" VerticalAlignment="Top" >
                     <TextBlock  VerticalAlignment="Center"  Text="题材热点股" Margin="-5,0,0,0"></TextBlock>
@@ -113,7 +113,7 @@
            
         </dxlc:GroupBox>
 
-        <dx:ThemedBorder BorderThickness="0,0,0,1" Grid.Column="2">
+        <dx:ThemedBorder BorderThickness="0,0,0,0" Grid.Column="2">
             <dx:ThemedBorder.ContextMenu>
                 <ContextMenu>
                     <MenuItem  Name="_miAddToCurSubjectAndHot" Header="添加到当前题材热点" Command="{Binding AddToCurSubjectAndHotCommand}" ></MenuItem>
@@ -123,7 +123,7 @@
         </dx:ThemedBorder>
 
     
-        <dxlc:GroupBox  Grid.Column="3" Padding="0" BorderThickness="1,0,0,1" >
+        <dxlc:GroupBox  Grid.Column="3" Padding="0" BorderThickness="1,0,0,0" >
                 <dxlc:GroupBox.Header>
                     <Grid   Height="23" VerticalAlignment="Top" >
                         <TextBlock  VerticalAlignment="Center"  Text="相关股票" Margin="-5,0,0,0"></TextBlock>

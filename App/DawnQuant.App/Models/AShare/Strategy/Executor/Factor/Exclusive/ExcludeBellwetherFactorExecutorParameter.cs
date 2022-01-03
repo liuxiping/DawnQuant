@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DawnQuant.App.Models.AShare.Strategy.Executor.Factor
 {
-    public class BellwetherFactorExecutorParameter : ExecutorParameter
+    public class ExcludeBellwetherFactorExecutorParameter : ExecutorParameter
     {
 
         /// <summary>

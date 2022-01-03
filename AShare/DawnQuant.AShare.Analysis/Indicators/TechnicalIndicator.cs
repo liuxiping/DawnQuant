@@ -20,27 +20,39 @@ namespace DawnQuant.AShare.Analysis.Indicators
         {
 
             List<double> ma = new List<double>();
-            double[] inReal = datas.OrderBy(p=>p.TradeDateTime).Select(p => p.Close).ToArray();
+
+            double[] inReal = datas.OrderBy(p => p.TradeDateTime).Select(p => p.Close).ToArray();
             double[] outReal = new double[inReal.Length];
-            var r = TALib.Core.Sma(inReal, 0, inReal.Length - 1, outReal, out int outBegIdx, out int outNbElement, timePeriod);
+
+            var r = TALib.Core.Sma(inReal, 0, inReal.Length - 1, outReal,
+                out int outBegIdx, out int outNbElement, timePeriod);
+
             if (r == TALib.Core.RetCode.Success)
             {
-                int i = 0;
-                foreach (var d in datas)
+                if (outNbElement > 0)
                 {
-                    //没有数据
-                    if (i < outBegIdx)
+                    for (int i = 0; i < datas.Count(); i++)
+                    {
+                        //前面没有数据
+                        if (i < outBegIdx)
+                        {
+                            ma.Add(double.NaN);
+
+                        }
+                        else
+                        {
+                            ma.Add(outReal[i - outBegIdx]);
+                        }
+
+                    }
+                }
+                else//数据不够没有输出
+                {
+                    for (int i = 0; i < datas.Count(); i++)
                     {
                         ma.Add(double.NaN);
-
                     }
-                    else
-                    {
-                        ma.Add(outReal[i - outBegIdx]);
-                    }
-                    i++;
                 }
-
             }
             return ma;
         }

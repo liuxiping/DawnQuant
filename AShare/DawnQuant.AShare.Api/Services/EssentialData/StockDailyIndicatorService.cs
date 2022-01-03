@@ -70,7 +70,7 @@ namespace DawnQuant.AShare.Api.EssentialData
                         complete++;
 
                         //第一个最后一个 每隔20通知
-                        if (complete == 1 || complete % 100 == 0 || complete == count)
+                        if (complete == 1 || complete % 20 == 0 || complete == count)
                         {
                             responseStream.WriteAsync(new  BatchSaveStockDailyIndicatorResponse { TotalCount = count, CompletCount = complete });
 

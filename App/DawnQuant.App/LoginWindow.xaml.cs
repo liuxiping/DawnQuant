@@ -99,9 +99,7 @@ namespace DawnQuant.App
                     this.ShowInTaskbar = false;
                     Visibility = Visibility.Hidden;
 
-                   // DownloadDataWindow loadDataWindow = new DownloadDataWindow();
-                   // loadDataWindow.IsCreateFromLogin = true;
-                   // loadDataWindow.Show();
+                
                     this.Close();
                 }
                 else if (cancelLogging)
@@ -136,41 +134,6 @@ namespace DawnQuant.App
             this.WindowState = WindowState.Minimized;
         }
 
-        class LoginWindowModel : ViewModelBase
-        {
-            private string _name;
-            public string Name
-            {
-                get { return _name; }
-                set { SetProperty(ref _name, value, nameof(Name)); }
-            }
-
-
-            private string _password;
-            public string Password
-            {
-                get { return _password; }
-                set { SetProperty(ref _password, value, nameof(Password)); }
-            }
-
-
-            private bool _remember = false;
-            public bool Remember
-            {
-                get { return _remember; }
-                set { SetProperty(ref _remember, value, nameof(Remember)); }
-            }
-
-
-            private bool _autoLogin = false;
-            public bool AutoLogin
-            {
-                get { return _autoLogin; }
-                set { SetProperty(ref _autoLogin, value, nameof(AutoLogin)); }
-            }
-
-        }
-
         private void _loginWindow_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
@@ -179,7 +142,6 @@ namespace DawnQuant.App
 
             }
         }
-
 
         private async void _loginWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -225,5 +187,40 @@ namespace DawnQuant.App
         {
 
         }
+    }
+
+    public class LoginWindowModel : ViewModelBase
+    {
+        private string _name;
+        public string Name
+        {
+            get { return _name; }
+            set { SetProperty(ref _name, value, nameof(Name)); }
+        }
+
+
+        private string _password;
+        public string Password
+        {
+            get { return _password; }
+            set { SetProperty(ref _password, value, nameof(Password)); }
+        }
+
+
+        private bool _remember = false;
+        public bool Remember
+        {
+            get { return _remember; }
+            set { SetProperty(ref _remember, value, nameof(Remember)); }
+        }
+
+
+        private bool _autoLogin = false;
+        public bool AutoLogin
+        {
+            get { return _autoLogin; }
+            set { SetProperty(ref _autoLogin, value, nameof(AutoLogin)); }
+        }
+
     }
 }

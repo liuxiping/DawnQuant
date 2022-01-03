@@ -25,7 +25,8 @@ namespace DawnQuant.App.Job
                     var dm = IOCUtil.Container.Resolve<AShareDataMaintainService>();
 
                     if (dm.IsOpen() && App.AShareSetting!=null &&
-                    App.AShareSetting.DataUpdateSetting!=null)
+                    App.AShareSetting.DataUpdateSetting!=null && 
+                    !App.IsUpdateAllAShareData )
                     {
 
                         var now = DateTime.Now;
@@ -71,11 +72,14 @@ namespace DawnQuant.App.Job
 
                             if (tsCodes.Count() > 0)
                             {
+                                App.IsDataUpdateScheduledTaskJob = true;
                                 dm.DownLoadStockData(tsCodes,1);
-
+                                App.IsDataUpdateScheduledTaskJob = false;
                                 //消息通知
-                                var jobc = IOCUtil.Container.Resolve<JobMessageUtil>();
-                                jobc.OnDataUpdateScheduledTaskJobCompleted();
+                                var notify = IOCUtil.Container.Resolve<MessageUtil>();
+                                notify.OnDownloadAShareDataComplete(false);
+                                notify.OnDataUpdateScheduledTaskJobCompleted();
+                              
                             }
                         }
                         

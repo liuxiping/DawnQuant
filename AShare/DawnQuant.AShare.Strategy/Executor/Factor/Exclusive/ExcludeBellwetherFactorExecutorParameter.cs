@@ -13,7 +13,7 @@ namespace DawnQuant.AShare.Strategy.Executor.Factor
     /// 龙头股
     /// </summary>
    
-    public class BellwetherFactorExecutorParameter
+    public class ExcludeBellwetherFactorExecutorParameter
     {
         /// <summary>
         /// 用户ID
@@ -23,8 +23,5 @@ namespace DawnQuant.AShare.Strategy.Executor.Factor
         public string UserName { get; set; }
 
     }
-
-
-
    
 }

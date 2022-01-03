@@ -10,25 +10,5 @@ using System.Threading.Tasks;
 
 namespace DawnQuant.App.ViewModels
 {
-    [POCOViewModel]
-    public class MainWindowModel
-    {
-        protected ICurrentWindowService CurrentWindowService { get { return this.GetService<ICurrentWindowService>(); } }
-        protected INotifyIconService NotifyIconService { get { return this.GetService<INotifyIconService>(); } }
-        protected IMessageBoxService MessageBoxService { get { return this.GetService<IMessageBoxService>(); } }
-
-
-        public event Action ShowMainWindow;
-
-        protected void OnShowMainWindow()
-        {
-            ShowMainWindow?.Invoke();
-        }
-
-        public void ActivateMainWindow()
-        {
-            OnShowMainWindow();
-        }
-
-    }
+   
 }

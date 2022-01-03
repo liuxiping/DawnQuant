@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace DawnQuant.App.Models.AShare.Strategy.Executor.Factor
 {
-    public class SubjectAndHotFactorExecutorParameter : ExecutorParameter
+    public class ExcludeSubjectAndHotFactorExecutorParameter : ExecutorParameter
     {
         /// <summary>
         /// 用户ID

@@ -1,4 +1,5 @@
-﻿using DevExpress.Xpf.Core;
+﻿using DawnQuant.App.ViewModels.Layout;
+using DevExpress.Xpf.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,21 +26,23 @@ namespace DawnQuant.App.Views.Layout
         public HeaderView()
         {
             InitializeComponent();
+
+            DataContext = new HeaderViewModel();
         }
 
         private void _miDawnloadData_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                DownloadDataWindow loadDataWindow = new DownloadDataWindow();
-                loadDataWindow.IsCreateFromLogin = false;
-                loadDataWindow.ShowDialog();
-                DXMessageBox.Show("下载数据成功！", "温馨提示", MessageBoxButton.OK, MessageBoxImage.Information);
+               // DownloadDataWindow loadDataWindow = new DownloadDataWindow();
+               
+               // loadDataWindow.ShowDialog();
+               // DXMessageBox.Show("下载数据成功！", "温馨提示", MessageBoxButton.OK, MessageBoxImage.Information);
 
             }
             catch (Exception ex)
             {
-                DXMessageBox.Show(ex.Message, "温馨提示", MessageBoxButton.OK, MessageBoxImage.Error);
+               // DXMessageBox.Show(ex.Message, "温馨提示", MessageBoxButton.OK, MessageBoxImage.Error);
 
             }
         }
@@ -64,15 +67,13 @@ namespace DawnQuant.App.Views.Layout
         {
             try
             {
-                DownloadDataWindow loadDataWindow = new DownloadDataWindow();
-                loadDataWindow.IsCreateFromLogin = false;
-                loadDataWindow.IsDownloadAllData = true;
-                loadDataWindow.ShowDialog();
-                DXMessageBox.Show("更新数据成功！", "温馨提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                //DownloadDataWindow loadDataWindow = new DownloadDataWindow();
+                //loadDataWindow.ShowDialog();
+               // DXMessageBox.Show("更新数据成功！", "温馨提示", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                DXMessageBox.Show(ex.Message, "温馨提示", MessageBoxButton.OK, MessageBoxImage.Error);
+                //DXMessageBox.Show(ex.Message, "温馨提示", MessageBoxButton.OK, MessageBoxImage.Error);
 
             }
         }

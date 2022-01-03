@@ -4,7 +4,7 @@
     xmlns:gif="http://wpfanimatedgif.codeplex.com"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    x:Class="DawnQuant.App.DownloadDataWindow"   Closed="_downloadDataWindow_Closed"
+    x:Class="DawnQuant.App.DownloadDataWindow"   
     Height="430" Width="650"   Padding="0"  Margin="0" ShowInTaskbar="True"
     WindowStyle="None" AllowsTransparency="True" Name="_downloadDataWindow" 
     MouseDown="_downloadDataWindow_MouseDown" Loaded="_downloadDataWindow_Loaded"

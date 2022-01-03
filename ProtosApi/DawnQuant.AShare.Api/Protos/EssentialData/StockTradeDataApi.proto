@@ -165,33 +165,51 @@ message StockTradeDataDto
 
         /// 交易时间
          google.protobuf.Timestamp TradeDateTime =11;
-
-        
 }
 
 message CalculateInsAdjustFactorResponse
 {
-    string Message=1;
+     //总数
+    int32 TotalCount=1;
+
+    //完成数
+    int32 CompletCount=2;
 }
 
 message CalculateAllAdjustFactorResponse
 {
-    string Message=1;
+     //总数
+    int32 TotalCount=1;
+
+    //完成数
+    int32 CompletCount=2;
 }
 
 message SyncTurnoverResponse
 {
-    string Message=1;
+     //总数
+    int32 TotalCount=1;
+
+    //完成数
+    int32 CompletCount=2;
 }
 
 
 message InSyncTurnoverResponse
 {
-    string Message=1;
+     //总数
+    int32 TotalCount=1;
+
+    //完成数
+    int32 CompletCount=2;
 }
 
 message DataCleaningResponse
 {
-    string Message=1;
+     //总数
+    int32 TotalCount=1;
+
+    //完成数
+    int32 CompletCount=2;
 }
 

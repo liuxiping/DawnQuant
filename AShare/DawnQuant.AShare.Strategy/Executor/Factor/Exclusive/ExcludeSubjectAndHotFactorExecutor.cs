@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace DawnQuant.AShare.Strategy.Executor.Factor
 {
-    class SubjectAndHotFactorExecutor : IFactorExecutor
+   public class ExcludeSubjectAndHotFactorExecutor : IFactorExecutor
     {
         public object Parameter { get; set; }
 
         private readonly ISubjectAndHotStockRepository _subjectAndHotStockRepository;
 
 
-        public SubjectAndHotFactorExecutor(ISubjectAndHotStockRepository subjectAndHotStockRepository)
+        public ExcludeSubjectAndHotFactorExecutor(ISubjectAndHotStockRepository subjectAndHotStockRepository)
         {
             _subjectAndHotStockRepository = subjectAndHotStockRepository;
         }
@@ -27,7 +27,7 @@ namespace DawnQuant.AShare.Strategy.Executor.Factor
             }
             else
             {
-                SubjectAndHotFactorExecutorParameter pa = (SubjectAndHotFactorExecutorParameter)Parameter;
+                ExcludeSubjectAndHotFactorExecutorParameter pa = (ExcludeSubjectAndHotFactorExecutorParameter)Parameter;
                 var temp = _subjectAndHotStockRepository.Entities.Where(p => p.UserId == pa.UserId).Select(p => p.TSCode).ToList();
                 //排除
                 return tsCodes.Except(temp).ToList();

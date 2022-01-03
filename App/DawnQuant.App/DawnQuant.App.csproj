@@ -22,12 +22,14 @@
 
   <ItemGroup>
     <Compile Remove="Converter\SelStockInfosConverter.cs" />
+    <Compile Remove="DownloadDataWindow.xaml.cs" />
     <Compile Remove="Models\AShare\Strategy\Executor\Factor\Exclusive\ExcludeCategories.cs" />
     <Compile Remove="Models\AShare\Strategy\Executor\Factor\Technical\HardenCountFactorParameter.cs" />
     <Compile Remove="Services\AShare\SelfSelStockItemService.cs" />
     <Compile Remove="Services\AShare\StockDailyIndicatorService.cs" />
     <Compile Remove="ViewModels\AShare\SelfSelStock\SelfSelStockContainerViewModel.cs" />
     <Compile Remove="ViewModels\AShare\SelfSelStock\SelfSelStockContentViewModel.cs" />
+    <Compile Remove="ViewModels\MainWindowModel.cs" />
     <Compile Remove="Views\AShare\SelfSelStock\SelfSelStockContainerView.xaml.cs" />
     <Compile Remove="Views\AShare\SelfSelStock\SelfSelStockContentView.xaml.cs" />
   </ItemGroup>
@@ -41,9 +43,13 @@
     <None Remove="Assets\Images\bellwether.png" />
     <None Remove="Assets\Images\board.jpg" />
     <None Remove="Assets\Images\categorymgr.png" />
+    <None Remove="Assets\Images\curdatetime.png" />
     <None Remove="Assets\Images\douyin.png" />
+    <None Remove="Assets\Images\downlaod.png" />
+    <None Remove="Assets\Images\empty.png" />
     <None Remove="Assets\Images\exit.png" />
     <None Remove="Assets\Images\group.png" />
+    <None Remove="Assets\Images\lastupdatetime.png" />
     <None Remove="Assets\Images\loading.gif" />
     <None Remove="Assets\Images\loading1.gif" />
     <None Remove="Assets\Images\loadsplash.gif" />
@@ -64,6 +70,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Remove="DownloadDataWindow.xaml" />
     <Page Remove="Views\AShare\SelfSelStock\SelfSelStockContainerView.xaml" />
     <Page Remove="Views\AShare\SelfSelStock\SelfSelStockContentView.xaml" />
   </ItemGroup>
@@ -72,9 +79,13 @@
     <Resource Include="Assets\Images\add.png" />
     <Resource Include="Assets\Images\bellwether.png" />
     <Resource Include="Assets\Images\categorymgr.png" />
+    <Resource Include="Assets\Images\curdatetime.png" />
     <Resource Include="Assets\Images\douyin.png" />
+    <Resource Include="Assets\Images\downlaod.png" />
+    <Resource Include="Assets\Images\empty.png" />
     <Resource Include="Assets\Images\exit.png" />
     <Resource Include="Assets\Images\group.png" />
+    <Resource Include="Assets\Images\lastupdatetime.png" />
     <Resource Include="Assets\Images\qq.png" />
     <Resource Include="Assets\Images\refresh.png" />
     <Resource Include="Assets\Images\scheduledtask.png" />
@@ -123,11 +134,7 @@
     <Resource Include="Assets\Icons\history.png" />
     <Resource Include="Assets\Images\board.jpg" />
     <Resource Include="Assets\Images\loading.gif" />
-    <Resource Include="Assets\Images\loading1.gif" />
     <Resource Include="Assets\Images\loadsplash.gif" />
-    <Resource Include="Assets\Images\loadsplash3.gif" />
-    <Resource Include="Assets\Images\loadsplash2.gif" />
-    <Resource Include="Assets\Images\loadsplash1.gif" />
     <Resource Include="Assets\Images\sun.png" />
   </ItemGroup>
 

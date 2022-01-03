@@ -44,7 +44,7 @@
                 <ColumnDefinition Width="auto"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <dxlc:GroupBox  Padding="0"  BorderThickness="0,1,1,1">
+            <dxlc:GroupBox  Padding="0"  BorderThickness="0,1,1,0">
                 <dxlc:GroupBox.Header>
                     <Grid Height="23">
                         <Grid.ColumnDefinitions>
@@ -58,18 +58,24 @@
                                     <TextBlock FontSize="15" Tex  t="&#xecb4;"   Foreground="#1296db"  FontFamily="/Assets/Fonts/#iconfont"></TextBlock>
                                 </ToggleButton.Content>
                             </ToggleButton>-->
+                            <Button   Template="{StaticResource ImageButton}"   x:Name="_btnEmptyStocks" Background="{Binding ElementName=_gcStockList,Path=Background}" BorderThickness="0" Padding="0"   Margin="0,0,5,0" ToolTip="清空股票"  Click="_btnEmptyStocks_Click" >
+                                <Button.Content>
+                                    <Image  Height="20" Width="20" Source="pack://application:,,,/Assets/Images/empty.png"></Image>
+                                </Button.Content>
+                            </Button>
                             <Button   Template="{StaticResource ImageButton}"   x:Name="_btnAddStock" Background="{Binding ElementName=_gcStockList,Path=Background}" BorderThickness="0" Padding="0"   Margin="0" ToolTip="添加股票"  Click="_btnAddStock_Click" >
                                 <Button.Content>
                                     <Image  Height="20" Width="20" Source="pack://application:,,,/Assets/Images/add.png"></Image>
                                 </Button.Content>
                             </Button>
+                           
                         </StackPanel>
                     </Grid>
                 </dxlc:GroupBox.Header>
                 <dxg:GridControl  CustomUnboundColumnData="_gcStockList_CustomUnboundColumnData"   Name="_gcStockList"  SelectedItem="{Binding  CurSelStock, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"
                                   ItemsSource="{Binding Stocks}"  ShowBorder="False">
                     <dxg:GridControl.Columns>
-                        <dxg:GridColumn Header="序号" FieldName="#"   Width="40" UnboundType="Integer"></dxg:GridColumn>
+                        <dxg:GridColumn Header="序号" FieldName="#"   Width="45" UnboundType="Integer"></dxg:GridColumn>
                         <dxg:GridColumn Header="代码" FieldName="TSCode"    Width="70">
                             <dxg:GridColumn.CellTemplate>
                                 <DataTemplate>
@@ -125,12 +131,12 @@
                         <MenuItem  Name="_miCategory" Header="添加到分类..." ></MenuItem>
                     </ContextMenu>
                 </Grid.ContextMenu>
-                <dx:ThemedBorder BorderThickness="0,1,0,1">
+                <dx:ThemedBorder BorderThickness="0,1,0,0">
                     <lccom:StockChartView DataContext="{Binding StockChartViewModel}"></lccom:StockChartView>
                 </dx:ThemedBorder>
             </Grid>
             <Grid Grid.Column="2"  Name="_gdRelateStocks">
-                <dxlc:GroupBox  Padding="0" BorderThickness="1,1,0,1" >
+                <dxlc:GroupBox  Padding="0" BorderThickness="1,1,0,0" SnapsToDevicePixels="True" >
                     <dxlc:GroupBox.Header>
                         <Grid   Height="23" VerticalAlignment="Top" >
                             <TextBlock  VerticalAlignment="Center"  Text="相关股票" Margin="-5,0,0,0"></TextBlock>

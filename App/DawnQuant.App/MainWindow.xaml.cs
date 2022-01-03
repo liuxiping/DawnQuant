@@ -18,6 +18,8 @@ using Autofac;
 using DevExpress.Mvvm.POCO;
 using DawnQuant.App.ViewModels;
 using DawnQuant.App.Services.AShare;
+using DevExpress.Mvvm.DataAnnotations;
+using DevExpress.Mvvm;
 
 namespace DawnQuant.App
 {
@@ -57,7 +59,6 @@ namespace DawnQuant.App
             this.ShowInTaskbar = true;
             WindowState = WindowState.Maximized;
             this.Show();
-     //       this.Activate();
         }
 
         private void _biExit_ItemClick(object sender, DevExpress.Xpf.Bars.ItemClickEventArgs e)
@@ -71,5 +72,28 @@ namespace DawnQuant.App
             this.ShowInTaskbar = false;
             e.Cancel = true;
         }
+    }
+
+
+    [POCOViewModel]
+    public class MainWindowModel
+    {
+        protected ICurrentWindowService CurrentWindowService { get { return this.GetService<ICurrentWindowService>(); } }
+        protected INotifyIconService NotifyIconService { get { return this.GetService<INotifyIconService>(); } }
+        protected IMessageBoxService MessageBoxService { get { return this.GetService<IMessageBoxService>(); } }
+
+
+        public event Action ShowMainWindow;
+
+        protected void OnShowMainWindow()
+        {
+            ShowMainWindow?.Invoke();
+        }
+
+        public void ActivateMainWindow()
+        {
+            OnShowMainWindow();
+        }
+
     }
 }

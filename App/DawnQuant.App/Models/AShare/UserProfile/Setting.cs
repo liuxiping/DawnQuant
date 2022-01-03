@@ -10,6 +10,7 @@ namespace DawnQuant.App.Models.AShare.UserProfile
 {
     public class Setting
     {
+
         /// <summary>
         /// 数据更新设置
         /// </summary>

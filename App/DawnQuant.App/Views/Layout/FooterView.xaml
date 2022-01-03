@@ -3,20 +3,26 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d"  Loaded="MvxWpfView_Loaded" Unloaded="MvxWpfView_Unloaded"
-             d:DesignHeight="25" d:DesignWidth="800">
-    <Grid VerticalAlignment="Center" Margin="0,2,5,2" >
+             mc:Ignorable="d"  Loaded="FooterView_Loaded" Unloaded="FooterView_Unloaded"
+             d:DesignHeight="25"  Height="25" d:DesignWidth="800" Margin="-7 0 -7 -7"  Padding="0 3 0 3" FontSize="15" >
+    <Grid    >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition Width="auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-            <TextBox  FontSize="12"  HorizontalAlignment="Left"
-                 Width="180" >
-            </TextBox>
-            <TextBlock  x:Name="txtCurTime" Margin="5,0,10,0" VerticalAlignment="Center"></TextBlock>
+        <StackPanel Grid.Column="2" Orientation="Horizontal"    
+                    VerticalAlignment="Center">
+
+            <Image x:Name="imgNotify"  Visibility="Collapsed" Source="/Assets/Images/downlaod.png" Width="20" Height="20" Margin="8 0 0 0"></Image>
+            <TextBlock  Foreground="#e52425"    x:Name="txtNotify" Margin="5,0,5,0" VerticalAlignment="Center"></TextBlock>
+
+            <Image x:Name="imgLastUpdateTime" Visibility="Collapsed" Source="/Assets/Images/lastupdatetime.png" Width="21" Height="21" Margin="3 0 3 0"></Image>
+            <TextBlock  Foreground="DarkOrange" x:Name="txtLastUpdateTime"></TextBlock>
+
+            <Image  x:Name="imgCurTime" Source="/Assets/Images/curdatetime.png" Width="20" Height="20" Margin="8 0 0 0"></Image>
+            <TextBlock  Foreground="Purple" x:Name="txtCurTime" Margin="3,0,5,0" VerticalAlignment="Center"></TextBlock>
         </StackPanel>
     </Grid>
 </UserControl>

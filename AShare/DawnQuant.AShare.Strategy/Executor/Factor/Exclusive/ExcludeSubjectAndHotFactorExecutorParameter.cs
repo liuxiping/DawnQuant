@@ -13,7 +13,7 @@ namespace DawnQuant.AShare.Strategy.Executor.Factor
     /// 题材热点
     /// </summary>
    
-    public class SubjectAndHotFactorExecutorParameter
+    public class ExcludeSubjectAndHotFactorExecutorParameter
     {
         /// <summary>
         /// 用户ID

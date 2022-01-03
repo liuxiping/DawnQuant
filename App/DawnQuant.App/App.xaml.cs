@@ -29,6 +29,17 @@ namespace DawnQuant.App
         /// </summary>
         public static Setting AShareSetting { get; set; } = null;
 
+        /// <summary>
+        /// 正在下载A股全部数据
+        /// </summary>
+        public static bool IsUpdateAllAShareData { get; set; } = false;
+
+        /// <summary>
+        /// 正在计划任务下载数据
+        /// </summary>
+        public static bool IsDataUpdateScheduledTaskJob { get; set; } = false;
+
+
         ILogger _logger = null;
 
         private void App_Startup(object sender, StartupEventArgs e)

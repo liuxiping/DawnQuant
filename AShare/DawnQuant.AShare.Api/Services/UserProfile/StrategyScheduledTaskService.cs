@@ -211,13 +211,18 @@ namespace DawnQuant.AShare.Api.UserProfile
                         selfSelectStock.CreateTime = DateTime.Now;
 
                         //获取行业和名称
-                        var basicInfo = _basicStockInfoRepository.Entities.Where(p => p.TSCode == s).FirstOrDefault();
-                        string indus = _industryRepository.Entities
-                         .Where(p => p.Id == basicInfo.IndustryId).Select(p => p.Name).SingleOrDefault();
-                        selfSelectStock.Name = basicInfo.StockName;
-                        selfSelectStock.Industry = indus;
+                        var basicInfo = _basicStockInfoRepository.Entities.Where(p => p.TSCode == s &&  !p.StockName.Contains("退")).FirstOrDefault();
 
-                        ustocks.Add(selfSelectStock);
+                        //新股 没有及时更新 查询可能为空
+                        if (basicInfo != null)
+                        {
+                            string indus = _industryRepository.Entities
+                             .Where(p => p.Id == basicInfo.IndustryId).Select(p => p.Name).SingleOrDefault();
+                            selfSelectStock.Name = basicInfo.StockName;
+                            selfSelectStock.Industry = indus;
+
+                            ustocks.Add(selfSelectStock);
+                        }
                     }
 
 
