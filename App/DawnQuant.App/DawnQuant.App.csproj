@@ -65,8 +65,10 @@
     <None Remove="Assets\Images\strategy.png" />
     <None Remove="Assets\Images\subjectandhot.png" />
     <None Remove="Assets\Images\sun.png" />
+    <None Remove="Assets\Images\THS.png" />
     <None Remove="Assets\Images\weibo.png" />
     <None Remove="Assets\Images\weixin.png" />
+    <None Remove="Views\AShare\AShareMainView.xaml~RF5fe551.TMP" />
   </ItemGroup>
 
   <ItemGroup>
@@ -94,6 +96,7 @@
     <Resource Include="Assets\Images\show.png" />
     <Resource Include="Assets\Images\strategy.png" />
     <Resource Include="Assets\Images\subjectandhot.png" />
+    <Resource Include="Assets\Images\THS.png" />
     <Resource Include="Assets\Images\weibo.png" />
     <Resource Include="Assets\Images\weixin.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
@@ -101,6 +104,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AngleSharp.Css" Version="0.16.2" />
     <PackageReference Include="Autofac" Version="6.3.0" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="DevExpress.Wpf.Accordion" Version="21.2.3" />
@@ -119,6 +123,8 @@
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1054.31" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
     <PackageReference Include="Quartz" Version="3.3.3" />
+    <PackageReference Include="Selenium.WebDriver" Version="4.1.0" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="96.0.4664.4500" />
     <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
@@ -131,7 +137,6 @@
     <Resource Include="Assets\Fonts\iconfont.ttf" />
     <Resource Include="Assets\Icons\app.ico" />
     <Resource Include="Assets\Icons\app.png" />
-    <Resource Include="Assets\Icons\history.png" />
     <Resource Include="Assets\Images\board.jpg" />
     <Resource Include="Assets\Images\loading.gif" />
     <Resource Include="Assets\Images\loadsplash.gif" />
@@ -141,6 +146,7 @@
   <ItemGroup>
     <Folder Include="Models\AShare\Strategy\Executor\SelectScope\Index\" />
     <Folder Include="Models\AShare\Strategy\Executor\SelectScope\MarketType\" />
+    <Folder Include="Views\AShare\THSDataAnalysis\Other\" />
   </ItemGroup>
 
   <ItemGroup>

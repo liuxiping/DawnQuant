@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+import "Protos/EssentialData/Common.proto";
+
+
+option csharp_namespace = "DawnQuant.AShare.Api.EssentialData";
+
+package DawnQuant.AShare.Api.EssentialData;
+
+
+//龙头股
+service THSIndexApi {
+  
+//保存龙头股
+  rpc SaveTHSIndexes(SaveTHSIndexesRequest) returns (google.protobuf.Empty);
+  rpc GetAllTHSIndexes(google.protobuf.Empty) returns(GetAllTHSIndexesReponse);
+ 
+}
+
+
+message SaveTHSIndexesRequest
+{
+    repeated  THSIndexDto Entities=1;
+}
+
+message GetAllTHSIndexesReponse
+{
+    repeated  THSIndexDto Entities=1;
+}
+
+
+
+
+
+
+
+
+
+
+

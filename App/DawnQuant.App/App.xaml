@@ -1,6 +1,8 @@
 ﻿<Application x:Class="DawnQuant.App.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+             xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
              xmlns:local="clr-namespace:DawnQuant.App"
              xmlns:localConverter="clr-namespace:DawnQuant.App.Converter"
              StartupUri="LoginWindow.xaml">
@@ -37,6 +39,10 @@
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
+
+
+        <dx:DXMessageBoxService x:Key="MessageBoxService"/>
+        <dxmvvm:DispatcherService  x:Key="DispatcherService"/>
 
     </Application.Resources>
 </Application>

@@ -70,7 +70,9 @@ namespace DawnQuant.DataCollector.Core.Utils
             serviceCollection.AddSingleton<DailyStockTradeDataCollector>();
             serviceCollection.AddSingleton<StockDailyIndicatorCollector>();
             serviceCollection.AddSingleton<IncrementalDataCollector>();
-           
+
+
+            serviceCollection.AddSingleton<SubjectAndHotCollector>();
 
 
             //认证信息
@@ -92,7 +94,9 @@ namespace DawnQuant.DataCollector.Core.Utils
             //注册ViewModel
             serviceCollection.AddSingleton<HistoryDataViewModel>();
             serviceCollection.AddSingleton<IncrementDataViewModel>();
+            serviceCollection.AddSingleton<SubjectAndHotViewModel>();
 
+            
         }
 
     }

@@ -24,10 +24,14 @@
   <ItemGroup>
     <None Remove="DawnQuant.AShare.Strategy.dll" />
     <None Remove="Protos\EssentialData\BellwetherApi.proto" />
+    <None Remove="Protos\EssentialData\FutureEventOfSubjectApi.proto" />
     <None Remove="Protos\EssentialData\HolderApi.proto" />
     <None Remove="Protos\EssentialData\PerformanceForecastApi.proto" />
     <None Remove="Protos\EssentialData\ReversionFactorApi.proto" />
     <None Remove="Protos\EssentialData\SubjectAndHotApi.proto" />
+    <None Remove="Protos\EssentialData\THSIndexApi.proto" />
+    <None Remove="Protos\EssentialData\THSIndexMemberApi.proto" />
+    <None Remove="Protos\EssentialData\THSIndexTradeDataApi.proto" />
     <None Remove="Protos\EssentialData\Top10FloatHolderApi.proto" />
     <None Remove="Protos\SyncToy_82a3c6fe-87e8-415a-af31-38997a8f26bf.dat" />
     <None Remove="Protos\SyncToy_a74b51fc-14e0-4c1f-8048-92502a6d3f82.dat" />
@@ -70,6 +74,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Protobuf Include="Protos\EssentialData\THSIndexTradeDataApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\EssentialData\THSIndexMemberApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\EssentialData\THSIndexApi.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\EssentialData\FutureEventOfSubjectApi.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\EssentialData\PerformanceForecastApi.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\EssentialData\SubjectAndHotApi.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\EssentialData\BellwetherApi.proto" GrpcServices="Server" />

@@ -73,7 +73,7 @@ namespace DawnQuant.App.ViewModels.AShare
 
                     if (!App.IsDataUpdateScheduledTaskJob)
                     {
-                        DownloadAllAShareData();
+                     //   DownloadAllAShareData();
                     }
                 }
                 
@@ -115,8 +115,22 @@ namespace DawnQuant.App.ViewModels.AShare
         /// </summary>
         private void Notify_DataUpdateScheduledTaskJobCompleted()
         {
-            ShowDataUpdateScheduledTaskCompletedNofify();
+            DispatcherService.Invoke(() =>
+            {
+                ShowDataUpdateScheduledTaskCompletedNofify();
+            });
+            
 
+        }
+
+        IDispatcherService DispatcherService
+        {
+            get
+            {
+                //return ServiceContainer.Default.GetService<IDispatcherService>();
+
+                return GetService<IDispatcherService>();
+            }
         }
 
         /// <summary>
@@ -125,7 +139,12 @@ namespace DawnQuant.App.ViewModels.AShare
         /// <param name="obj"></param>
         private void Notify_StrategyScheduledTaskCompleted(Models.AShare.UserProfile.StrategyScheduledTask task)
         {
-            ShowStrategyScheduledTaskCompletedNofify(task);
+
+            DispatcherService.Invoke(() =>
+            {
+                ShowStrategyScheduledTaskCompletedNofify(task);
+            });
+
 
         }
 

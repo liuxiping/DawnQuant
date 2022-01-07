@@ -19,16 +19,19 @@ namespace DawnQuant.AShare.Api.UserProfile
         private readonly ILogger<SubjectAndHotStockService> _logger;
         private readonly ISubjectAndHotStockRepository _subjectAndHotStockRepository;
         private readonly IBasicStockInfoRepository _basicStockInfoRepository;
+        private readonly IIndustryRepository _industryRepository;
         private readonly IMapper _mapper;
 
         public SubjectAndHotStockService(ILogger<SubjectAndHotStockService> logger, IMapper mapper,
         ISubjectAndHotStockRepository SubjectAndHotStockRepository,
-        IBasicStockInfoRepository basicStockInfoRepository )
+        IBasicStockInfoRepository basicStockInfoRepository,
+        IIndustryRepository industryRepository)
         {
             _logger = logger;
             _mapper = mapper;
             _subjectAndHotStockRepository = SubjectAndHotStockRepository;
             _basicStockInfoRepository = basicStockInfoRepository;
+            _industryRepository = industryRepository;
         }
 
 
@@ -125,7 +128,72 @@ namespace DawnQuant.AShare.Api.UserProfile
         }
 
 
-        
+        public override Task<Empty> ImportSubjectAndHotStocks(ImportSubjectAndHotStocksRequest request, ServerCallContext context)
+        {
+            return Task.Run(() =>
+            {
+
+                if (request.StocksId != null && request.StocksId.Count > 0)
+                {
+
+                    //获取TScodes
+                    List<SubjectAndHotStock> ustocks = new List<SubjectAndHotStock>();
+
+                    foreach (var s in request.StocksId)
+                    {
+                        string tsCode = _basicStockInfoRepository.Entities.Where(p => p.TSCode.Contains(s)).Select(p => p.TSCode).FirstOrDefault();
+
+                        if (!string.IsNullOrEmpty(tsCode))
+                        {
+
+                            //检测数据是否存在 如果存在则更新时间
+                            var self = _subjectAndHotStockRepository.Entities.Where(p => p.UserId == request.UserId &&
+                                p.CategoryId == request.CategoryId && p.TSCode == tsCode).AsNoTracking().FirstOrDefault();
+                            if (self != null)
+                            {
+                                //更新创建时间
+                                self.CreateTime = DateTime.Now;
+                                ustocks.Add(self);
+
+                            }
+                            else
+                            {
+                                SubjectAndHotStock subjectAndHotStock = new SubjectAndHotStock();
+                                subjectAndHotStock.TSCode = tsCode;
+                                subjectAndHotStock.UserId = request.UserId;
+                                subjectAndHotStock.CategoryId = request.CategoryId;
+                                subjectAndHotStock.CreateTime = DateTime.Now;
+
+                                //名称
+                                var basicInfo = _basicStockInfoRepository.Entities.Where(p => p.TSCode == tsCode && !p.StockName.Contains("退")).FirstOrDefault();
+
+                                string indus = _industryRepository.Entities
+                                .Where(p => p.Id == basicInfo.IndustryId).Select(p => p.Name).SingleOrDefault();
+
+                                subjectAndHotStock.Name = basicInfo.StockName;
+                                subjectAndHotStock.Industry = indus;
+
+                                ustocks.Add(subjectAndHotStock);
+                            }
+
+                        }
+                    }
+
+                    if (ustocks.Count > 0)
+                    {
+                        //保存
+                        _subjectAndHotStockRepository.Save(ustocks);
+
+                    }
+                    
+                }
+
+                return new Empty();
+
+            });
+
+        }
+
 
     }
 }

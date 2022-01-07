@@ -23,6 +23,9 @@ service SubjectAndHotStockApi {
   rpc DelSubjectAndHotStocksByCategory(DelSubjectAndHotStocksByCategoryRequest) returns ( google.protobuf.Empty);
   rpc DelSubjectAndHotStocksByUser(DelSubjectAndHotStocksByUserRequest) returns ( google.protobuf.Empty);
 
+  //导入数据
+  rpc ImportSubjectAndHotStocks(ImportSubjectAndHotStocksRequest) returns( google.protobuf.Empty);
+
 }
 
 message DelSubjectAndHotStockByIdRequest
@@ -67,6 +70,13 @@ repeated SubjectAndHotStockDto Entities=1;
 message SaveSubjectAndHotStocksResponse
 {
 repeated SubjectAndHotStockDto Entities=1;
+}
+
+message ImportSubjectAndHotStocksRequest
+{
+	int64 UserId=1;
+	int64 CategoryId=2;
+	repeated string StocksId=3;
 }
 
 

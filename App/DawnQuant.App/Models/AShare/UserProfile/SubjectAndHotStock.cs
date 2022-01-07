@@ -40,6 +40,12 @@ namespace DawnQuant.App.Models.AShare.UserProfile
         /// </summary>
         public string Industry { get; set; }
 
+
+        /// <summary>
+        /// 是否重点关注
+        /// </summary>
+        public bool IsFocus { get; set; }
+
         /// <summary>
         /// 排序
         /// </summary>

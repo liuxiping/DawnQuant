@@ -10,6 +10,8 @@
         xmlns:BellwetherView="clr-namespace:DawnQuant.App.Views.AShare.Bellwether"
         xmlns:SubjectAndHotView="clr-namespace:DawnQuant.App.Views.AShare.SubjectAndHot"
         xmlns:SettingView="clr-namespace:DawnQuant.App.Views.AShare.Setting"
+        xmlns:THSDataAnalysis="clr-namespace:DawnQuant.App.Views.AShare.THSDataAnalysis"
+
         xmlns:dxmvvm="http://schemas.devexpress.com/winfx/2008/xaml/mvvm"
         xmlns:local="clr-namespace:DawnQuant.App.Views.AShare" 
         mc:Ignorable="d"  FontSize="15"  d:Height="600" d:Width="1200"
@@ -25,8 +27,10 @@
                                     ApplicationId="DawnQuant.App"
                                     ApplicationIconPath="/Assets/Icons/app.png"
                                     CreateApplicationShortcut="True">
-
+           
         </dxmvvm:NotificationService>
+
+        <dxmvvm:DispatcherService />
     </dxmvvm:Interaction.Behaviors>
     <Grid >
         <Grid.RowDefinitions>
@@ -38,20 +42,28 @@
                           HeaderHeight="0" >
             <dxwui:HamburgerMenu.Content>
                 <Grid  x:Name="_gdContent">
+                    
+                    <SubjectAndHotView:SubjectAndHotView x:Name="_subjectAndHotView"></SubjectAndHotView:SubjectAndHotView>
                     <SelfSelView:SelfSelStockView x:Name="_selfSelStockView"></SelfSelView:SelfSelStockView>
                     <StockStrategyView:StockStrategyView x:Name="_stockStrategyView"></StockStrategyView:StockStrategyView>
                     <ScheduledTaskView:StrategyScheduledTaskView x:Name="_strategyScheduledTaskView"></ScheduledTaskView:StrategyScheduledTaskView>
                     <BellwetherView:BellwetherView x:Name="_bellwetherView"></BellwetherView:BellwetherView>
-                    <SubjectAndHotView:SubjectAndHotView x:Name="_subjectAndHotView"></SubjectAndHotView:SubjectAndHotView>
+
+                    <THSDataAnalysis:THSDataAnalysisView x:Name="_thsDataAnalysisView"></THSDataAnalysis:THSDataAnalysisView>
+
+
                     <SettingView:SettingView x:Name="_settingView"></SettingView:SettingView>
 
                 </Grid>
             </dxwui:HamburgerMenu.Content>
-            <dxwui:HamburgerMenuNavigationButton ToolTip="自选分类" Name="_btnSelfSelStock"  Glyph="/Assets/Images/group.png" />
+            <dxwui:HamburgerMenuNavigationButton ToolTip="题材热点" Name="_btnSubjectAndHot" Glyph="/Assets/Images/subjectandhot.png"  />
+
+            <dxwui:HamburgerMenuNavigationButton ToolTip="自选分类"  Name="_btnSelfSelStock"  Glyph="/Assets/Images/group.png" />
             <dxwui:HamburgerMenuNavigationButton  ToolTip="策略管理" Name="_btnStockStrategy" Glyph="/Assets/Images/strategy.png"  />
             <dxwui:HamburgerMenuNavigationButton ToolTip="任务计划" Name="_btnScheduledTask" Glyph="/Assets/Images/scheduledtask.png"  />
             <dxwui:HamburgerMenuNavigationButton ToolTip="龙头股" Name="_btnBellwether" Glyph="/Assets/Images/bellwether.png"  />
-            <dxwui:HamburgerMenuNavigationButton ToolTip="题材热点" Name="_btnSubjectAndHot" Glyph="/Assets/Images/subjectandhot.png"  />
+            <dxwui:HamburgerMenuNavigationButton ToolTip="同花顺数据分析" Name="_btnTHSDataAnalysis" Glyph="/Assets/Images/THS.png"  />
+
             <dxwui:HamburgerMenuNavigationButton Placement="Bottom"  ToolTip="参数设置" Name="_btnSetting" Glyph="/Assets/Images/setting.png"  />
 
         </dxwui:HamburgerMenu>

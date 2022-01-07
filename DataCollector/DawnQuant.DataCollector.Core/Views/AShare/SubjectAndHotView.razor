@@ -1,0 +1,40 @@
+﻿
+  <div id="subjectandhot">
+        <div id="subjectandhot-header">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>沪深股市热点题材分析</td>
+                        <td> <button  @onclick="ClearMessage" class="btn-blue">清空日志</button></td>
+                    </tr>
+                    <tr>
+                        <td colspan=2></td>
+                    </tr>
+                    <tr>
+                        <td colspan=2></td>
+                    </tr>
+                     <tr>
+                        <td colspan=2></td>
+                    </tr>
+                   
+                </tbody>
+            </table>
+        </div>
+        <div id="subjectandhot-log">
+            <textarea value="@ViewModel.Message" readonly>
+            </textarea>
+        </div>
+        <div>
+            <div>
+                <button  @onclick="CollectFutureEventsOfSubject"  disabled="@ViewModel.IsCollectFutureEventsOfSubject" class="btn-blue">采集题材前瞻日历</button>
+                <button  class="btn-blue">开启从新浪更新增量数据任务</button>
+            </div>
+        </div>
+        <div>
+            <div>
+                <button   class="btn-green">开启所有数据采集任务</button>
+            </div>
+        </div>
+
+    </div>
+

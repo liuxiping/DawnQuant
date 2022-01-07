@@ -43,9 +43,14 @@ namespace DawnQuant.AShare.Api.Utils
                   config.CreateMap<StockDailyIndicatorDto, StockDailyIndicator>().ReverseMap();
                   config.CreateMap<HolderNumberDto, HolderNumber>().ReverseMap();
                   config.CreateMap<Top10FloatHolder, Top10FloatHolderDto>().ReverseMap();
+
                   config.CreateMap<Bellwether, BellwetherDto>().ReverseMap();
                   config.CreateMap<SubjectAndHot, SubjectAndHotDto>().ReverseMap();
+
                   config.CreateMap<PerformanceForecast, PerformanceForecastDto>().ReverseMap();
+                  config.CreateMap<FutureEventOfSubject, FutureEventOfSubjectDto>().ReverseMap();
+
+                  config.CreateMap<THSIndex, THSIndexDto>().ReverseMap();
 
 
                   config.CreateMap<FactorMetadataDto, FactorMetadata>().ReverseMap();

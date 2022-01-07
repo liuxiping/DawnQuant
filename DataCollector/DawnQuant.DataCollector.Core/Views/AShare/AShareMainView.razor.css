@@ -51,6 +51,10 @@
     content: '\e61c';
 }
 
+#asharemainview-sidebar ul :nth-child(2) a:before {
+    content: '\e61c';
+}
+
 #asharemainview-sidebar ul :last-child a:before {
     content: '\e608';
 }

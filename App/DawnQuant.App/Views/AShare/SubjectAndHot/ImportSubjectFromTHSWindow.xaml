@@ -1,0 +1,35 @@
+﻿<Window x:Class="DawnQuant.App.Views.AShare.SubjectAndHot.ImportSubjectFromTHSWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DawnQuant.App.Views.AShare.SubjectAndHot"
+        mc:Ignorable="d" FontSize="15"  WindowStartupLocation="CenterScreen"
+        Title="从同花顺提取概念题材成分股"  Height="120" Width="800" >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto">
+            </RowDefinition>
+        </Grid.RowDefinitions>
+        <dx:ThemedBorder Padding="5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock>提取地址：</TextBlock>
+                <TextBox Grid.Column="1" Text="{Binding URL}"></TextBox>
+            </Grid>
+        </dx:ThemedBorder>
+       
+        <dx:ThemedBorder Grid.Row="1" BorderThickness="0 1 0 0">
+            <StackPanel    Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 5 10 5">
+                <Button  x:Name="_btnExtract"  Click="_btnExtract_Click"  MinWidth="80"  Padding="5">提取</Button>
+                <Button  x:Name="_btnCancel"  Click="_btnCancel_Click" MinWidth="80"  Margin="10 0 0 0" Padding="5">取消</Button>
+            </StackPanel>
+        </dx:ThemedBorder>
+
+    </Grid>
+</Window>

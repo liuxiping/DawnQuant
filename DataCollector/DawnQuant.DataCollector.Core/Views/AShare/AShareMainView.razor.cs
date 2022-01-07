@@ -18,8 +18,11 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
         {
             HistoryMenuCss = "";
             IncrementMenuCss = AShareMainViewSidebarSelected;
+            SubjectAndHotMenuCss = "";
+
             HistoryContentCss = "";
             IncrementContentCss = AshareMainViewContentSelected;
+            SubjectAndHotContentCss = "";
             StateHasChanged();
                
         }
@@ -28,19 +31,36 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
         {
             HistoryMenuCss = AShareMainViewSidebarSelected;
             IncrementMenuCss = "";
+            SubjectAndHotMenuCss = "";
 
             HistoryContentCss = AshareMainViewContentSelected;
             IncrementContentCss = "";
+            SubjectAndHotContentCss = "";
+
             StateHasChanged();
             
         }
 
+        private void OnClickSubjectAndHot()
+        {
+            HistoryMenuCss = "";
+            IncrementMenuCss = "";
+            SubjectAndHotMenuCss = AShareMainViewSidebarSelected;
+
+            HistoryContentCss = "";
+            IncrementContentCss = "";
+            SubjectAndHotContentCss = AshareMainViewContentSelected;
+
+            StateHasChanged();
+        }
+
         public string HistoryMenuCss { set; get; } = "";
-        public string IncrementMenuCss { set; get; } = AShareMainViewSidebarSelected;
+        public string IncrementMenuCss { set; get; } = "";
+        public string SubjectAndHotMenuCss { set; get; } = AShareMainViewSidebarSelected;
 
         public string HistoryContentCss { set; get; } = "";
-        public string IncrementContentCss { set; get; } = AshareMainViewContentSelected;
-
+        public string IncrementContentCss { set; get; } = "";
+        public string SubjectAndHotContentCss { set; get; } = AshareMainViewContentSelected;
 
     }
 

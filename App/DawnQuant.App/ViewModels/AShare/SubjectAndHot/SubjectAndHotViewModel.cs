@@ -35,13 +35,17 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
             CopyStockCodeCommand = new DelegateCommand(CopyStockCode);
             CopyStockNameCommand = new DelegateCommand(CopyStockName);
 
-            CopyRelateStockCodeCommand = new DelegateCommand(CopyRelateStockCode);
-            CopyRelateStockNameCommand = new DelegateCommand(CopyRelateStockName);
+            CopyFocusStockCodeCommand = new DelegateCommand(CopyFocusStockCode);
+            CopyFocusStockNameCommand = new DelegateCommand(CopyFocusStockName);
 
             DeleteSubjectAndHotStockCategoryCommand = new DelegateCommand(DeleteSubjectAndHotStockCategory);
             DelStockItemCommand = new DelegateCommand(DelStockItem);
 
             AddToCurSubjectAndHotCommand=new DelegateCommand(AddToCurSubjectAndHot);
+            SetFocusStockCommand=new DelegateCommand(SetFocusStock);
+
+            MoveCategoryToTopCommand = new DelegateCommand(MoveCategoryToTop);
+            MoveCategoryToBottomCommand = new DelegateCommand(MoveCategoryToBottom);
 
             //初始化 加载题材热点分类数据
             Initialize();
@@ -53,6 +57,8 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
             RefreshSubjectAndHotStockCategories();
         }
 
+
+       
 
         public void RefreshSubjectAndHotStockCategories()
         {
@@ -72,21 +78,33 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
 
             }).ConfigureAwait(true);
 
+            var curSelCategory = CurSelCategory;
+
             Categories = categories;
 
             if (Categories == null || Categories.Count == 0)
             {
                 CurSelCategory = null;
             }
-
-            if (CurSelCategory == null && Categories != null && Categories.Count > 0)
-            {
-                CurSelCategory = Categories.First();
-            }
             else
             {
-                CurSelCategory = Categories.Where(p => p.Id == CurSelCategory.Id).FirstOrDefault();
+                if (curSelCategory != null )
+                {
+                    CurSelCategory = Categories.Where(p => p.Id == curSelCategory.Id).FirstOrDefault();
+                    //找不到 选择第一条
+                    if(CurSelCategory == null)
+                    {
+                        CurSelCategory = Categories.First();
+                    }
+                }
+                else
+                {
+                    CurSelCategory = Categories.First();
+                }
+                
             }
+
+            
         }
 
 
@@ -132,15 +150,32 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
                 await Task.Run(() => {
                     stocks = _subjectAndHotService.GetSubjectAndHotStocksByCategory(CurSelCategory.Id);
                 }).ConfigureAwait(true);
+
                 Stocks = stocks;
 
                 if (Stocks != null && Stocks.Count > 0)
                 {
-                    CurSelStock = Stocks[0];
+
+                    if(FocusStocks==null)
+                    {
+                        FocusStocks = new ObservableCollection<SubjectAndHotStock>();
+                    }
+                    //过滤重点关注股票
+                    FocusStocks.Clear();
+                    Stocks.Where(p=>p.IsFocus).ToList().ForEach(p => FocusStocks.Add(p));   
+
+                    if(FocusStocks.Count>0)
+                    {
+                        CurSelFocusStock=FocusStocks[0];
+                    }
+                    else
+                    {
+                        CurSelStock = Stocks[0];
+                    }
                 }
                 else
                 {
-                    Stocks.Clear();
+                    FocusStocks?.Clear();
                 }
             }
         }
@@ -187,38 +222,38 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
 
 
         //相关股票列表
-        ObservableCollection<SubjectAndHotStock> _relateStocks;
-        public ObservableCollection<SubjectAndHotStock> RelateStocks
+        ObservableCollection<SubjectAndHotStock> _focusStocks;
+        public ObservableCollection<SubjectAndHotStock> FocusStocks
         {
             get
             {
-                return _relateStocks;
+                return _focusStocks;
             }
             set
             {
-                SetProperty(ref _relateStocks, value, nameof(RelateStocks));
+                SetProperty(ref _focusStocks, value, nameof(FocusStocks));
             }
         }
 
 
         //当前选择的相关股票
-        SubjectAndHotStock _curSelRelateStock;
-        public SubjectAndHotStock CurSelRelateStock
+        SubjectAndHotStock _curSelFocusStock;
+        public SubjectAndHotStock CurSelFocusStock
         {
             get
             {
-                return _curSelRelateStock;
+                return _curSelFocusStock;
             }
             set
             {
 
-                SetProperty(ref _curSelRelateStock, value, nameof(CurSelRelateStock));
+                SetProperty(ref _curSelFocusStock, value, nameof(CurSelFocusStock));
                 //更新数据交易数据
-                OnSelRelateStockChange(value);
+                OnSelFocusStockChange(value);
             }
         }
 
-        private void OnSelRelateStockChange(SubjectAndHotStock stockItem)
+        private void OnSelFocusStockChange(SubjectAndHotStock stockItem)
         {
             UpdateChart(stockItem);
         }
@@ -230,7 +265,7 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
         private void OnSelStockChange(SubjectAndHotStock stockItem)
         {
             UpdateChart(stockItem);
-            UpdateRelateStocks(stockItem?.TSCode);
+
         }
 
 
@@ -269,28 +304,76 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
             
         }
 
+
+
         /// <summary>
-        /// 查找同类股票
+        /// 分类置顶
         /// </summary>
-        /// <param name="tsCode"></param>
-        private async void UpdateRelateStocks(string tsCode)
+        public DelegateCommand MoveCategoryToTopCommand { set; get; }
+        private void MoveCategoryToTop()
         {
-
-            if (tsCode != null)
+            if (CurSelCategory != null)
             {
-                ObservableCollection<SubjectAndHotStock> stocks = null;
-
-                await Task.Run(() =>
+                var cur=CurSelCategory;
+                Categories.Remove(cur);
+                Categories.Insert(0, cur);
+                int i = 1;
+                foreach (var c in Categories)
                 {
-                    stocks = _subjectAndHotService.GetSameIndustryStocks(tsCode);
-                }).ConfigureAwait(true);
+                    c.SortNum = i;
+                    i++;
+                }
 
-                RelateStocks = stocks;
+                ObservableCollection<SubjectAndHotStockCategory> categories = new ObservableCollection<SubjectAndHotStockCategory>();
+                Categories.OrderBy(c => c.SortNum).ToList().ForEach(c=>categories.Add(c));
+                Categories = categories;
+                CurSelCategory = cur;
+
+                //保存
+                Task.Run(() => 
+                {
+                    foreach (var c in Categories)
+                    {
+                        _subjectAndHotService.SaveSubjectAndHotCategory(c);
+                    }
+                });
+
             }
-
-
         }
 
+        /// <summary>
+        /// 分类置底
+        /// </summary>
+        public DelegateCommand MoveCategoryToBottomCommand { set; get; }
+        private void MoveCategoryToBottom()
+        {
+            if (CurSelCategory != null)
+            {
+                var cur = CurSelCategory;
+                Categories.Remove(cur);
+                Categories.Add(cur);
+                int i = 1;
+                foreach (var c in Categories)
+                {
+                    c.SortNum = i;
+                    i++;
+                }
+
+                ObservableCollection<SubjectAndHotStockCategory> categories = new ObservableCollection<SubjectAndHotStockCategory>();
+                Categories.OrderBy(c => c.SortNum).ToList().ForEach(c => categories.Add(c));
+                Categories = categories;
+                CurSelCategory = cur;
+
+                //保存
+                Task.Run(() =>
+                {
+                    foreach (var c in Categories)
+                    {
+                        _subjectAndHotService.SaveSubjectAndHotCategory(c);
+                    }
+                });
+            }
+        }
 
         /// <summary>
         /// 删除股票
@@ -364,6 +447,19 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
         }
 
 
+
+        public DelegateCommand SetFocusStockCommand { set; get; }
+        private void SetFocusStock()
+        {
+            if(CurSelStock!=null)
+            {
+                CurSelStock.IsFocus=true;
+            }
+            _subjectAndHotService.SaveSubjectAndHotStock(CurSelStock);
+
+            FocusStocks.Insert(0,CurSelStock);
+        }
+
         public DelegateCommand CopyStockCodeCommand { set; get; }
         private void CopyStockCode()
         {
@@ -383,21 +479,21 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
         }
 
 
-        public DelegateCommand CopyRelateStockCodeCommand { set; get; }
-        private void CopyRelateStockCode()
+        public DelegateCommand CopyFocusStockCodeCommand { set; get; }
+        private void CopyFocusStockCode()
         {
-            if (CurSelRelateStock != null)
+            if (CurSelFocusStock != null)
             {
-                TextCopy.ClipboardService.SetText(CurSelRelateStock.TSCode.Substring(0, 6));
+                TextCopy.ClipboardService.SetText(CurSelFocusStock.TSCode.Substring(0, 6));
             }
         }
 
-        public DelegateCommand CopyRelateStockNameCommand { set; get; }
-        private void CopyRelateStockName()
+        public DelegateCommand CopyFocusStockNameCommand { set; get; }
+        private void CopyFocusStockName()
         {
-            if (CurSelRelateStock != null)
+            if (CurSelFocusStock != null)
             {
-                TextCopy.ClipboardService.SetText(CurSelRelateStock.Name);
+                TextCopy.ClipboardService.SetText(CurSelFocusStock.Name);
             }
         }
 

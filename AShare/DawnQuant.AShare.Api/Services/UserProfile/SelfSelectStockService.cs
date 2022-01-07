@@ -179,7 +179,7 @@ namespace DawnQuant.AShare.Api.UserProfile
 
                              //检测数据是否存在 如果存在则更新时间
                              var self = _selfSelectStockRepository.Entities.Where(p => p.UserId == request.UserId &&
-                                 p.CategoryId == request.CategoryId && p.TSCode == s).FirstOrDefault();
+                                 p.CategoryId == request.CategoryId && p.TSCode == tsCode).FirstOrDefault();
                              if (self != null)
                              {
                                  //更新创建时间
@@ -196,7 +196,7 @@ namespace DawnQuant.AShare.Api.UserProfile
                                  selfSelectStock.CreateTime = DateTime.Now;
 
                                  //获取行业和名称
-                                 var basicInfo = _basicStockInfoRepository.Entities.Where(p => p.TSCode == tsCode).FirstOrDefault();
+                                 var basicInfo = _basicStockInfoRepository.Entities.Where(p => p.TSCode == tsCode  &&!p.StockName.Contains("退")).FirstOrDefault();
                                  string indus = _industryRepository.Entities
                                   .Where(p => p.Id == basicInfo.IndustryId).Select(p => p.Name).SingleOrDefault();
                                  selfSelectStock.Name = basicInfo.StockName;

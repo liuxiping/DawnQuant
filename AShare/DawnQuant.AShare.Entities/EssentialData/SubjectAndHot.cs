@@ -30,7 +30,7 @@ namespace DawnQuant.AShare.Entities.EssentialData
 
 
         /// <summary>
-        /// 龙头股来源渠道 1同花顺公司亮点 ，2同花顺行业分析 营业额 利润前三
+        /// 题材热点源渠道 1同花顺公司亮点 ，2同花顺行业分析 营业额 利润前三
         /// </summary>
         public int Source { get; set; }
     }

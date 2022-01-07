@@ -1,34 +1,8 @@
-﻿@*<div style="width: 100%; height: 100%;">
-
-    <Layout ShowFooter="false" SideWidth="150px" IsFullSide="true">
-        <Side>
-            <div style="border-right: 1px solid rgba(0,0,0,.125); padding: 6px 0;height:100% ">
-                <Menu Items="@SideMenuItems" DisableNavigation="true"
-                      IsVertical="true" OnClick="@OnClickAShare">
-                </Menu>
-            </div>
-        </Side>
-        <Main>
-            <section style="height:100%;width:100%" class="@IncrementCssClass">
-                <IncrementDataView></IncrementDataView>
-            </section>
-
-            <section style="height:100%;width:100%" class="@HistoryCssClass">
-                <HistoryDataView></HistoryDataView>
-            </section>
-        </Main>
-    </Layout>
-
-</div>
-
-*@
-
-
-
+﻿
       <div id="asharemainview">
         <div id="asharemainview-sidebar">
             <ul>
-               
+                <li><a  class="@SubjectAndHotMenuCss"    @onclick="OnClickSubjectAndHot">热点题材分析</a></li>
                 <li><a  class="@IncrementMenuCss"  @onclick="OnClickIncrement" >增量数控采集</a></li>
                 <li><a  class="@HistoryMenuCss"    @onclick="OnClickHistory">历史数据采集</a></li>
             </ul>
@@ -39,6 +13,9 @@
         </div>
         <div id="asharemainview-content-history-increment" class="@IncrementContentCss" >
             <IncrementDataView></IncrementDataView>
+        </div>
+         <div id="asharemainview-content-subjectandhot" class="@SubjectAndHotContentCss" >
+          <SubjectAndHotView></SubjectAndHotView>
         </div>
         </div>
     </div>

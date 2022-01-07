@@ -36,8 +36,8 @@
             <RowDefinition></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <dx:DXTabControl TabContentCacheMode="CacheAllTabs" Padding="0" Margin="-7 0 -7 0">
-            <dx:DXTabItem FontSize="15" Header="沪深股市" >
+        <dx:DXTabControl TabContentCacheMode="CacheAllTabs" Padding="0"  Margin="-7 0 -7 0">
+            <dx:DXTabItem FontSize="15" Header="沪深股市"  >
                 <AShareViews:AShareMainView></AShareViews:AShareMainView>
             </dx:DXTabItem>
         </dx:DXTabControl>

@@ -57,6 +57,20 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
         public DbSet<PerformanceForecast> PerformanceForecasts { get; set; }
 
 
+        /// <summary>
+        /// 同花顺指数
+        /// </summary>
+        public DbSet<THSIndex> THSIndexes { get; set; }
+
+        /// <summary>
+        /// 同花顺指数成员
+        /// </summary>
+        public DbSet<THSIndexMember> THSIndexMembers { get; set; }
+        /// <summary>
+        /// 题材前瞻
+        /// </summary>
+        public DbSet<FutureEventOfSubject> FutureEventsOfSubject { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -115,6 +129,12 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
             modelBuilder.Entity<PerformanceForecast>(en =>
             {
                 en.HasIndex(p => new { p.TSCode, p.EndDate, p.Source }).IsUnique();
+
+            });
+
+            modelBuilder.Entity<FutureEventOfSubject>(en =>
+            {
+                en.HasIndex(p => new { p.Date, p.Event }).IsUnique();
 
             });
         }

@@ -51,7 +51,7 @@ namespace DawnQuant.App.Views.AShare
 
         private void _aShareMain_Loaded(object sender, RoutedEventArgs e)
         {
-            _hmAShare.SelectedItem = _btnSelfSelStock;
+            _hmAShare.SelectedItem = _btnSubjectAndHot;
         }
 
         private void _hmAShare_SelectedItemChanged(object sender, DevExpress.Xpf.WindowsUI.HamburgerMenuSelectedItemChangedEventArgs e)
@@ -88,6 +88,10 @@ namespace DawnQuant.App.Views.AShare
             else if (btn.Name == "_btnSetting")
             {
                 _settingView.Visibility = Visibility.Visible;
+            }
+            else if(btn.Name == "_btnTHSDataAnalysis")
+            {
+                _thsDataAnalysisView.Visibility = Visibility.Visible;
             }
             else
             {

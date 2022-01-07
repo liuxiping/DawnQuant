@@ -49,11 +49,19 @@ namespace DawnQuant.AShare.Entities.UserProfile
         [MaxLength(255)]
         public string Industry { get; set; }
 
+
+        /// <summary>
+        /// 是否重点关注
+        /// </summary>
+        public bool IsFocus { get; set; }
+
         /// <summary>
         /// 排序
         /// </summary>
         public int SortNum { get; set; }
 
+
+       
 
         /// <summary>
         /// 创建时间

@@ -198,5 +198,25 @@ namespace DawnQuant.App.Services.AShare
             }
             return rdata;
         }
+
+
+        /// <summary>
+        /// 导入题材热点股票
+        /// </summary>
+        /// <param name="categoryId"></param>
+        /// <param name="stocksId"></param>
+        public void ImportSubjectAndHotStocks(long categoryId, List<string> stocksId)
+        {
+            var client = new SubjectAndHotStockApi.SubjectAndHotStockApiClient(_grpcChannelSet.AShareGrpcChannel);
+
+            Metadata meta = new Metadata();
+            meta.AddAuthorization(_passportProvider?.AccessToken);
+
+            ImportSubjectAndHotStocksRequest request = new ImportSubjectAndHotStocksRequest();
+            request.CategoryId = categoryId;
+            request.UserId = _passportProvider.UserId;
+            request.StocksId.AddRange(stocksId);
+            client.ImportSubjectAndHotStocks(request, meta);
+        }
     }
 }

@@ -15,6 +15,7 @@
     <None Remove="Protos\EssentialData\BellwetherApi.proto" />
     <None Remove="Protos\EssentialData\Common.proto" />
     <None Remove="Protos\EssentialData\CompanyApi.proto" />
+    <None Remove="Protos\EssentialData\FutureEventOfSubjectApi.proto" />
     <None Remove="Protos\EssentialData\HolderApi.proto" />
     <None Remove="Protos\EssentialData\HolderNumberApi.proto" />
     <None Remove="Protos\EssentialData\IndustryApi.proto" />
@@ -23,6 +24,9 @@
     <None Remove="Protos\EssentialData\StockDailyIndicatorApi.proto" />
     <None Remove="Protos\EssentialData\StockTradeDataApi.proto" />
     <None Remove="Protos\EssentialData\SubjectAndHotApi.proto" />
+    <None Remove="Protos\EssentialData\THSIndexApi.proto" />
+    <None Remove="Protos\EssentialData\THSIndexMemberApi.proto" />
+    <None Remove="Protos\EssentialData\THSIndexTradeDataApi.proto" />
     <None Remove="Protos\EssentialData\Top10FloatHolderApi.proto" />
     <None Remove="Protos\EssentialData\TradingCalendarApi.proto" />
     <None Remove="Protos\StrategyExecutor\StrategyExecutorApi.proto" />
@@ -31,6 +35,7 @@
     <None Remove="Protos\StrategyMetadata\FactorMetadataCategoryApi.proto" />
     <None Remove="Protos\StrategyMetadata\SelectScopeMetadataApi.proto" />
     <None Remove="Protos\StrategyMetadata\SelectScopeMetadataCategoryApi.proto" />
+    <None Remove="Protos\SyncToy_33f4abb2-1727-45ec-b9aa-7ca1a028c051.dat" />
     <None Remove="Protos\SyncToy_d91a667c-faf2-4f0b-8cbc-9765406e02a6.dat" />
     <None Remove="Protos\UserProfile\BellwetherStockApi.proto" />
     <None Remove="Protos\UserProfile\BellwetherStockCategoryApi.proto" />
@@ -61,6 +66,7 @@
     <Protobuf Include="Protos\EssentialData\BellwetherApi.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\EssentialData\Common.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\EssentialData\CompanyApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\EssentialData\FutureEventOfSubjectApi.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\EssentialData\HolderApi.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\EssentialData\IndustryApi.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\EssentialData\PerformanceForecastApi.proto" GrpcServices="Client" />
@@ -68,6 +74,9 @@
     <Protobuf Include="Protos\EssentialData\StockDailyIndicatorApi.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\EssentialData\StockTradeDataApi.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\EssentialData\SubjectAndHotApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\EssentialData\THSIndexApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\EssentialData\THSIndexMemberApi.proto" GrpcServices="Client" />
+    <Protobuf Include="Protos\EssentialData\THSIndexTradeDataApi.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\EssentialData\TradingCalendarApi.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\StrategyExecutor\StrategyExecutorApi.proto" GrpcServices="Client" />
     <Protobuf Include="Protos\StrategyMetadata\Common.proto" GrpcServices="Client" />

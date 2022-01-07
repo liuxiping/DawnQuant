@@ -103,6 +103,7 @@ namespace DawnQuant.AShare.Api.Utils
             string stock = configuration["ConnectionStrings:DawnQuant.AShare.Stock"];
             string dailytd = configuration["ConnectionStrings:DawnQuant.AShare.Stock.DailyTD"];
             string dailyindicator = configuration["ConnectionStrings:DawnQuant.AShare.Stock.DailyIndicator"];
+            string thsindextd = configuration["ConnectionStrings:DawnQuant.AShare.Stock.THSIndexDailyTD"];
 
 
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
@@ -132,18 +133,32 @@ namespace DawnQuant.AShare.Api.Utils
 
             //业绩预测
             services.AddScoped<IPerformanceForecastRepository, EFPerformanceForecastRepository>();
+            services.AddScoped<IFutureEventOfSubjectRepository, EFFutureEventOfSubjectRepositoy>();
 
+            //同花顺指数
+            services.AddScoped<ITHSIndexRepository, EFTHSIndexRepository>();
+            services.AddScoped<ITHSIndexMemberRepository, EFTHSIndexMemberRepository>();
 
             //注册交易数据DBContext创建函数
             services.AddSingleton(provider =>
             {
                 Func<string, KCycle, IStockTradeDataRepository> func = (ts_code, stockKCycle) =>
                 {
+                    string con = "";
+                    if (stockKCycle == KCycle.Day)
+                    {
+                        con = dailytd;
+                    }
+                    else
+                    {
+                        throw new NotSupportedException("只支持日线，其他不支持");
+                    }
+
                     DbContextOptionsBuilder<StockTradeDataDbContext> builder = new DbContextOptionsBuilder<StockTradeDataDbContext>();
 
                     if (stockKCycle == KCycle.Day)
                     {
-                        builder.UseMySql(dailytd, MySqlServerVersion.AutoDetect(dailytd));
+                        builder.UseMySql(con, MySqlServerVersion.AutoDetect(dailytd));
                     }
                     else
                     {
@@ -172,6 +187,30 @@ namespace DawnQuant.AShare.Api.Utils
                 return func;
             });
 
+            //同花顺指数DBContext创建函数
+            services.AddSingleton(provider =>
+            {
+                Func<string,KCycle, ITHSIndexTradeDataRepository> func = (ts_code, kCycle) =>
+                {
+                    string con = "";
+                    if(kCycle== KCycle.Day)
+                    {
+                        con = thsindextd;
+                    }
+                    else
+                    {
+                        throw new NotSupportedException("只支持日线，其他不支持");
+                    }
+
+                    DbContextOptionsBuilder<THSIndexTradeDataDbContext> builder = new DbContextOptionsBuilder<THSIndexTradeDataDbContext>();
+                    builder.UseMySql(con, MySqlServerVersion.AutoDetect(dailyindicator));
+
+                    var dbContext = new THSIndexTradeDataDbContext(builder.Options, ts_code, kCycle);
+
+                    return new EFTHSIndexTradeDataRepository(dbContext, configuration);
+                };
+                return func;
+            });
         }
 
     }

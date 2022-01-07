@@ -225,6 +225,49 @@ message  PerformanceForecastDto
         // 龙头股来源渠道 1同花顺F10
          int32 Source =9;
 }
+
+
+message FutureEventOfSubjectDto
+{
+         int64 Id=1;
+
+        // 时间
+         google.protobuf.Timestamp  Date =2;
+
+     
+        // 事件前瞻
+         string Event=3;
+      
+        // 影响题材
+         string Subject =4;
+
+        // 影响股票 逗号分割
+         string RelateStocks =5;
+}
+
+
+message THSIndexDto{
+   
+        /// 代码
+         string TSCode =1;
+        
+        /// 名称
+         string Name =2;
+
+        /// 成分个数
+         int32 Count =3;
+
+        /// 交易所
+         string Exchange =4;
+
+        /// 上市日期
+         google.protobuf.Timestamp ListDate=5; 
+
+        /// N概念指数S特色指数
+         string Type =6;
+}
+
+
 // K线周期
  enum KCycleDto
 {

@@ -18,11 +18,16 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
             {
                 obj = stockDataContext.TableName;
             }
-
-            if (context is StockDailyIndicatorDbContext stockIndicatorDataContext)
+            else if (context is StockDailyIndicatorDbContext stockIndicatorDataContext)
             {
                 obj = stockIndicatorDataContext.TableName;
             }
+
+            else if (context is THSIndexTradeDataDbContext thsIndexTradeDataDbContext)
+            {
+                obj = thsIndexTradeDataDbContext.TableName;
+            }
+
             return obj;
 
         }

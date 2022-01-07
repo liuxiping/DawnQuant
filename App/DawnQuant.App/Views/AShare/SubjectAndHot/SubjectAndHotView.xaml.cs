@@ -104,7 +104,7 @@ namespace DawnQuant.App.Views.AShare.SubjectAndHot
 
         }
 
-        private void _gcRelateStockList_CustomUnboundColumnData(object sender, GridColumnDataEventArgs e)
+        private void _gcFocusStockList_CustomUnboundColumnData(object sender, GridColumnDataEventArgs e)
         {
             var view = sender as GridControl;
             if (e.Column.FieldName == "#" && e.IsGetData)
@@ -132,23 +132,51 @@ namespace DawnQuant.App.Views.AShare.SubjectAndHot
 
             if (e.Key == Key.W  )
             {
-                _gcSubjectAndHotStockList.View.MovePrevRow();
+                _gcFocusStockList.View.MovePrevRow();
+              
             }
 
             if (e.Key == Key.S  )
             {
-                _gcSubjectAndHotStockList.View.MoveNextRow();
+                _gcFocusStockList.View.MoveNextRow();
+             
             }
 
             if (e.Key == Key.NumPad0 )
             {
-                _gcRelateStockList.View.MoveNextRow();
+                _gcSubjectAndHotStockList.View.MoveNextRow();
+              
+             
             }
 
             if (e.Key == Key.NumPad1)
             {
-                _gcRelateStockList.View.MovePrevRow();
+                _gcSubjectAndHotStockList.View.MovePrevRow();
             }
+
+            if (e.Key == Key.Q)
+            { 
+                _gcSubjectAndHotStockCategoryList.View.MovePrevRow();
+            }
+            if(e.Key==Key.A)
+            {
+                _gcSubjectAndHotStockCategoryList.View.MoveNextRow();
+
+            }
+        }
+
+        private void _miImportSubjectFromTHS_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new ImportSubjectFromTHSWindow();
+
+            win.ViewModel.CategoryId = Model.CurSelCategory.Id;
+
+            if (win.ShowDialog() == true)
+            {
+
+                Model.RefreshSubjectAndHotStockCategories();
+            }
+
         }
     }
 }

@@ -282,7 +282,7 @@ namespace DawnQuant.AShare.Api.Quartz.Job
                     selfSelectStock.CreateTime = DateTime.Now;
 
                     //获取行业和名称
-                    var basicInfo = _basicStockInfoRepository.Entities.Where(p => p.TSCode == s).FirstOrDefault();
+                    var basicInfo = _basicStockInfoRepository.Entities.Where(p => p.TSCode == s && !p.StockName.Contains("退")).FirstOrDefault();
                     string indus = _industryRepository.Entities
                      .Where(p => p.Id == basicInfo.IndustryId).Select(p => p.Name).SingleOrDefault();
                     selfSelectStock.Name = basicInfo.StockName;

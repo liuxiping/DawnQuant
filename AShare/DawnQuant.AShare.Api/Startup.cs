@@ -122,6 +122,10 @@ namespace DawnQuant.AShare.Api
                 endpoints.MapGrpcService<BellwetherService>();
                 endpoints.MapGrpcService<SubjectAndHotService>();
                 endpoints.MapGrpcService<PerformanceForecastService>();
+                endpoints.MapGrpcService<FutureEventOfSubjectService>();
+
+                //同花顺指数
+                endpoints.MapGrpcService<THSIndexService>();
 
 
 
