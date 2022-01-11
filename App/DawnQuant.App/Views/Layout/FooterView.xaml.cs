@@ -30,7 +30,6 @@ namespace DawnQuant.App.Views.Layout
             InitializeComponent();
 
         }
-
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             App.Current?.Dispatcher?.Invoke(() =>
@@ -39,7 +38,6 @@ namespace DawnQuant.App.Views.Layout
             });
             
         }
-
         Timer _timer;
 
         private void FooterView_Loaded(object sender, RoutedEventArgs e)
@@ -53,45 +51,54 @@ namespace DawnQuant.App.Views.Layout
 
             var notify = IOCUtil.Container.Resolve<MessageUtil>();
 
-            notify.DownloadAShareDataProgress += (complete, total) =>
+            notify.DataUpdateScheduledTaskJobProgress += (complete, total) =>
+             {
+                 string msg = $"正在下载交易数据，已经完成{complete}个，总共{total}个";
+
+                 Dispatcher.Invoke(() =>
+                 {
+
+                     imgNotify.Visibility = Visibility.Visible;
+                     txtNotify.Text = msg;
+                 });
+             };
+
+            notify.DataUpdateScheduledTaskJobCompleted += () =>
+              {
+                  Dispatcher.Invoke(() =>
+                  {
+                      var dt = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+                      var msg = $"策略数据更新完成,更新时间{dt}";
+                      txtNotify.Text = msg;
+                  });
+              };
+
+            notify.DownloadAllAShareDataProgress += (complete, total) =>
            {
-              
+
                string msg = $"正在下载交易数据，已经完成{complete}个，总共{total}个";
 
                Dispatcher.Invoke(() =>
                {
-                   
+
                    imgNotify.Visibility = Visibility.Visible;
                    txtNotify.Text = msg;
                });
 
            };
 
-            notify.DownloadAShareDataComplete += (isALL) => 
+            notify.DownloadAllAShareDataComplete += () =>
             {
-                if (isALL)
+
+                Dispatcher.Invoke(() =>
                 {
-                    Dispatcher.Invoke(() =>
-                    {
-                        var dt = AppLocalConfig.Instance.LastUpdateAllDataDateTime.Value.ToString("yyyy-MM-dd HH:mm");
+                    var dt = AppLocalConfig.Instance.LastUpdateAllDataDateTime.Value.ToString("yyyy-MM-dd HH:mm");
 
-                        var msg = $"全部数据更新完成,更新时间{dt}";
-                        txtNotify.Text = msg;
+                    var msg = $"全部数据更新完成,更新时间{dt}";
+                    txtNotify.Text = msg;
 
-                        txtLastUpdateTime.Text = $"上次全部数据更新时间：{dt}";
-                    });
-
-                }
-                else
-                {
-                    Dispatcher.Invoke(() =>
-                    {
-                        var dt = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
-                        var msg = $"策略数据更新完成,更新时间{dt}";
-                        txtNotify.Text = msg;
-                    });
-                }
-
+                    txtLastUpdateTime.Text = $"上次全部数据更新时间：{dt}";
+                });
 
             };
 

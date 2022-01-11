@@ -51,6 +51,8 @@ namespace DawnQuant.AShare.Api.Utils
                   config.CreateMap<FutureEventOfSubject, FutureEventOfSubjectDto>().ReverseMap();
 
                   config.CreateMap<THSIndex, THSIndexDto>().ReverseMap();
+                  config.CreateMap<THSIndexMember, THSIndexMemberDto>().ReverseMap();
+                  config.CreateMap<THSIndexTradeData, THSIndexTradeDataDto>().ReverseMap();
 
 
                   config.CreateMap<FactorMetadataDto, FactorMetadata>().ReverseMap();

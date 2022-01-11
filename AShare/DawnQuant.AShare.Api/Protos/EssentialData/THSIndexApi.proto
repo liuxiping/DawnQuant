@@ -16,6 +16,7 @@ service THSIndexApi {
   rpc SaveTHSIndexes(SaveTHSIndexesRequest) returns (google.protobuf.Empty);
   rpc GetAllTHSIndexes(google.protobuf.Empty) returns(GetAllTHSIndexesReponse);
  
+  rpc AddToSubjectAndHot(AddToSubjectAndHotRequest)returns (google.protobuf.Empty);
 }
 
 
@@ -30,7 +31,11 @@ message GetAllTHSIndexesReponse
 }
 
 
-
+message AddToSubjectAndHotRequest
+{
+    int64 UserId=1;
+    string TSCode=2;
+}
 
 
 

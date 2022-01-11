@@ -20,14 +20,14 @@ namespace DawnQuant.App.ViewModels.AShare.SelfSelStock
     public class SelfSelStockViewModel : ViewModelBase
     {
 
-        private readonly StockPlotDataService _stockPlotDataService;
+        private readonly PlotDataService _stockPlotDataService;
         private readonly SelfSelService _selfSelService;
         private readonly IPassportProvider _passportProvider;
 
 
         public SelfSelStockViewModel()
         {
-            _stockPlotDataService = IOCUtil.Container.Resolve<StockPlotDataService>(); ;
+            _stockPlotDataService = IOCUtil.Container.Resolve<PlotDataService>(); ;
             _selfSelService = IOCUtil.Container.Resolve<SelfSelService>();
             _passportProvider = IOCUtil.Container.Resolve<IPassportProvider>();
 
@@ -187,9 +187,9 @@ namespace DawnQuant.App.ViewModels.AShare.SelfSelStock
                 StockChartViewModel model = new StockChartViewModel()
                 {
                     TSCode = stockItem.TSCode,
-                    StockName = stockItem.Name,
+                    Name = stockItem.Name,
                     KCycle = KCycle.Day,
-                    VA = StockChartViewModel.VisibleArea.Chart,
+                    VA = VisibleArea.Chart,
                     AdjustedState= AdjustedState.None,
                 };
                 //保存前一个数据选择状态

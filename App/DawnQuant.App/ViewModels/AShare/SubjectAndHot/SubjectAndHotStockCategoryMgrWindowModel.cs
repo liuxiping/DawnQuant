@@ -43,7 +43,7 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
             ObservableCollection<SubjectAndHotStockCategory> categories = null;
             await Task.Run(() =>
             {
-                categories = _subjectAndHotService.GetSubjectAndHotStockCategories(_passportProvider.UserId);
+                categories = _subjectAndHotService.GetSubjectAndHotStockCategories();
 
             }).ConfigureAwait(true);
             Categories = categories;

@@ -5,6 +5,7 @@ using DawnQuant.AShare.Repository.Abstract;
 using DawnQuant.AShare.Repository.Abstract.EssentialData;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -17,15 +18,19 @@ namespace DawnQuant.AShare.Api.EssentialData
     {
         private readonly ILogger<IndustryService> _logger;
         private readonly IIndustryRepository _industryRepository;
+        private readonly IBasicStockInfoRepository _basicStockInfoRepository;
+
         private readonly IMapper _imapper;
 
 
         public IndustryService(ILogger<IndustryService> logger,
            IIndustryRepository industryRepository,
+           IBasicStockInfoRepository basicStockInfoRepository,
            IMapper imapper)
         {
             _logger = logger;
             _industryRepository = industryRepository;
+            _basicStockInfoRepository = basicStockInfoRepository;
             _imapper = imapper;
         }
 
@@ -79,6 +84,42 @@ namespace DawnQuant.AShare.Api.EssentialData
 
                  return response;
              });
+        }
+
+        public override Task<GetAllIndustriesResponse> GetAllIndustries(Empty request, ServerCallContext context)
+        {
+            return Task.Run(() =>
+            {
+                GetAllIndustriesResponse response = new GetAllIndustriesResponse();
+
+                var ins = _industryRepository.Entities;
+
+                response.Entities.AddRange(_imapper.Map<IEnumerable<IndustryDto>>(ins));
+
+                return response;
+            });
+        }
+
+        /// <summary>
+        /// 删除无效行业
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override Task<Empty> ClearInvalidIndustry(Empty request, ServerCallContext context)
+        {
+            return Task.Run(() =>
+            {
+                foreach (var industry in _industryRepository.Entities.Where(p => p.Level == 3).AsNoTracking().ToList())
+                {
+                    if (!_basicStockInfoRepository.Entities.Where(
+                      p => p.IndustryId == industry.Id).Any())
+                    {
+                        _industryRepository.Delete(industry);
+                    }
+                }
+                return new Empty();
+            });
         }
     } 
     

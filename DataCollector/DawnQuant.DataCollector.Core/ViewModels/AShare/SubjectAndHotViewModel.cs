@@ -11,10 +11,26 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
     {
 
         SubjectAndHotCollector _subjectAndHotCollector;
-
-        public SubjectAndHotViewModel(SubjectAndHotCollector subjectAndHotCollector)
+        THSIndexCollector _thsIndexCollector;
+        public SubjectAndHotViewModel(SubjectAndHotCollector subjectAndHotCollector,
+            THSIndexCollector thsIndexCollector)
         {
-            _subjectAndHotCollector=subjectAndHotCollector;
+            _subjectAndHotCollector = subjectAndHotCollector;
+
+            _thsIndexCollector = thsIndexCollector;
+
+            _thsIndexCollector.CollectTHSIndexMemberProgress += (msg) =>
+            {
+                CollectTHSIndexMemberProgress = msg;
+                OnViewNeedUpdate();
+            };
+
+            _thsIndexCollector.CollectTHSIndexDailyTradeDataProgress += (msg) =>
+              {
+                  CollectTHSIndexDailyTradeDataProgress = msg;
+                  OnViewNeedUpdate();
+              };
+
         }
 
         /// <summary>
@@ -22,8 +38,17 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
         /// </summary>
         public string Message { set; get; }
 
+        public string CollectTHSIndexMemberProgress { set; get; }
+        public string CollectTHSIndexDailyTradeDataProgress { set; get; }
+
+
 
         public bool IsCollectFutureEventsOfSubject { set; get; } = false;
+        public bool IsCollectTHSIndex { set; get; } = false;
+        public bool IsCollectTHSIndexMember { set; get; } = false;
+
+        public bool IsCollectTHSIndexDailyTradeData { set; get; } = false;
+        
 
 
         /// <summary>
@@ -62,9 +87,130 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
         }
 
 
+        public async void CollectTHSIndexFromTushare()
+        {
+            IsCollectTHSIndex = true;
+            Message += $"开始采集同花顺指数，{DateTime.Now.ToString()}\r\n";
+            OnViewNeedUpdate();
+            //开启采集任务
+            Task t = Task.Run(() =>
+            {
+
+                _thsIndexCollector.CollectTHSIndexFromTushare();
+
+            });
+
+            await t;
+
+
+            if (t.Exception == null)
+            {
+                Message += $"采集同花顺指数成功，{DateTime.Now.ToString()}\r\n";
+                OnViewNeedUpdate();
+            }
+            else
+            {
+                Message += $"采集同花顺指数过程中发生异常，{DateTime.Now.ToString()}\r\n";
+                Message += t.Exception.Message + "\r\n" + t.Exception.StackTrace + "\r\n";
+                OnViewNeedUpdate();
+            }
+            IsCollectTHSIndex = false;
+            OnViewNeedUpdate();
+        }
+
+        public async void CollectTHSIndexMemberFromTushare()
+        {
+            IsCollectTHSIndexMember = true;
+            Message += $"开始采集同花顺指数成分股，{DateTime.Now.ToString()}\r\n";
+            OnViewNeedUpdate();
+            //开启采集任务
+            Task t = Task.Run(async () =>
+            {
+              await  _thsIndexCollector.CollectTHSIndexMemberFromTushare();
+
+            });
+
+            await t;
+
+
+            if (t.Exception == null)
+            {
+                Message += $"采集同花顺指数成分股成功，{DateTime.Now.ToString()}\r\n";
+                OnViewNeedUpdate();
+            }
+            else
+            {
+                Message += $"采集同花顺指数成分股过程中发生异常，{DateTime.Now.ToString()}\r\n";
+                Message += t.Exception.Message + "\r\n" + t.Exception.StackTrace + "\r\n";
+                OnViewNeedUpdate();
+            }
+            IsCollectTHSIndexMember = false;
+            OnViewNeedUpdate();
+        }
+
+        public async void CollectTHSIndexMemberFromTHS()
+        {
+            IsCollectTHSIndexMember = true;
+            Message += $"开始采集同花顺指数成分股，{DateTime.Now.ToString()}\r\n";
+            OnViewNeedUpdate();
+            //开启采集任务
+            Task t = Task.Run( () =>
+            {
+                 _thsIndexCollector.CollectTHSIndexMemberFromTHS();
+
+            });
+
+            await t;
+
+
+            if (t.Exception == null)
+            {
+                Message += $"采集同花顺指数成分股成功，{DateTime.Now.ToString()}\r\n";
+                OnViewNeedUpdate();
+            }
+            else
+            {
+                Message += $"采集同花顺指数成分股过程中发生异常，{DateTime.Now.ToString()}\r\n";
+                Message += t.Exception.Message + "\r\n" + t.Exception.StackTrace + "\r\n";
+                OnViewNeedUpdate();
+            }
+            IsCollectTHSIndexMember = false;
+            OnViewNeedUpdate();
+        }
+
+        public async void CollectTHSIndexDailyTradeDataFromTushare()
+        {
+            IsCollectTHSIndexDailyTradeData = true;
+            Message += $"开始采集同花顺指数日线数据，{DateTime.Now.ToString()}\r\n";
+            OnViewNeedUpdate();
+            //开启采集任务
+            Task t = Task.Run( () =>
+            {
+                 _thsIndexCollector.CollectTHSIndexDailyTradeDataFromTushare();
+
+            });
+
+            await t;
+
+
+            if (t.Exception == null)
+            {
+                Message += $"采集同花顺指数日线数据成功，{DateTime.Now.ToString()}\r\n";
+                OnViewNeedUpdate();
+            }
+            else
+            {
+                Message += $"采集同花顺指数日线数据过程中发生异常，{DateTime.Now.ToString()}\r\n";
+                Message += t.Exception.Message + "\r\n" + t.Exception.StackTrace + "\r\n";
+                OnViewNeedUpdate();
+            }
+            IsCollectTHSIndexDailyTradeData = false;
+            OnViewNeedUpdate();
+        }
+        
+
         //通知更新视图
         public event Action ViewNeedUpdate;
-
         protected void OnViewNeedUpdate()
         {
             ViewNeedUpdate?.Invoke();

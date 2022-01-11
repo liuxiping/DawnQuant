@@ -195,5 +195,72 @@ namespace DawnQuant.AShare.Api.UserProfile
         }
 
 
+        public override Task<Empty> ImportSubjectAndHotStocksByIndustries(ImportSubjectAndHotStocksByIndustriesRequest request, ServerCallContext context)
+        {
+            return Task.Run(() =>
+            {
+
+                List<string> tsCodes = new List<string>();
+                //获取股票ID
+
+                foreach (var iid in request.Industries)
+                {
+                    tsCodes.AddRange(_basicStockInfoRepository.Entities.Where(
+                        p => p.IndustryId == iid && !p.StockName.Contains("退")).Select(p => p.TSCode));
+                }
+
+                tsCodes=tsCodes.Distinct().ToList();
+
+                if (tsCodes.Count > 0)
+                {
+                 
+                    List<SubjectAndHotStock> ustocks = new List<SubjectAndHotStock>();
+
+                    foreach (var s in tsCodes)
+                    {
+                            //检测数据是否存在 如果存在则更新时间
+                            var self = _subjectAndHotStockRepository.Entities.Where(p => p.UserId == request.UserId &&
+                                p.CategoryId == request.CategoryId && p.TSCode == s).AsNoTracking().FirstOrDefault();
+                            if (self != null)
+                            {
+                                //更新创建时间
+                                self.CreateTime = DateTime.Now;
+                                ustocks.Add(self);
+
+                            }
+                            else
+                            {
+                                SubjectAndHotStock subjectAndHotStock = new SubjectAndHotStock();
+                                subjectAndHotStock.TSCode = s;
+                                subjectAndHotStock.UserId = request.UserId;
+                                subjectAndHotStock.CategoryId = request.CategoryId;
+                                subjectAndHotStock.CreateTime = DateTime.Now;
+
+                                //名称
+                                var basicInfo = _basicStockInfoRepository.Entities.Where(p => p.TSCode == s && !p.StockName.Contains("退")).FirstOrDefault();
+
+                                string indus = _industryRepository.Entities
+                                .Where(p => p.Id == basicInfo.IndustryId).Select(p => p.Name).SingleOrDefault();
+
+                                subjectAndHotStock.Name = basicInfo.StockName;
+                                subjectAndHotStock.Industry = indus;
+
+                                ustocks.Add(subjectAndHotStock);
+                            }
+                    }
+
+                    if (ustocks.Count > 0)
+                    {
+                        //保存
+                        _subjectAndHotStockRepository.Save(ustocks);
+
+                    }
+
+                }
+
+                return new Empty();
+
+            });
+        }
     }
 }

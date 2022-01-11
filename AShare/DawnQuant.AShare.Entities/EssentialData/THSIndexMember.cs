@@ -50,38 +50,18 @@ namespace DawnQuant.AShare.Entities.EssentialData
         /// <summary>
         /// 纳入日期
         /// </summary>
-        public DateTime InDate { get; set; }
+        public DateTime? InDate { get; set; }
 
         /// <summary>
         /// 剔除日期
         /// </summary>
-        public DateTime OutDate { get; set; }
+        public DateTime? OutDate { get; set; }
 
 
         /// <summary>
         /// 是否最新Y是N否
         /// </summary>
         public string IsNew { get; set; }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     }
 }

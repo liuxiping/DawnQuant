@@ -48,10 +48,10 @@ namespace DawnQuant.App.Services.AShare
         /// <summary>
         /// 下载进度事件
         /// </summary>
-        public  event Action<int,int> DownLoadStockDataProgress;
-        protected void OnDownLoadStockDataProgress(int complete,int total )
+        public  event Action<int,int> DownLoadAShareStockDataProgress;
+        protected void OnDownLoadAShareStockDataProgress(int complete,int total )
         {
-            DownLoadStockDataProgress?.Invoke(complete,total);
+            DownLoadAShareStockDataProgress?.Invoke(complete,total);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace DawnQuant.App.Services.AShare
                         {
                             ++completeCount;
                         }
-                        OnDownLoadStockDataProgress(completeCount, allCount);
+                        OnDownLoadAShareStockDataProgress(completeCount, allCount);
                     }));
                 }
             }
@@ -125,7 +125,7 @@ namespace DawnQuant.App.Services.AShare
                             {
                                 ++completeCount;
                             }
-                            OnDownLoadStockDataProgress(completeCount, allCount);
+                            OnDownLoadAShareStockDataProgress(completeCount, allCount);
                         }
                     }));
                 }

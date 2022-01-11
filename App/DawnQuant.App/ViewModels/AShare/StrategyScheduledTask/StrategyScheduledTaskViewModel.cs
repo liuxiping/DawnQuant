@@ -39,11 +39,15 @@ namespace DawnQuant.App.ViewModels.AShare.StrategyScheduledTask
 
             CurSelStockStrategies = new ObservableCollection<UserProfile.StockStrategy>();
 
-            LoadStrategyCategoriesAndSelectStockCategories();
+            Initialize();
+        }
+
+        private async void Initialize()
+        {
+           await LoadStrategyCategoriesAndSelectStockCategories();
 
             UpdateStrategyScheduledTaskStatus();
         }
-
 
         /// <summary>
         /// 加载任务计划列表和自选股列表

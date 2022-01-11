@@ -38,14 +38,20 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
             CopyFocusStockCodeCommand = new DelegateCommand(CopyFocusStockCode);
             CopyFocusStockNameCommand = new DelegateCommand(CopyFocusStockName);
 
+            CopyPlotStockCodeCommand=new DelegateCommand(CopyPlotStockCode);
+            CopyPlotStockNameCommand= new DelegateCommand(CopyPlotStockName);
+
             DeleteSubjectAndHotStockCategoryCommand = new DelegateCommand(DeleteSubjectAndHotStockCategory);
             DelStockItemCommand = new DelegateCommand(DelStockItem);
 
             AddToCurSubjectAndHotCommand=new DelegateCommand(AddToCurSubjectAndHot);
             SetFocusStockCommand=new DelegateCommand(SetFocusStock);
+            CancelFocusStockCommand=new DelegateCommand(CancelFocusStock);
 
             MoveCategoryToTopCommand = new DelegateCommand(MoveCategoryToTop);
             MoveCategoryToBottomCommand = new DelegateCommand(MoveCategoryToBottom);
+
+            RefreshCategoryCommand=new DelegateCommand(RefreshCategory);
 
             //初始化 加载题材热点分类数据
             Initialize();
@@ -74,7 +80,7 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
 
             await Task.Run(() =>
             {
-                categories = _subjectAndHotService.GetSubjectAndHotStockCategories(_passportProvider.UserId);
+                categories = _subjectAndHotService.GetSubjectAndHotStockCategories();
 
             }).ConfigureAwait(true);
 
@@ -281,9 +287,9 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
                 StockChartViewModel model = new StockChartViewModel()
                 {
                     TSCode = stockItem.TSCode,
-                    StockName = stockItem.Name,
+                    Name = stockItem.Name,
                     KCycle = KCycle.Day,
-                    VA = StockChartViewModel.VisibleArea.Chart,
+                    VA = VisibleArea.Chart,
                     AdjustedState = AdjustedState.None,
                     Industry= stockItem.Industry,
                 };
@@ -304,6 +310,12 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
             
         }
 
+
+        public  DelegateCommand RefreshCategoryCommand { get; set; }
+        private void RefreshCategory()
+        {
+            LoadCategories();
+        }
 
 
         /// <summary>
@@ -403,10 +415,31 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
         {
             if (CurSelCategory != null)
             {
+                //删除之后设置自动选择下一个
+                SubjectAndHotStockCategory next = null;
+                var categories = Categories.ToList();
+
+                var index= categories.FindIndex(0,p=>p.Id==CurSelCategory.Id);
+
+                if(index>0)
+                {
+                    if(index== categories.Count-1)
+                    {
+                        next = categories[index-1];
+                    }
+                    else if(index<categories.Count-1)
+                    {
+                        next = categories[index + 1];
+                    }
+                }
+
                 await Task.Run(() =>
                 {
                     _subjectAndHotService.DelSubjectAndHotStockCategory(CurSelCategory);
                 }).ConfigureAwait(true);
+
+                CurSelCategory = next;
+
                 LoadCategories();
 
             }
@@ -425,7 +458,7 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
                     item.UserId = CurSelCategory.UserId;
                     item.CategoryId = CurSelCategory.Id;
                     item.TSCode = StockChartViewModel.TSCode;
-                    item.Name = StockChartViewModel.StockName;
+                    item.Name = StockChartViewModel.Name;
                     item.Industry = StockChartViewModel.Industry;
                     item.CreateTime = DateTime.Now;
 
@@ -446,20 +479,83 @@ namespace DawnQuant.App.ViewModels.AShare.SubjectAndHot
 
         }
 
+        public DelegateCommand CancelFocusStockCommand { set; get; }
+        private void CancelFocusStock()
+        {
+            if (CurSelFocusStock != null)
+            {
+                CurSelFocusStock.IsFocus = false;
 
+                FocusStocks.Remove(CurSelFocusStock);
 
+                //重新绑定数据
+                ObservableCollection<SubjectAndHotStock> stocks = new ObservableCollection<SubjectAndHotStock>();
+                FocusStocks.ToList().ForEach(s => stocks.Add(s));
+                FocusStocks = stocks;
+
+                Task.Run(() =>
+                {
+                    _subjectAndHotService.SaveSubjectAndHotStock(CurSelFocusStock);
+
+                });
+            }
+            
+
+            
+        }
         public DelegateCommand SetFocusStockCommand { set; get; }
         private void SetFocusStock()
         {
             if(CurSelStock!=null)
             {
-                CurSelStock.IsFocus=true;
-            }
-            _subjectAndHotService.SaveSubjectAndHotStock(CurSelStock);
+                if (FocusStocks != null &&
+                    !FocusStocks.Where(p => p.TSCode == CurSelStock.TSCode).Any())
+                {
+                    CurSelStock.IsFocus = true;
 
-            FocusStocks.Insert(0,CurSelStock);
+                    FocusStocks.Insert(0, CurSelStock);
+
+                    //重新绑定数据
+                    ObservableCollection<SubjectAndHotStock> stocks = new ObservableCollection<SubjectAndHotStock>();
+                    FocusStocks.ToList().ForEach(s => stocks.Add(s));
+                    FocusStocks = stocks;
+
+                    Task.Run(() => 
+                    {
+                        _subjectAndHotService.SaveSubjectAndHotStock(CurSelStock);
+
+                    });
+
+
+                   
+
+                }
+            }
+           
         }
 
+        public DelegateCommand CopyPlotStockCodeCommand { set; get; }
+
+
+        private  void CopyPlotStockCode()
+        {
+            if(StockChartViewModel!=null)
+            {
+                TextCopy.ClipboardService.SetText(StockChartViewModel.TSCode.Substring(0, 6));
+
+            }
+        }
+
+        public DelegateCommand CopyPlotStockNameCommand { set; get; }
+
+        private  void CopyPlotStockName()
+        {
+            if (StockChartViewModel != null)
+            {
+                TextCopy.ClipboardService.SetText(StockChartViewModel.Name);
+
+            }
+        }
         public DelegateCommand CopyStockCodeCommand { set; get; }
         private void CopyStockCode()
         {

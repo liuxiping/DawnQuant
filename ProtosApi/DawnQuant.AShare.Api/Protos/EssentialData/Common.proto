@@ -227,21 +227,19 @@ message  PerformanceForecastDto
 }
 
 
-message FutureEventOfSubjectDto
-{
+message FutureEventOfSubjectDto{
          int64 Id=1;
 
-        // 时间
+        //时间
          google.protobuf.Timestamp  Date =2;
 
-     
-        // 事件前瞻
+         //事件前瞻
          string Event=3;
       
-        // 影响题材
+        //影响题材
          string Subject =4;
 
-        // 影响股票 逗号分割
+        //影响股票 逗号分割
          string RelateStocks =5;
 }
 
@@ -268,9 +266,81 @@ message THSIndexDto{
 }
 
 
+message THSIndexMemberDto{
+
+   int64 Id =1;
+
+        /// 指数代码
+         string TSCode =2;
+
+
+       /// 股票代码
+         string Code =3;
+
+        /// 股票名称
+         string Name =4;
+
+        
+        /// 权重
+         double Weight =5;
+
+        /// 纳入日期
+         google.protobuf.Timestamp InDate =6;
+
+        /// 剔除日期
+         google.protobuf.Timestamp OutDate =7;
+
+
+        /// 是否最新Y是N否
+         string IsNew =8;
+}
+
+message THSIndexTradeDataDto{
+
+        // 开盘价
+         double Open=1;
+
+        // 收盘价
+         double Close =2;
+
+        // 最高价
+         double High =3;
+
+        //  最低价
+         double Low =4;
+
+        // 前收盘价
+         double PreClose =5;
+
+        // 平均价
+         double AvgClose =6;
+
+        // 涨跌点位
+         double Change =7;
+
+        // 涨跌幅
+         double PctChange =8;
+
+        // 成交量
+         double Volume =9;
+
+         double Amount=10;
+
+        // 总市值
+         double TotalMV=11;
+
+        // 流通市值
+         double FloatMV =12;
+
+        // 换手率
+         double Turnover =13;
+
+        // 交易时间
+        google.protobuf.Timestamp TradeDateTime =14;
+}
+
 // K线周期
- enum KCycleDto
-{
+ enum KCycleDto{
     Minute1 = 0;
     Minute5 = 1;
     Minute15 = 2;
@@ -285,26 +355,24 @@ message THSIndexDto{
 }
 
    
-    // 市场类型 （主板/中小板/创业板/科创板/CDR）
-     enum MarketTypeDto
-    {
-        MainBoard=0;
-        SmallAndMediumSizedBoard=1;
-        GEMBoard=2;
-        STARBoard=3;
-        CDRBoard=4;
-    }
+ // 市场类型 （主板/中小板/创业板/科创板/CDR）
+enum MarketTypeDto{
+    MainBoard=0;
+    SmallAndMediumSizedBoard=1;
+    GEMBoard=2;
+    STARBoard=3;
+    CDRBoard=4;
+}
 
 
     /// <summary>
     /// 上市状态
     /// </summary>
-     enum ListedStateDto
-    {
-        Listed=0;
-        Delisted=1;
-        Suspend=2;
-    }
+enum ListedStateDto{
+Listed=0;
+Delisted=1;
+Suspend=2;
+}
 
     /// 数据状态 维护全(原始数据) 前复权 后复权
     enum AdjustedStateDto

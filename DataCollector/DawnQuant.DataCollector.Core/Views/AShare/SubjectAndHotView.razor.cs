@@ -32,6 +32,7 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
         private void ClearMessage()
         {
             ViewModel.Message = "";
+            ViewModel.CollectTHSIndexMemberProgress = "";
         }
 
        
@@ -40,5 +41,32 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
             ViewModel?.CollectFutureEventsOfSubject();
 
         }
+
+        /// <summary>
+        /// 同花顺指数
+        /// </summary>
+        private void CollectTHSIndexFromTushare()
+        {
+            ViewModel?.CollectTHSIndexFromTushare();
+
+        }
+
+        private void CollectTHSIndexMemberFromTushare()
+        {
+            ViewModel?.CollectTHSIndexMemberFromTushare();
+
+        }
+        private void CollectTHSIndexMemberFromTHS()
+        {
+            ViewModel?.CollectTHSIndexMemberFromTHS();
+
+        }
+        
+        private void CollectTHSIndexDailyTradeDataFromTushare()
+        {
+            ViewModel?.CollectTHSIndexDailyTradeDataFromTushare();
+
+        }
+        
     }
 }

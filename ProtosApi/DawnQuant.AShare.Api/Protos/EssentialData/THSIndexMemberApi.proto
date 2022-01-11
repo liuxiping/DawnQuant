@@ -14,18 +14,41 @@ service THSIndexMemberApi {
   
 //保存龙头股
   rpc SaveTHSIndexMembers(SaveTHSIndexMembersRequest) returns (google.protobuf.Empty);
- 
-}
 
+  rpc SaveTHSIndexMembersByName(SaveTHSIndexMembersByNameRequest) returns (google.protobuf.Empty);
+
+
+  //根据代码获取指数成分股
+  rpc GetTHSIndexMembersByTSCode(GetTHSIndexMembersByTSCodeRequest) returns(GetTHSIndexMembersByTSCodeResponse);
+
+  //清空数据
+  rpc EmptyTHSIndexMembers(google.protobuf.Empty) returns (google.protobuf.Empty);
+
+}
 
 message SaveTHSIndexMembersRequest
 {
-    repeated  BellwetherDto Entities=1;
+    repeated  THSIndexMemberDto Entities=1;
 }
 
+message GetTHSIndexMembersByTSCodeRequest
+{
+    string TSCode=1;
+}
 
+message GetTHSIndexMembersByTSCodeResponse
+{
+    repeated  THSIndexMemberDto Entities=1;
+}
 
+message SaveTHSIndexMembersByNameRequest
+{
+    //指数代码
+    string TSCode=1;
 
+    //成分股
+    repeated  string Names=2;
+}
 
 
 

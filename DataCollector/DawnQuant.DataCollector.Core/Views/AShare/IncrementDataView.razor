@@ -9,10 +9,14 @@
                         <td> <button  @onclick="ClearMessage" class="btn-blue">清空日志</button></td>
                     </tr>
                     <tr>
-                        <td colspan=2>@ViewModel.DailyTradeDataProgress</td>
+                        <td colspan=2>@ViewModel.InStockDailyTradeDataProgress</td>
                     </tr>
                     <tr>
-                        <td colspan=2>@ViewModel.StockDailyIndicatorProgress</td>
+                        <td colspan=2>@ViewModel.InStockDailyIndicatorProgress</td>
+                    </tr>
+
+                     <tr>
+                        <td colspan=2>@ViewModel.InTHSIndexDailyTradeDataProgress</td>
                     </tr>
                      <tr>
                         <td colspan=2>@ViewModel.InSyncTurnoverProgress</td>

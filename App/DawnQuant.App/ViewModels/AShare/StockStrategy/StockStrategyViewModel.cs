@@ -37,21 +37,45 @@ namespace DawnQuant.App.ViewModels.AShare.StockStrategy
             MoveToOtherCategoryCommand = new DelegateCommand<SelfSelectStockCategory>(MoveToOtherCategory);
             CopyStockCodeCommand = new DelegateCommand(CopyStockCode);
 
-            LoadCategoriesIncludeStrategies();
-            LoadSelfSelectStockCategories();
-           
+            Initialize();
+
+        }
+
+        private async void Initialize()
+        {
+            await LoadCategoriesIncludeStrategies();
+
+            await LoadSelfSelectStockCategories();
         }
 
         /// <summary>
         /// 加载自选股分类
         /// </summary>
-        public void LoadSelfSelectStockCategories()
+        public async Task LoadSelfSelectStockCategories()
         {
+            ObservableCollection<SelfSelectStockCategory> category=null;
+
+            await Task.Run(() => 
+            {
+                 category = _selfSelService.GetSelfSelectStockCategories(_passportProvider.UserId);
+            }).ConfigureAwait(true);
+
             //加载策略
-            SelfSelectStockCategories = _selfSelService.GetSelfSelectStockCategories(_passportProvider.UserId); ;
+            SelfSelectStockCategories = category;
+
+            OnSelfSelectStockCategoriesLoad();
 
         }
 
+
+        /// <summary>
+        /// 自选分类加载完毕
+        /// </summary>
+        public event Action SelfSelectStockCategoriesLoad;
+        private void OnSelfSelectStockCategoriesLoad()
+        {
+            SelfSelectStockCategoriesLoad?.Invoke();
+        }
 
         /// <summary>
         /// 加载策略分类与策略
@@ -162,9 +186,9 @@ namespace DawnQuant.App.ViewModels.AShare.StockStrategy
                 StockChartViewModel model = new StockChartViewModel()
                 {
                     TSCode = stockItem.TSCode,
-                    StockName = stockItem.Name,
+                    Name = stockItem.Name,
                     KCycle = KCycle.Day,
-                    VA = StockChartViewModel.VisibleArea.Chart,
+                    VA = VisibleArea.Chart,
                     AdjustedState = AdjustedState.None,
                 };
                 //保存前一个数据选择状态

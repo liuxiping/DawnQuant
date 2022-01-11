@@ -10,7 +10,7 @@ namespace DawnQuant.App.Models.AShare.EssentialData
     /// <summary>
     /// 绘图相关数据
     /// </summary>
-    public class StockPlotContext
+    public class PlotContext
     {
         int _showCount = 120;
 
@@ -30,7 +30,7 @@ namespace DawnQuant.App.Models.AShare.EssentialData
         /// <summary>
         /// 绘图数据
         /// </summary>
-        public ObservableCollection<StockPlotData> PlotDatas { get; set; }
+        public ObservableCollection<PlotData> PlotDatas { get; set; }
 
 
         //显示的均线
@@ -49,14 +49,21 @@ namespace DawnQuant.App.Models.AShare.EssentialData
         {
             get
             {
-                if (PlotDatas.Count >= _showCount)
+                if (PlotDatas != null && PlotDatas.Count > 0)
                 {
-                    return PlotDatas[PlotDatas.Count - _showCount].FormatedTradeDateTime;
+                    if (PlotDatas.Count >= _showCount)
+                    {
+                        return PlotDatas[PlotDatas.Count - _showCount].FormatedTradeDateTime;
+                    }
+                    else
+                    {
+                        return PlotDatas[0].FormatedTradeDateTime;
+
+                    }
                 }
                 else
                 {
-                    return PlotDatas[0].FormatedTradeDateTime;
-
+                    return "";
                 }
             }
         }

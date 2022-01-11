@@ -33,7 +33,9 @@ namespace DawnQuant.App.ViewModels.AShare.Setting
             if (App.AShareSetting!=null && App.AShareSetting.DataUpdateSetting!=null)
             {
                 UpdateBellwether = App.AShareSetting.DataUpdateSetting.UpdateBellwether;
+
                 UpdateSubjectAndHot = App.AShareSetting.DataUpdateSetting.UpdateSubjectAndHot;
+                UpdateOnlyFocusSubjectAndHot = App.AShareSetting.DataUpdateSetting.UpdateOnlyFocusSubjectAndHot;
 
                 TaskCron = App.AShareSetting.DataUpdateSetting.TaskCron;
             }
@@ -89,6 +91,8 @@ namespace DawnQuant.App.ViewModels.AShare.Setting
             s.DataUpdateSetting.SelfSelCategories = UpdateSelfSelStockCategoryIds;
             s.DataUpdateSetting.UpdateBellwether = UpdateBellwether;
             s.DataUpdateSetting.UpdateSubjectAndHot = UpdateSubjectAndHot;
+            s.DataUpdateSetting.UpdateOnlyFocusSubjectAndHot = UpdateOnlyFocusSubjectAndHot;
+
             s.DataUpdateSetting.TaskCron = TaskCron;
 
             Task.Run(() => 
@@ -100,7 +104,9 @@ namespace DawnQuant.App.ViewModels.AShare.Setting
 
         }
 
-        bool _updateBellwether=false;
+        #region
+
+        bool _updateBellwether =false;
         public bool UpdateBellwether
         {
             set
@@ -112,30 +118,45 @@ namespace DawnQuant.App.ViewModels.AShare.Setting
             { return _updateBellwether; }
         }
 
+
         bool _updateSubjectAndHot=false;
         public bool UpdateSubjectAndHot
         {
             set
             {
                 SetProperty(ref _updateSubjectAndHot, value, nameof(UpdateSubjectAndHot));
-                OnCategoriesUpdated();
+                
+               
             }
             get
             { return _updateSubjectAndHot; }
         }
 
+
+        bool _updateOnlyFocusSubjectAndHot = false;
+        public bool UpdateOnlyFocusSubjectAndHot
+        {
+            set
+            {
+                SetProperty(ref _updateOnlyFocusSubjectAndHot, value, nameof(UpdateOnlyFocusSubjectAndHot));
+               
+               
+            }
+            get
+            { return _updateOnlyFocusSubjectAndHot; }
+        }
+
+        
         List<long> _updateSelfSelStockCategoryIds;
         public List<long> UpdateSelfSelStockCategoryIds
         {
             set
             {
                 SetProperty(ref _updateSelfSelStockCategoryIds, value, nameof(UpdateSelfSelStockCategoryIds));
-                OnCategoriesUpdated();
             }
             get
             { return _updateSelfSelStockCategoryIds; }
         }
-
 
         string _taskCron ;
         public string TaskCron
@@ -143,10 +164,12 @@ namespace DawnQuant.App.ViewModels.AShare.Setting
             set
             {
                 SetProperty(ref _taskCron, value, nameof(TaskCron));
-                OnCategoriesUpdated();
+               
             }
             get
             { return _taskCron; }
         }
+
+        #endregion
     }
 }

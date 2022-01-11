@@ -33,7 +33,8 @@
          HorizontalAlignment="Right">其他：</TextBlock>
         <StackPanel Grid.Column="1"  Grid.Row="1" Grid.ColumnSpan="3"   >
             <CheckBox   IsChecked="{Binding UpdateBellwether}" Padding="5"  Margin="5"  Grid.Row="1" Content="龙头股" Grid.Column="1"></CheckBox>
-            <CheckBox   IsChecked="{Binding UpdateSubjectAndHot}"  Padding="5"  Margin="5"  Grid.Row="2" Content="题材热点" Grid.Column="1"></CheckBox>
+            <CheckBox   IsChecked="{Binding UpdateSubjectAndHot}"  Padding="5"  Margin="5"  Content="题材热点" Grid.Column="1"></CheckBox>
+            <CheckBox   IsChecked="{Binding UpdateOnlyFocusSubjectAndHot}"   Padding="5"  Margin="5"  Grid.Row="2" Content="只下载题材热点重点关注股票" ></CheckBox>
 
         </StackPanel>
        

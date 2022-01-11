@@ -40,9 +40,9 @@ namespace DawnQuant.DataCollector.Core.Job
                     //    jobMessageUtility.OnDailyTradeDataJobProgressChanged(msg);
                     //};
 
-                    jobMessageUtility.OnInDailyTradeDataJobStarted();
+                    jobMessageUtility.OnInStockDailyTradeDataJobStarted();
                      collector.CollectInDailyTradeDataFromTushare(DateTime.Now);
-                    jobMessageUtility.OnInDailyTradeDataJobCompleted();
+                    jobMessageUtility.OnInStockDailyTradeDataJobCompleted();
                 }
             }
 

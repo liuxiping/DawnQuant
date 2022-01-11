@@ -19,15 +19,16 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
             _jobMessageUtil = jobMessageUtil;
 
 
-            _jobMessageUtil.DailyTradeDataJobProgressChanged += _jobMessageUtility_DailyTradeDataJobProgressChanged;
+            _jobMessageUtil.StockDailyTradeDataJobProgressChanged += _jobMessageUtility_StockDailyTradeDataJobProgressChanged;
             _jobMessageUtil.StockDailyIndicatorJobProgressChanged += _jobMessageUtility_StockDailyIndicatorJobProgressChanged;
             _jobMessageUtil.InSyncTrunoverJobProgressChanged += _jobMessageUtil_InSyncTrunoverJobProgressChanged;
+            _jobMessageUtil.THSIndexDailyTradeDataJobProgressChanged += _jobMessageUtil_THSIndexDailyTradeDataJobProgressChanged;
 
-            _jobMessageUtil.InDailyTradeDataFromSinaJobStarted += _jobMessageUtil_InDailyTradeDataFromSinaJobStarted;
-            _jobMessageUtil.InDailyTradeDataFromSinaJobCompleted += _jobMessageUtil_InDailyTradeDataFromSinaJobCompleted;
+            _jobMessageUtil.InStockDailyTradeDataFromSinaJobStarted += _jobMessageUtil_InStockDailyTradeDataFromSinaJobStarted;
+            _jobMessageUtil.InStockDailyTradeDataFromSinaJobCompleted += _jobMessageUtil_InStockDailyTradeDataFromSinaJobCompleted;
 
-            _jobMessageUtil.InDailyTradeDataJobStarted += _jobMessageUtil_InDailyTradeDataJobStarted;
-            _jobMessageUtil.InDailyTradeDataJobCompleted += JobMessageUtil_InDailyTradeDataJobCompleted;
+            _jobMessageUtil.InStockDailyTradeDataJobStarted += _jobMessageUtil_InStockDailyTradeDataJobStarted;
+            _jobMessageUtil.InStockDailyTradeDataJobCompleted += JobMessageUtil_InStockDailyTradeDataJobCompleted;
 
             _jobMessageUtil.InStockDailyIndicatorJobStarted += _jobMessageUtil_InStockDailyIndicatorJobStarted;
             _jobMessageUtil.InStockDailyIndicatorJobCompleted += _jobMessageUtil_InStockDailyIndicatorJobCompleted;
@@ -35,6 +36,27 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
 
             _jobMessageUtil.InSyncTrunoverJobStarted += _jobMessageUtil_InSyncTrunoverJobStarted;
             _jobMessageUtil.InSyncTrunoverJobCompleted += _jobMessageUtil_InSyncTrunoverJobCompleted;
+
+            _jobMessageUtil.InTHSIndexDailyTradeDataJobStarted += _jobMessageUtil_InTHSIndexDailyTradeDataJobStarted;
+            _jobMessageUtil.InTHSIndexDailyTradeDataJobCompleted += _jobMessageUtil_InTHSIndexDailyTradeDataJobCompleted;
+        }
+
+        private void _jobMessageUtil_InTHSIndexDailyTradeDataJobCompleted()
+        {
+            lock (this)
+            {
+                Message += $"增量(同花顺指数)每日日线数据已成功采集，{DateTime.Now}\r\n";
+                OnViewNeedUpdate();
+            }
+        }
+
+        private void _jobMessageUtil_InTHSIndexDailyTradeDataJobStarted()
+        {
+            lock (this)
+            {
+                Message += $"开始采集增量(同花顺指数)每日日线数据，{DateTime.Now}\r\n";
+                OnViewNeedUpdate();
+            }
         }
 
         private void _jobMessageUtil_InSyncTrunoverJobProgressChanged(string msg)
@@ -80,7 +102,7 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
             }
         }
 
-        private void JobMessageUtil_InDailyTradeDataJobCompleted()
+        private void JobMessageUtil_InStockDailyTradeDataJobCompleted()
         {
             lock (this)
             {
@@ -89,7 +111,7 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
             }
         }
 
-        private void _jobMessageUtil_InDailyTradeDataJobStarted()
+        private void _jobMessageUtil_InStockDailyTradeDataJobStarted()
         {
             lock (this)
             {
@@ -99,7 +121,7 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
 
         }
 
-        private void _jobMessageUtil_InDailyTradeDataFromSinaJobCompleted()
+        private void _jobMessageUtil_InStockDailyTradeDataFromSinaJobCompleted()
         {
             lock (this)
             {
@@ -108,7 +130,7 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
             }
         }
 
-        private void _jobMessageUtil_InDailyTradeDataFromSinaJobStarted()
+        private void _jobMessageUtil_InStockDailyTradeDataFromSinaJobStarted()
         {
             lock (this)
             {
@@ -135,17 +157,21 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
 
         private void _jobMessageUtility_StockDailyIndicatorJobProgressChanged(string msg)
         {
-            StockDailyIndicatorProgress = msg;
+            InStockDailyIndicatorProgress = msg;
             OnViewNeedUpdate();
         }
 
-        private void _jobMessageUtility_DailyTradeDataJobProgressChanged(string msg)
+        private void _jobMessageUtility_StockDailyTradeDataJobProgressChanged(string msg)
         {
-            DailyTradeDataProgress = msg;
+            InStockDailyTradeDataProgress = msg;
             OnViewNeedUpdate();
         }
 
-
+        private void _jobMessageUtil_THSIndexDailyTradeDataJobProgressChanged(string msg)
+        {
+            InTHSIndexDailyTradeDataProgress = msg;
+            OnViewNeedUpdate();
+        }
 
         public bool IsInDataFromTushare { set; get; } = false;
         public bool IsStartInDailyTradeDataFromSina { set; get; } = false;
@@ -164,7 +190,10 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
         /// <summary>
         /// 采集增量日线历史数据进度
         /// </summary>
-        public string DailyTradeDataProgress { set; get; }
+        public string InStockDailyTradeDataProgress { set; get; }
+
+
+        public string InTHSIndexDailyTradeDataProgress { set; get; }
 
 
         /// <summary>
@@ -176,7 +205,7 @@ namespace DawnQuant.DataCollector.Core.ViewModels.AShare
         /// <summary>
         /// 采集增量每日指标数据进度
         /// </summary>
-        public string StockDailyIndicatorProgress { set; get; }
+        public string InStockDailyIndicatorProgress { set; get; }
 
 
 

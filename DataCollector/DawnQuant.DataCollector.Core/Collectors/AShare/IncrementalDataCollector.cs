@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using System.Globalization;
 using System.Text.Json;
 using TuShareHttpSDKLibrary;
+using TuShareHttpSDKLibrary.Model.Index.THSIndex;
 using TuShareHttpSDKLibrary.Model.MarketData;
 
 namespace DawnQuant.DataCollector.Core.Collectors.AShare
@@ -19,24 +20,16 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
         ILogger _logger;
         JobMessageUtil _jobMessageUtil;
         IPassportProvider _passportProvider;
-
+        CollectorConfig _config;
         public IncrementalDataCollector(IPassportProvider passportProvider,
             ILogger logger, CollectorConfig config, JobMessageUtil jobMessageUtil)
         {
 
             _logger = logger;
             _passportProvider = passportProvider;
-            _tushareToken = config.TushareToken;
-            _tushareUrl = config.TushareUrl;
-            _apiUrl = config.AShareApiUrl;
+            _config = config;
             _jobMessageUtil = jobMessageUtil;
         }
-
-        string _tushareToken;
-        string _tushareUrl;
-        string _apiUrl;
-
-
 
         #region  从新浪获取实时数据
         const string DTDUrlPart1FromSina =
@@ -135,19 +128,19 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
         {
             string msg;
 
-            GrpcChannel channel = GrpcChannel.ForAddress(_apiUrl);
+            GrpcChannel channel = GrpcChannel.ForAddress(_config.AShareApiUrl);
 
             try
             {
                 msg = $"正在从Sina获取增量日线数据...";
-                _jobMessageUtil.OnDailyTradeDataJobProgressChanged(msg);
+                _jobMessageUtil.OnStockDailyTradeDataJobProgressChanged(msg);
 
                 var datas =   CollectInDailyTradeDataFromSina(date, channel);
 
                 int allCount = datas.Count;
 
                 msg = $"从Sina成功获取{allCount}个增量日线数据...";
-                _jobMessageUtil.OnDailyTradeDataJobProgressChanged(msg);
+                _jobMessageUtil.OnStockDailyTradeDataJobProgressChanged(msg);
 
                 var client = new StockTradeDataApi.StockTradeDataApiClient(channel);
                 Metadata meta = new Metadata();
@@ -173,13 +166,13 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
                     {
                         var response = call.ResponseStream.Current;
                         msg = $"正在保存增量日线数据(Sina)，已经成功保存{response.CompletCount}个，总共{response.TotalCount}个";
-                        _jobMessageUtil.OnDailyTradeDataJobProgressChanged(msg);
+                        _jobMessageUtil.OnStockDailyTradeDataJobProgressChanged(msg);
                     }
                 }
 
                 msg = $"保存增量日线数据(Sina)已完成，总共保存{datas.Count}个";
 
-                _jobMessageUtil.OnDailyTradeDataJobProgressChanged(msg);
+                _jobMessageUtil.OnStockDailyTradeDataJobProgressChanged(msg);
 
 
 
@@ -201,7 +194,7 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
             if (IsOpen(date, channel))
             {
                 //读取增量数据
-                TuShare tu = new TuShare(_tushareUrl, _tushareToken);
+                TuShare tu = new TuShare(_config.TushareUrl, _config.TushareToken);
                 DailyRequestModel requestModel = new DailyRequestModel();
                 requestModel.TradeDate = date.ToString("yyyyMMdd");
 
@@ -249,7 +242,7 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
             if (IsOpen(date, channel))
             {
                 //读取增量数据
-                TuShare tu = new TuShare(_tushareUrl, _tushareToken);
+                TuShare tu = new TuShare(_config.TushareUrl, _config.TushareToken);
                 DailyBasicRequestModel requestModel = new DailyBasicRequestModel();
                 requestModel.TradeDate = date.ToString("yyyyMMdd");
 
@@ -302,19 +295,19 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
         {
             string msg;
 
-            GrpcChannel channel = GrpcChannel.ForAddress(_apiUrl);
+            GrpcChannel channel = GrpcChannel.ForAddress(_config.AShareApiUrl);
 
             try
             {
                 msg = $"正在从Tushare获取增量日线数据...";
-                _jobMessageUtil.OnDailyTradeDataJobProgressChanged(msg);
+                _jobMessageUtil.OnStockDailyTradeDataJobProgressChanged(msg);
 
                 var datas = CollectIncrementDailyTradeDataFromTushare(date, channel);
 
                 int allCount = datas.Count;
 
                 msg = $"从Tushare成功获取{allCount}个增量日线数据...";
-                _jobMessageUtil.OnDailyTradeDataJobProgressChanged(msg);
+                _jobMessageUtil.OnStockDailyTradeDataJobProgressChanged(msg);
 
 
                 var client = new StockTradeDataApi.StockTradeDataApiClient(channel);
@@ -337,13 +330,13 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
                     {
                         var response = call.ResponseStream.Current;
                         msg = $"正在保存增量日线数据(Tushare)，已经成功保存{response.CompletCount}个，总共{response.TotalCount}个";
-                        _jobMessageUtil.OnDailyTradeDataJobProgressChanged(msg);
+                        _jobMessageUtil.OnStockDailyTradeDataJobProgressChanged(msg);
                     }
                 }
 
                 msg = $"保存增量日线数据(Tushare)已完成，总共保存{datas.Count}个";
 
-                _jobMessageUtil.OnDailyTradeDataJobProgressChanged(msg);
+                _jobMessageUtil.OnStockDailyTradeDataJobProgressChanged(msg);
 
 
 
@@ -361,7 +354,7 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
         /// <param name="date"></param>
         public async Task CollectInStockDailyIndicatorFromTushare(DateTime date)
         {
-            GrpcChannel channel = GrpcChannel.ForAddress(_apiUrl);
+            GrpcChannel channel = GrpcChannel.ForAddress(_config.AShareApiUrl);
 
             try
             {
@@ -416,7 +409,7 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
         /// </summary>
         public async Task InSyncTurnoverAsync()
         {
-            GrpcChannel channel = GrpcChannel.ForAddress(_apiUrl);
+            GrpcChannel channel = GrpcChannel.ForAddress(_config.AShareApiUrl);
             try
             {
                 Metadata meta = new Metadata();
@@ -456,7 +449,7 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
             var date = DateTime.Now.Date;
 
             bool isOpen = false;
-            using (GrpcChannel channel = GrpcChannel.ForAddress(_apiUrl))
+            using (GrpcChannel channel = GrpcChannel.ForAddress(_config.AShareApiUrl))
             {
                 var utcdate = DateTime.SpecifyKind(new DateTime(date.Year, date.Month, date.Day), DateTimeKind.Utc);
                 //交易所代码
@@ -493,6 +486,129 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
 
             return tr.IsOpen;
         }
+
+
+
+        /// <summary>
+        /// 指数增量日线数据
+        /// </summary>
+        public async Task CollectInTHSIndexDailyTradeDataFromTushareAsync( DateTime date)
+        {
+            string msg;
+
+            GrpcChannel channel = GrpcChannel.ForAddress(_config.AShareApiUrl);
+
+            try
+            {
+                msg = $"正在从Tushare获取增量同花顺指数日线数据...";
+                _jobMessageUtil.OnTHSIndexDailyTradeDataJobProgressChanged(msg);
+
+                var datas = CollectInTHSIndexDailyTradeDataFromTushare(date, channel);
+
+                int allCount = datas.Count;
+
+                msg = $"从Tushare成功获取{allCount}个增量同花顺指数日线数据...";
+                _jobMessageUtil.OnTHSIndexDailyTradeDataJobProgressChanged(msg);
+
+                var client = new THSIndexTradeDataApi.THSIndexTradeDataApiClient(channel);
+                Metadata meta = new Metadata();
+                meta.AddAuthorization(_passportProvider.AccessToken);
+
+                List<SingleTHSIndexTradeData> tradeDatas = new List<SingleTHSIndexTradeData>();
+                foreach (var d in datas)
+                {
+                    tradeDatas.Add(new SingleTHSIndexTradeData
+                    {
+                        KCycle = KCycleDto.Day,
+                        TSCode = d.Key,
+                        Entity = d.Value
+                    });
+                }
+
+                BatchSaveInTHSIndexTDRequest request = new BatchSaveInTHSIndexTDRequest();
+                request.Entities.Add(tradeDatas);
+
+                using (var call = client.BatchSaveInTHSIndexTD(request, meta))
+                {
+                    while (await call.ResponseStream.MoveNext())
+                    {
+                        var response = call.ResponseStream.Current;
+                        msg = $"正在保存增量同花顺指数日线数据(Tushare)，已经成功保存{response.CompletCount}个，总共{response.TotalCount}个";
+                        _jobMessageUtil.OnTHSIndexDailyTradeDataJobProgressChanged(msg);
+                    }
+                }
+
+                msg = $"保存增量同花顺指数日线数据(Tushare)已完成，总共保存{datas.Count}个";
+
+                _jobMessageUtil.OnTHSIndexDailyTradeDataJobProgressChanged(msg);
+            }
+            finally
+            {
+                channel?.Dispose();
+            }
+
+        }
+
+
+        private Dictionary<string, THSIndexTradeDataDto> CollectInTHSIndexDailyTradeDataFromTushare(DateTime date, GrpcChannel channel)
+        {
+
+            Dictionary<string, THSIndexTradeDataDto> stockTradeDatas = new Dictionary<string, THSIndexTradeDataDto>();
+
+            if (IsOpen(date, channel))
+            {
+                //读取增量数据
+                TuShare tu = new TuShare(_config.TushareUrl, _config.TushareToken);
+                THSIndexDailyTradeDataRequestModel requestModel = new THSIndexDailyTradeDataRequestModel();
+                requestModel.TradeDate = date.ToString("yyyyMMdd");
+
+                List<string> fields = new List<string>();
+                fields.AddRange(new[]
+                { "ts_code", "trade_date", "close", "open", "high","low",
+                    "pre_close", "avg_price","change","pct_change","vol","turnover_rate"
+                    ,"total_mv","float_mv" });
+
+                var task = tu.GetData(requestModel, string.Join(",", fields));
+
+                task.Wait();
+
+                if (task.Result != null && task.Result.Count > 0)
+                {
+                    foreach (var item in task.Result)
+                    {
+                        THSIndexTradeDataDto tradeDataDto = new THSIndexTradeDataDto();
+                        DateTimeFormatInfo dtFormat = new DateTimeFormatInfo();
+                        dtFormat.ShortDatePattern = "yyyyMMdd";
+                        tradeDataDto.TradeDateTime = Timestamp.FromDateTime(DateTime.SpecifyKind(
+                            DateTime.ParseExact(item.TradeDate, "yyyyMMdd", dtFormat), DateTimeKind.Utc));
+
+                        tradeDataDto.Open = item.Open;
+                        tradeDataDto.Close = item.Close;
+                        tradeDataDto.High = item.High;
+                        tradeDataDto.Low = item.Low;
+                        tradeDataDto.Amount = item.Vol * item.AvgPrice;
+                        tradeDataDto.Volume = item.Vol;
+                        tradeDataDto.PreClose = item.PreClose;
+                        tradeDataDto.Change = item.Change;
+                        tradeDataDto.AvgClose = item.AvgPrice;
+                        tradeDataDto.FloatMV = item.FloatMV;
+                        tradeDataDto.TotalMV = item.TotalMV;
+                        tradeDataDto.PctChange = item.PctChange;
+
+                        tradeDataDto.Turnover = item.TurnoverRate;
+
+                        if (tradeDataDto.Open == 0 || tradeDataDto.Close == 0 || tradeDataDto.High == 0 ||
+                           tradeDataDto.Low == 0 || tradeDataDto.Volume == 0 )
+                        {
+                            continue;
+                        }
+                        stockTradeDatas.Add(item.TSCode, tradeDataDto);
+                    }
+                }
+            }
+            return stockTradeDatas;
+        }
+
 
     }
 }

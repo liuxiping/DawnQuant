@@ -28,11 +28,19 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock  VerticalAlignment="Center"  Text="题材热点分类" Margin="-5,0,0,0"></TextBlock>
                     <StackPanel Grid.Column="1"  HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,0,-5,0">
-                        <Button  x:Name="_btnAddSubjectAndHotStockCategoryMgr" Background="{Binding ElementName=_gcStockList,Path=Background}" BorderThickness="0" Padding="0"   Margin="0" 
+
+                        <Button  Template="{StaticResource ImageButton}" Command="{Binding RefreshCategoryCommand}"  Padding="0" Margin="0" ToolTip="刷新重点题材热点分类"  Background="Transparent" BorderBrush="Transparent" Grid.Column="1">
+                            <Button.Content>
+                                <TextBlock  VerticalAlignment="Center" Margin="0 1 0 0" FontSize="18" Foreground="#1296db" Text="&#xe610;"   FontFamily="/Assets/Fonts/#iconfont"></TextBlock>
+                            </Button.Content>
+                        </Button>
+
+                        <Button  x:Name="_btnAddSubjectAndHotStockCategoryMgr" Template="{StaticResource ImageButton}" Background="{Binding ElementName=_gcStockList,Path=Background}" BorderThickness="0" Padding="0"   Margin="3 0 0 0" 
                                  Click="_btnAddSubjectAndHotStockCategoryMgr_Click">
                             <Button.Content>
-                                <TextBlock  FontSize="19" Foreground="#1296db" Text="&#xe62f;"   FontFamily="/Assets/Fonts/#iconfont"></TextBlock>
+                                <TextBlock  VerticalAlignment="Center" FontSize="24" Foreground="#1296db" Text="&#xe62f;"   FontFamily="/Assets/Fonts/#iconfont"></TextBlock>
                             </Button.Content>
+                            
                         </Button>
                     </StackPanel>
                 </Grid>
@@ -62,8 +70,12 @@
                                 <MenuItem Header="置顶" Command="{Binding MoveCategoryToTopCommand}"></MenuItem>
                                 <MenuItem Header="置底" Command="{Binding MoveCategoryToBottomCommand}"></MenuItem>
                                 <Separator></Separator>
-                                <MenuItem  Click="_miImportSubjectFromTHS_Click" Header="导入同花顺板块成分股"></MenuItem>
-                                <MenuItem Header="删除分类" Command="{Binding DeleteSubjectAndHotStockCategoryCommand}" ></MenuItem>
+                                    <MenuItem Header="合并题材热点分类"  Click="_miMergeSubjectAndHot_Click" Command="{Binding MergeSubjectAndHotCommand}"></MenuItem>
+                                 <Separator></Separator>
+                                 <MenuItem  Click="_miImportSubjectFromTHS_Click" Header="导入同花顺板块成分股"></MenuItem>
+                                 <MenuItem  Click="_miImportSubjectFromTHSIndustry_Click" Header="导入同花顺行业成分股"></MenuItem>
+                                 <Separator></Separator>
+                                 <MenuItem Header="删除分类" Command="{Binding DeleteSubjectAndHotStockCategoryCommand}" ></MenuItem>
                                 </ContextMenu>
 
                             </dxg:TableView.ContextMenu>
@@ -104,11 +116,15 @@
                                ShowVerticalLines="True">
                         <dxg:TableView.ContextMenu>
                             <ContextMenu>
-                                <MenuItem  Click="_miImportSubjectFromTHS_Click" Header="导入同花顺板块成分股"></MenuItem>
-
+                                <MenuItem Header="取消重点关注" Command="{Binding CancelFocusStockCommand}"></MenuItem>
+                                
                                 <Separator></Separator>
                                 <MenuItem Header="复制股票代码" Command="{Binding CopyFocusStockCodeCommand}"></MenuItem>
                                 <MenuItem Header="复制股票名称" Command="{Binding CopyFocusStockNameCommand}"></MenuItem>
+                                <Separator></Separator>
+                                <MenuItem  Click="_miImportSubjectFromTHS_Click" Header="导入同花顺板块成分股"></MenuItem>
+                                <MenuItem  Click="_miImportSubjectFromTHSIndustry_Click" Header="导入同花顺行业成分股"></MenuItem>
+
                             </ContextMenu>
                         </dxg:TableView.ContextMenu>
                     </dxg:TableView>
@@ -123,9 +139,11 @@
                 <ContextMenu>
                     <MenuItem Header="设置为重点关注" Command="{Binding SetFocusStockCommand}"></MenuItem>
                     <Separator></Separator>
-                    <MenuItem  Click="_miImportSubjectFromTHS_Click" Header="导入同花顺板块成分股"></MenuItem>
+                    <MenuItem Header="复制股票代码" Command="{Binding CopyPlotStockCodeCommand}"></MenuItem>
+                    <MenuItem Header="复制股票名称" Command="{Binding CopyPlotStockNameCommand}"></MenuItem>
                     <Separator></Separator>
-                    <MenuItem  Name="_miAddToCurSubjectAndHot" Header="添加到当前题材热点" Command="{Binding AddToCurSubjectAndHotCommand}" ></MenuItem>
+                    <MenuItem  Click="_miImportSubjectFromTHS_Click" Header="导入同花顺板块成分股"></MenuItem>
+                    <MenuItem  Click="_miImportSubjectFromTHSIndustry_Click" Header="导入同花顺行业成分股"></MenuItem>
                 </ContextMenu>
             </dx:ThemedBorder.ContextMenu>
             <lccom:StockChartView DataContext="{Binding StockChartViewModel}"></lccom:StockChartView>
@@ -177,7 +195,7 @@
                                     <MenuItem Header="删除" Command="{Binding DelStockItemCommand}"></MenuItem>
                                     <Separator></Separator>
                                     <MenuItem Name="_miImportSubjectFromTHS" Click="_miImportSubjectFromTHS_Click" Header="导入同花顺板块成分股"   ></MenuItem>
-                                    <MenuItem Header="导入同花顺同行业分类股票" Command="{Binding ImportSameIndustryFromTHSCommand}"></MenuItem>
+                                    <MenuItem  Click="_miImportSubjectFromTHSIndustry_Click" Header="导入同花顺行业成分股"></MenuItem>
                                 </ContextMenu>
                             </dxg:TableView.ContextMenu>
                         </dxg:TableView>

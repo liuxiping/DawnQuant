@@ -22,6 +22,8 @@ namespace DawnQuant.AShare.Strategy.Executor.SelectScope
 
         public string UserName { get; set; }
 
+        public bool OnlyFocus { get; set; }
+
     }
 
 

@@ -9,23 +9,72 @@ option csharp_namespace = "DawnQuant.AShare.Api.EssentialData";
 package DawnQuant.AShare.Api.EssentialData;
 
 
-//龙头股
+//同花顺指数日线数据
 service THSIndexTradeDataApi {
   
 //保存龙头股
   rpc SaveTHSIndexTradeDatas(SaveTHSIndexTradeDatasRequest) returns (google.protobuf.Empty);
  
+  rpc SaveAllTHSIndexTradeDatas(SaveAllTHSIndexTradeDatasRequest) returns (google.protobuf.Empty);
+
+  rpc GetLatestTHSIndexTradeData(GetLatestTHSIndexTradeDataRequest) returns (GetLatestTHSIndexTradeDataResponse);
+
+  //批量保存增量同花顺指数数据
+  rpc BatchSaveInTHSIndexTD(BatchSaveInTHSIndexTDRequest) returns (stream BatchSaveInTHSIndexTDReponse);
+
 }
 
 
 message SaveTHSIndexTradeDatasRequest
 {
-    repeated  BellwetherDto Entities=1;
+     string TSCode=1;
+     KCycleDto KCycle=2;
+     repeated  THSIndexTradeDataDto Entities=3;
+}
+
+message SaveAllTHSIndexTradeDatasRequest{
+
+     string TSCode=1;
+     KCycleDto KCycle=2;
+     repeated  THSIndexTradeDataDto Entities=3;
+
+}
+
+message GetLatestTHSIndexTradeDataRequest
+{
+    string TSCode=1;
+    KCycleDto KCycle=2;
+    int32 Size=3;
+}
+
+message GetLatestTHSIndexTradeDataResponse
+{
+repeated THSIndexTradeDataDto Entities=1;
 }
 
 
 
+message BatchSaveInTHSIndexTDRequest
+{
+    repeated SingleTHSIndexTradeData Entities=1;
+}
 
+message BatchSaveInTHSIndexTDReponse
+{
+    //总数
+    int32 TotalCount=1;
+
+    //完成数
+    int32 CompletCount=2;
+}
+
+//单个交易数据
+message SingleTHSIndexTradeData
+{
+     string TSCode=1;
+     KCycleDto KCycle=2;
+     THSIndexTradeDataDto Entity=3;
+}
 
 
 

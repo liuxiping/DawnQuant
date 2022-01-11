@@ -19,7 +19,7 @@ namespace DawnQuant.App.ViewModels.AShare.Bellwether
     class BellwetherViewModel : ViewModelBase
     {
 
-        private readonly StockPlotDataService _stockPlotDataService;
+        private readonly PlotDataService _stockPlotDataService;
         private readonly BellwetherService _bellwetherService;
         private readonly IPassportProvider _passportProvider;
         private readonly SelfSelService _selfSelService;
@@ -30,7 +30,7 @@ namespace DawnQuant.App.ViewModels.AShare.Bellwether
         {
 
             _selfSelService = IOCUtil.Container.Resolve<SelfSelService>();
-            _stockPlotDataService = IOCUtil.Container.Resolve<StockPlotDataService>(); ;
+            _stockPlotDataService = IOCUtil.Container.Resolve<PlotDataService>(); ;
             _bellwetherService = IOCUtil.Container.Resolve<BellwetherService>();
             _passportProvider = IOCUtil.Container.Resolve<IPassportProvider>();
             _dataMaintainService = IOCUtil.Container.Resolve<AShareDataMaintainService>();
@@ -243,9 +243,9 @@ namespace DawnQuant.App.ViewModels.AShare.Bellwether
                 StockChartViewModel model = new StockChartViewModel()
                 {
                     TSCode = stockItem.TSCode,
-                    StockName = stockItem.Name,
+                    Name = stockItem.Name,
                     KCycle = KCycle.Day,
-                    VA = StockChartViewModel.VisibleArea.Chart,
+                    VA = VisibleArea.Chart,
                     AdjustedState = AdjustedState.None,
                     Industry = CurSelCategory.Name
                 };
@@ -333,7 +333,7 @@ namespace DawnQuant.App.ViewModels.AShare.Bellwether
                     item.UserId = CurSelCategory.UserId;
                     item.CategoryId = CurSelCategory.Id;
                     item.TSCode = StockChartViewModel.TSCode;
-                    item.Name = StockChartViewModel.StockName;
+                    item.Name = StockChartViewModel.Name;
                     item.CreateTime = DateTime.Now;
 
                     //保存数据

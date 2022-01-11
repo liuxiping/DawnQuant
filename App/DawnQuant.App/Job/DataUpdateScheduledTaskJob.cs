@@ -52,10 +52,23 @@ namespace DawnQuant.App.Job
                                 tsCodes.AddRange(bs.GetBellwetherStocksByUser(userId).Select(p => p.TSCode));
 
                             }
+
                             if (us.UpdateSubjectAndHot)
                             {
                                 var ahs = IOCUtil.Container.Resolve<SubjectAndHotService>();
-                                tsCodes.AddRange(ahs.GetSubjectAndHotStocksByUser(userId).Select(p => p.TSCode));
+                                tsCodes.AddRange(ahs.GetSubjectAndHotStocksByUser(userId)
+                                    .Select(p => p.TSCode));
+                            }
+
+                            else
+                            {
+                                if (us.UpdateOnlyFocusSubjectAndHot)
+                                {
+                                    var ahs = IOCUtil.Container.Resolve<SubjectAndHotService>();
+                                    tsCodes.AddRange(ahs.GetSubjectAndHotStocksByUser(userId)
+                                        .Where(p => p.IsFocus).Select(p => p.TSCode));
+
+                                }
                             }
 
                             if (us.SelfSelCategories != null && us.SelfSelCategories.Count() > 0)
@@ -73,13 +86,18 @@ namespace DawnQuant.App.Job
                             if (tsCodes.Count() > 0)
                             {
                                 App.IsDataUpdateScheduledTaskJob = true;
+
+                                dm.DownLoadAShareStockDataProgress += Dm_DownLoadAShareStockDataProgress;
+
                                 dm.DownLoadStockData(tsCodes,1);
+
                                 App.IsDataUpdateScheduledTaskJob = false;
+
                                 //消息通知
                                 var notify = IOCUtil.Container.Resolve<MessageUtil>();
-                                notify.OnDownloadAShareDataComplete(false);
                                 notify.OnDataUpdateScheduledTaskJobCompleted();
-                              
+
+                                dm.DownLoadAShareStockDataProgress -= Dm_DownLoadAShareStockDataProgress;
                             }
                         }
                         
@@ -87,6 +105,10 @@ namespace DawnQuant.App.Job
                 });
             }
 
-        
+        private void Dm_DownLoadAShareStockDataProgress(int complete, int total)
+        {
+            var notify = IOCUtil.Container.Resolve<MessageUtil>();
+            notify.OnDataUpdateScheduledTaskJobProgress(complete, total);
+        }
     }
 }

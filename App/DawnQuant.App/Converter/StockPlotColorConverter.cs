@@ -10,7 +10,7 @@ using System.Windows.Media;
 
 namespace DawnQuant.App.Converter
 {
-    [ValueConversion(typeof(StockPlotData),typeof(SolidColorBrush))]
+    [ValueConversion(typeof(PlotData),typeof(SolidColorBrush))]
     public class StockPlotColorConverter : IValueConverter
     {
 
@@ -18,7 +18,7 @@ namespace DawnQuant.App.Converter
         {
             string p = parameter.ToString();
 
-            var data = value as StockPlotData;
+            var data = value as PlotData;
 
             if (p == "Open")
             {

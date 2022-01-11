@@ -23,7 +23,7 @@ service StockTradeDataApi {
  //增量保存交易数据并计算复权因子
  rpc SaveInSTDAndCAF(SaveInSTDAndCAFRequest) returns (google.protobuf.Empty);
 
- //批量保存增量保存交易数据并计算复权因子
+ //批量保存增量交易数据并计算复权因子
  rpc BatchSaveInSTDAndCAF(BatchSaveInSTDAndCAFRequest) returns (stream BatchSaveInSTDAndCAFReponse);
 
 

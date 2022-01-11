@@ -16,21 +16,84 @@ namespace DawnQuant.App.ViewModels.AShare.Common
 {
     public class StockChartViewModel : ViewModelBase
     {
+
+        private readonly PlotDataService _plotDataService;
+
+
+        public TradeDataType TradeDataType { get; set; } = TradeDataType.Stock;
+
         /// <summary>
-        /// 显示区域
+        /// 是否显示复权菜单
         /// </summary>
-        public enum VisibleArea
+        public bool ShowAdjustMenu
         {
-            Chart,
-            F10,
+            get
+            {
+                if (TradeDataType == TradeDataType.Stock)
+                {
+                    return true;
+                }
+                else if (TradeDataType == TradeDataType.THSIndex)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
         }
 
-        private readonly StockPlotDataService _stockPlotDataService;
+        /// <summary>
+        /// F10 按钮名称
+        /// </summary>
+        public string F10Caption
+        {
+            get
+            {
+                if (TradeDataType == TradeDataType.Stock)
+                {
+                    return "个股资料";
+                }
+                else if (TradeDataType == TradeDataType.THSIndex)
+                {
+                    return "指数资料";
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
 
+        /// <summary>
+        /// 显示实际换手率
+        /// </summary>
+        public bool ShowTurnoverFree
+        {
+            get
+            {
+                if (TradeDataType == TradeDataType.Stock)
+                {
+                    return true;
+                }
+                else if (TradeDataType == TradeDataType.THSIndex)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+    
         public string TSCode { get; set; }
-        public string StockName { get; set; }
+
+        public string Name { get; set; }
 
         public string Industry { get; set; }
+
         public KCycle KCycle { get; set; }
 
         //页面数据大小
@@ -39,7 +102,7 @@ namespace DawnQuant.App.ViewModels.AShare.Common
         public StockChartViewModel()
         {
 
-            _stockPlotDataService = IOCUtil.Container.Resolve<StockPlotDataService>();
+            _plotDataService = IOCUtil.Container.Resolve<PlotDataService>();
 
             #region Command Init
             ShowDayCycleCommand = new DelegateCommand(ShowDayCycle);
@@ -53,7 +116,6 @@ namespace DawnQuant.App.ViewModels.AShare.Common
 
         }
 
-
         /// <summary>
         /// 初始化数据
         /// </summary>
@@ -66,13 +128,22 @@ namespace DawnQuant.App.ViewModels.AShare.Common
                  KCycle == KCycle.Month || KCycle == KCycle.Minute30 ||
                  KCycle == KCycle.Minute60 || KCycle == KCycle.Minute120)
                 {
-                    StockPlotContext pc = null;
+                    PlotContext pc = null;
                     await Task.Run(() =>
                      {
-                         pc = _stockPlotDataService.GetStockPlotContext(TSCode, KCycle, _tradeDataPageSize, AdjustedState);
+
+                         if (TradeDataType == TradeDataType.Stock)
+                         {
+                             pc = _plotDataService.GetStockPlotContext(TSCode, KCycle, _tradeDataPageSize, AdjustedState);
+                         }
+                         else if(TradeDataType== TradeDataType.THSIndex)
+                         {
+                             pc = _plotDataService.GetTHSIndexPlotContext(TSCode, KCycle, _tradeDataPageSize);
+
+                         }
 
                      }).ConfigureAwait(true);
-                    pc.Name = StockName;
+                    pc.Name = Name;
                     PlotContext = pc;
                 }
                 else
@@ -86,8 +157,8 @@ namespace DawnQuant.App.ViewModels.AShare.Common
 
         #region   属性
         //绘图相关数据
-        StockPlotContext _plotContext;
-        public StockPlotContext PlotContext
+        PlotContext _plotContext;
+        public PlotContext PlotContext
         {
             get { return _plotContext; }
             set { SetProperty(ref _plotContext, value, nameof(PlotContext)); }
@@ -107,8 +178,8 @@ namespace DawnQuant.App.ViewModels.AShare.Common
         }
 
 
-        IList<StockPlotData> _selectedStockItems;
-        public IList<StockPlotData> SelectedStockItems
+        IList<PlotData> _selectedStockItems;
+        public IList<PlotData> SelectedStockItems
         {
             set
             {
@@ -246,5 +317,24 @@ namespace DawnQuant.App.ViewModels.AShare.Common
         }
 
         #endregion
+    }
+
+
+    /// <summary>
+    /// 显示区域
+    /// </summary>
+    public enum VisibleArea
+    {
+        Chart,
+        F10,
+    }
+
+    /// <summary>
+    /// 交易数据类型
+    /// </summary>
+    public enum TradeDataType
+    {
+        Stock,//股票交易数据
+        THSIndex,//同花顺指数
     }
 }

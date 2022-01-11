@@ -10,16 +10,16 @@ namespace DawnQuant.DataCollector.Core.Utils
         /// 从新浪同步数据
         /// </summary>
         //开始事件
-        public event Action InDailyTradeDataFromSinaJobStarted;
-        public void OnInDailyTradeDataFromSinaJobStarted()
+        public event Action InStockDailyTradeDataFromSinaJobStarted;
+        public void OnInStockDailyTradeDataFromSinaJobStarted()
         {
-            InDailyTradeDataFromSinaJobStarted?.Invoke();
+            InStockDailyTradeDataFromSinaJobStarted?.Invoke();
         }
         //结束事件
-        public event Action InDailyTradeDataFromSinaJobCompleted;
-        public void OnInDailyTradeDataFromSinaJobCompleted()
+        public event Action InStockDailyTradeDataFromSinaJobCompleted;
+        public void OnInStockDailyTradeDataFromSinaJobCompleted()
         {
-            InDailyTradeDataFromSinaJobCompleted?.Invoke();
+            InStockDailyTradeDataFromSinaJobCompleted?.Invoke();
         }
 
 
@@ -27,18 +27,34 @@ namespace DawnQuant.DataCollector.Core.Utils
         /// <summary>
         /// 每日交易数据
         /// </summary>
-        public event Action InDailyTradeDataJobStarted;
-        public void OnInDailyTradeDataJobStarted()
+        public event Action InStockDailyTradeDataJobStarted;
+        public void OnInStockDailyTradeDataJobStarted()
         {
-            InDailyTradeDataJobStarted?.Invoke();
+            InStockDailyTradeDataJobStarted?.Invoke();
         }
         //结束事件
-        public event Action InDailyTradeDataJobCompleted;
-        public void OnInDailyTradeDataJobCompleted()
+        public event Action InStockDailyTradeDataJobCompleted;
+        public void OnInStockDailyTradeDataJobCompleted()
         {
-            InDailyTradeDataJobCompleted?.Invoke();
+            InStockDailyTradeDataJobCompleted?.Invoke();
         }
 
+
+
+        /// <summary>
+        /// 同花顺指数每日交易数据
+        /// </summary>
+        public event Action InTHSIndexDailyTradeDataJobStarted;
+        public void OnInTHSIndexDailyTradeDataJobStarted()
+        {
+            InTHSIndexDailyTradeDataJobStarted?.Invoke();
+        }
+        //结束事件
+        public event Action InTHSIndexDailyTradeDataJobCompleted;
+        public void OnInTHSIndexDailyTradeDataJobCompleted()
+        {
+            InTHSIndexDailyTradeDataJobCompleted?.Invoke();
+        }
 
         /// <summary>
         /// 每日指标
@@ -72,19 +88,36 @@ namespace DawnQuant.DataCollector.Core.Utils
         }
 
 
-        public event Action<string> DailyTradeDataJobProgressChanged;
-        public void OnDailyTradeDataJobProgressChanged(string msg)
+        /// <summary>
+        /// 日线数据
+        /// </summary>
+        public event Action<string> StockDailyTradeDataJobProgressChanged;
+        public void OnStockDailyTradeDataJobProgressChanged(string msg)
         {
-            DailyTradeDataJobProgressChanged?.Invoke(msg);
+            StockDailyTradeDataJobProgressChanged?.Invoke(msg);
         }
 
+        /// <summary>
+        /// 同花顺指数
+        /// </summary>
+        public event Action<string> THSIndexDailyTradeDataJobProgressChanged;
+        public void OnTHSIndexDailyTradeDataJobProgressChanged(string msg)
+        {
+            THSIndexDailyTradeDataJobProgressChanged?.Invoke(msg);
+        }
 
+       /// <summary>
+       /// 每日指标
+       /// </summary>
         public event Action<string> StockDailyIndicatorJobProgressChanged;
         public void OnStockDailyIndicatorJobProgressChanged(string msg)
         {
             StockDailyIndicatorJobProgressChanged?.Invoke(msg);
         }
 
+        /// <summary>
+        /// 换手率
+        /// </summary>
         public event Action<string> InSyncTrunoverJobProgressChanged;
         public void OnInSyncTrunoverJobProgressChanged(string msg)
         {

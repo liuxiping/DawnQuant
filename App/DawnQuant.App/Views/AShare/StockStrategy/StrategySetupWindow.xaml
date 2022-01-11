@@ -9,7 +9,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DawnQuant.App.Views.AShare.StockStrategy"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen" x:Name="winStrategySetupView"   
-              Loaded="winStrategySetupView_Loaded"
+              Loaded="winStrategySetupView_Loaded" FontSize="15"
         Title="策略配置" Height="780" Width="1200">
     <Grid>
         <dxco:Wizard  Finish="Wizard_Finish"   >

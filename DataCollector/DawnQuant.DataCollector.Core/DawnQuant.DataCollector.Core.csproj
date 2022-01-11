@@ -37,12 +37,12 @@
 		<PackageReference Include="IdentityModel" Version="5.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.1" />
 		<PackageReference Include="Quartz" Version="3.3.3" />
-		<PackageReference Include="TuShareHttpSDKLibrary" Version="1.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Infrastructure\DawnQuant.Passport\DawnQuant.Passport.csproj" />
 	  <ProjectReference Include="..\..\ProtosApi\DawnQuant.AShare.Api\DawnQuant.AShare.Api.csproj" />
+	  <ProjectReference Include="..\TuShareHttpSDK\TuShareHttpSDKLibrary\TuShareHttpSDKLibrary.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

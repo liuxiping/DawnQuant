@@ -102,5 +102,6 @@ namespace DawnQuant.App.Views.AShare.Setting
             ViewModel.Save();
 
         }
+
     }
 }

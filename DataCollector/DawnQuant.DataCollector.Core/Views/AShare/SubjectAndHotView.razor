@@ -8,10 +8,10 @@
                         <td> <button  @onclick="ClearMessage" class="btn-blue">清空日志</button></td>
                     </tr>
                     <tr>
-                        <td colspan=2></td>
+                        <td colspan=2>@ViewModel.CollectTHSIndexMemberProgress</td>
                     </tr>
                     <tr>
-                        <td colspan=2></td>
+                        <td colspan=2>@ViewModel.CollectTHSIndexDailyTradeDataProgress</td>
                     </tr>
                      <tr>
                         <td colspan=2></td>
@@ -27,7 +27,14 @@
         <div>
             <div>
                 <button  @onclick="CollectFutureEventsOfSubject"  disabled="@ViewModel.IsCollectFutureEventsOfSubject" class="btn-blue">采集题材前瞻日历</button>
-                <button  class="btn-blue">开启从新浪更新增量数据任务</button>
+
+                 <button  @onclick="CollectTHSIndexDailyTradeDataFromTushare" class="btn-blue" disabled="@ViewModel.IsCollectTHSIndexDailyTradeData" >采集同花顺指数日线历史数据</button>
+
+                 <button  @onclick="CollectTHSIndexMemberFromTHS" class="btn-blue" disabled="@ViewModel.IsCollectTHSIndexMember" >采集同花顺指数成分股(THS)</button>
+
+                 <button  @onclick="CollectTHSIndexMemberFromTushare" class="btn-blue" disabled="@ViewModel.IsCollectTHSIndexMember" >采集同花顺指数成分股(Tushare)</button>
+
+                <button  @onclick="CollectTHSIndexFromTushare" class="btn-blue" disabled="@ViewModel.IsCollectTHSIndex" >采集同花顺指数</button>
             </div>
         </div>
         <div>

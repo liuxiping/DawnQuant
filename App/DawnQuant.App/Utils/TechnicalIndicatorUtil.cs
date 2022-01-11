@@ -16,12 +16,12 @@ namespace DawnQuant.App.Utils
         /// <param name="datas"></param>
         /// <param name="timePeriod"></param>
         /// <returns></returns>
-        public static List<double> SMA(IEnumerable<StockTradeData> datas, int timePeriod)
+        public static List<double> SMA(List<double> datas, int timePeriod)
         {
 
             List<double> ma = new List<double>();
 
-            double[] inReal = datas.OrderBy(p => p.TradeDateTime).Select(p => p.Close).ToArray();
+            double[] inReal = datas.ToArray();
             double[] outReal = new double[inReal.Length];
 
             var r = TALib.Core.Sma(inReal, 0, inReal.Length - 1, outReal,
@@ -66,7 +66,7 @@ namespace DawnQuant.App.Utils
         /// <param name="optInSlowPeriod"></param>
         /// <param name="optInSignalPeriod"></param>
         /// <returns></returns>
-        public static (double[] Macd, double[] MacdSignal, double[] MacdHist) MACD(IEnumerable<StockTradeData> datas, 
+        public static (double[] Macd, double[] MacdSignal, double[] MacdHist) MACD(List<double> datas, 
             int optInFastPeriod = 12, int optInSlowPeriod = 26, int optInSignalPeriod = 9)
         {
 
@@ -75,15 +75,15 @@ namespace DawnQuant.App.Utils
             int extraSize = 50;
             int extraCount = count + extraSize;
 
-            var extraData = datas.OrderBy(p => p.TradeDateTime).Select(p => p.Close).ToList();
-            var first= extraData.First();
+            //var extraData = datas.OrderBy(p => p.TradeDateTime).Select(p => p.Close).ToList();
+            var first= datas[0];
             for(int i = 0;i < extraSize; i++)
             {
-                extraData.Insert(0, first);
+                datas.Insert(0, first);
             }
 
 
-            double[] inReal= extraData.ToArray();
+            double[] inReal= datas.ToArray();
 
             double[] outMacd = new double[extraCount];
             double[] outMacdSignal = new double[extraCount];
@@ -144,5 +144,6 @@ namespace DawnQuant.App.Utils
 
             return rMacd;
         }
+
     }
 }

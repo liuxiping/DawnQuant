@@ -77,7 +77,7 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<StockTradeData>(entity =>
+            modelBuilder.Entity<THSIndexTradeData>(entity =>
             {
                 entity.ToTable(TableName);
                 entity.HasKey(t =>  t.TradeDateTime);

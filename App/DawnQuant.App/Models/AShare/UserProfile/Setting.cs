@@ -60,6 +60,13 @@ namespace DawnQuant.App.Models.AShare.UserProfile
         /// 题材热点
         /// </summary>
         public bool UpdateSubjectAndHot { get; set; }
+
+
+       /// <summary>
+       /// 仅仅更新重点关注股票
+       /// </summary>
+        public bool UpdateOnlyFocusSubjectAndHot { get; set; }
+
         /// <summary>
         /// 任务定时Cron
         /// </summary>

@@ -1,0 +1,158 @@
+﻿<UserControl x:Class="DawnQuant.App.Views.AShare.THSDataAnalysis.THSIndex.THSIndexView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" 
+             xmlns:dxlc="http://schemas.devexpress.com/winfx/2008/xaml/layoutcontrol"
+             xmlns:dxg="http://schemas.devexpress.com/winfx/2008/xaml/grid"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:lccom="clr-namespace:DawnQuant.App.Views.AShare.Common" Name="_thsIndexView"
+             xmlns:local="clr-namespace:DawnQuant.App.Views.AShare.THSDataAnalysis.THSIndex"
+             mc:Ignorable="d"  FontSize="15" KeyDown="_thsIndexView_KeyDown"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid   Name="_gdTHSIndex">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <dxlc:GroupBox  Padding="0"  BorderThickness="0,0,1,0">
+                <dxlc:GroupBox.Header>
+                    <Grid Height="23">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock  VerticalAlignment="Center"  Text="同花顺概念和行业指数" Margin="-5,0,0,0"></TextBlock>
+                        <StackPanel Grid.Column="1"  HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,0,-6,0">
+                        </StackPanel>
+                    </Grid>
+                </dxlc:GroupBox.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid Margin="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" ></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock VerticalAlignment="Center">指数类型：</TextBlock>
+                        <ComboBox Grid.Column="1"   ItemsSource="{Binding THSIndexTypes}"
+                                  SelectedItem="{Binding  CurSelTHSIndexType ,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  >
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"></TextBlock>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </Grid>
+                    <dxe:SearchControl Grid.Row="1" NullText="搜索" Margin="3" Name="_scTHSIndex" ></dxe:SearchControl>
+                    <dxg:GridControl  Grid.Row="2" CustomUnboundColumnData="_gcTHSIndexList_CustomUnboundColumnData"   Name="_gcTHSIndexList" 
+                                      SelectedItem="{Binding  CurSelTHSIndex, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"
+                                  ItemsSource="{Binding THSIndexes}"  ShowBorder="False">
+                        <dxg:GridControl.Columns>
+                            <dxg:GridColumn Header="序号" FieldName="#"   Width="45" UnboundType="Integer"></dxg:GridColumn>
+                            <dxg:GridColumn Header="代码" FieldName="TSCode"    Width="70">
+                                <dxg:GridColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Center" Text="{Binding RowData.Row.TSCode ,Converter={StaticResource stockCodeConverter}}"  ></TextBlock>
+                                    </DataTemplate>
+                                </dxg:GridColumn.CellTemplate>
+                            </dxg:GridColumn>
+                            <dxg:GridColumn Header="指数名称" FieldName="Name"   Width="110"></dxg:GridColumn>
+                            <dxg:GridColumn Header="上市日期" FieldName="ListDate"  Width="95">
+                                <dxg:GridColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock HorizontalAlignment="Center" Text="{Binding RowData.Row.ListDate ,Converter={StaticResource indexJoinDateTimeConverter}}"  ></TextBlock>
+                                    </DataTemplate>
+                                </dxg:GridColumn.CellTemplate>
+                            </dxg:GridColumn>
+                        </dxg:GridControl.Columns>
+                        <dxg:GridControl.TotalSummary>
+                            <dxg:GridSummaryItem FieldName="TSCode" 
+                             SummaryType="Count"
+                             DisplayFormat="总计： {0}条"
+                             Alignment="Left"/>
+                        </dxg:GridControl.TotalSummary>
+                        <dxg:GridControl.View>
+                            <dxg:TableView ShowFixedTotalSummary="True" x:Name="watchStockList" AllowEditing="False" FadeSelectionOnLostFocus="False"
+                               AllowPerPixelScrolling="True" ShowGroupPanel="False" AllowGrouping="True"
+                               AutoWidth="False" HorizontalAlignment="Center" UseLayoutRounding="True" SearchString="{Binding ElementName=_scTHSIndex, Path=SearchText}"
+                               ShowIndicator="False" ShowHorizontalLines="True"   BorderThickness="0"
+                               ShowVerticalLines="True" SearchPanelNullText="搜索" ShowSearchPanelMode="Never" SearchPanelHorizontalAlignment="Stretch">
+                                <dxg:TableView.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="重点关注当前指数" Command="{Binding AddToSubjectAndHotCommand}" ></MenuItem>
+                                        <Separator></Separator>
+                                        <MenuItem Header="复制指数代码" Command="{Binding CopyTHSIndexCodeCommand}"></MenuItem>
+                                        <MenuItem Header="复制指数名称" Command="{Binding CopyTHSIndexNameCommand}"></MenuItem>
+                                    </ContextMenu>
+                                </dxg:TableView.ContextMenu>
+                            </dxg:TableView>
+                        </dxg:GridControl.View>
+                    </dxg:GridControl>
+
+                </Grid>
+            </dxlc:GroupBox>
+
+            <Grid Grid.Column="1" Name="_gdChart">
+                <Grid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="重点关注当前指数" Command="{Binding AddToSubjectAndHotCommand}" ></MenuItem>
+                    </ContextMenu>
+                </Grid.ContextMenu>
+                <dx:ThemedBorder BorderThickness="0,0,0,0">
+                    <lccom:StockChartView DataContext="{Binding StockChartViewModel}"></lccom:StockChartView>
+                </dx:ThemedBorder>
+            </Grid>
+            
+            <Grid Grid.Column="2"  Name="_gdStocks">
+                <dxlc:GroupBox  Padding="0" BorderThickness="1,0,0,0" SnapsToDevicePixels="True" >
+                    <dxlc:GroupBox.Header>
+                        <Grid   Height="23" VerticalAlignment="Top" >
+                            <TextBlock  VerticalAlignment="Center"  Text="指数成分股" Margin="-5,0,0,0"></TextBlock>
+                        </Grid>
+
+                    </dxlc:GroupBox.Header>
+                    <dx:ThemedBorder >
+                        <dxg:GridControl   CustomUnboundColumnData="_gcStockList_CustomUnboundColumnData"  Name="_gcStockList"  SelectedItem="{Binding  CurSelStock, Mode=TwoWay,  UpdateSourceTrigger=PropertyChanged}"
+                                  ItemsSource="{Binding Stocks}"  ShowBorder="False">
+                            <dxg:GridControl.Columns>
+                                <dxg:GridColumn Header="序号" FieldName="#" Width="40" UnboundType="Integer"></dxg:GridColumn>
+                                <dxg:GridColumn Header="代码" FieldName="Code"    Width="70">
+                                    <dxg:GridColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock HorizontalAlignment="Center" Text="{Binding RowData.Row.Code ,Converter={StaticResource stockCodeConverter}}"  ></TextBlock>
+                                        </DataTemplate>
+                                    </dxg:GridColumn.CellTemplate>
+                                </dxg:GridColumn>
+                                <dxg:GridColumn Header="名称" FieldName="Name"  Width="75"></dxg:GridColumn>
+                            </dxg:GridControl.Columns>
+                            <dxg:GridControl.View>
+                                <dxg:TableView x:Name="_watchStockList" AllowEditing="False" FadeSelectionOnLostFocus="False"
+                               AllowPerPixelScrolling="True" ShowGroupPanel="False" AllowGrouping="True"
+                               AutoWidth="False" HorizontalAlignment="Center" UseLayoutRounding="True"
+                               ShowIndicator="False" ShowHorizontalLines="True"   BorderThickness="0"
+                               ShowVerticalLines="True">
+                                    <dxg:TableView.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="复制股票代码" Command="{Binding CopyStockCodeCommand}"></MenuItem>
+                                            <MenuItem Header="复制股票名称" Command="{Binding CopyStockNameCommand}"></MenuItem>
+                                        </ContextMenu>
+                                    </dxg:TableView.ContextMenu>
+                                </dxg:TableView>
+                            </dxg:GridControl.View>
+                        </dxg:GridControl>
+                    </dx:ThemedBorder>
+                </dxlc:GroupBox>
+            </Grid>
+            
+        </Grid>
+    </Grid>
+</UserControl>

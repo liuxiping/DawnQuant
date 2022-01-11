@@ -25,6 +25,7 @@ namespace DawnQuant.DataCollector.Core.Job
 
                 var t1 = CollectInDailyTradeData(serviceProvider);
                 var t2 = CollectInStockDailyIndicator(serviceProvider);
+                var t3 = CollectInTHSIndexDailyTradeData(serviceProvider);
 
                 Task.WaitAll(t1, t2);
 
@@ -48,9 +49,33 @@ namespace DawnQuant.DataCollector.Core.Job
                 {
                     var jobMessageUtility = scope.ServiceProvider.GetService<JobMessageUtil>();
 
-                    jobMessageUtility.OnInDailyTradeDataJobStarted();
+                    jobMessageUtility.OnInStockDailyTradeDataJobStarted();
                     await collector.CollectInDailyTradeDataFromTushare(DateTime.Now);
-                    jobMessageUtility.OnInDailyTradeDataJobCompleted();
+                    jobMessageUtility.OnInStockDailyTradeDataJobCompleted();
+                }
+            }
+
+        }
+
+
+
+        /// <summary>
+        /// 采集增量同花顺指数数据
+        /// </summary>
+        /// <param name="serviceProvider"></param>
+        private async Task CollectInTHSIndexDailyTradeData(IServiceProvider serviceProvider)
+        {
+            using (var scope = serviceProvider.CreateScope())
+            {
+                IncrementalDataCollector collector = scope.ServiceProvider.GetService<IncrementalDataCollector>();
+
+                if (collector.IsOpen())
+                {
+                    var jobMessageUtility = scope.ServiceProvider.GetService<JobMessageUtil>();
+
+                    jobMessageUtility.OnInTHSIndexDailyTradeDataJobStarted();
+                    await collector.CollectInTHSIndexDailyTradeDataFromTushareAsync(DateTime.Now);
+                    jobMessageUtility.OnInTHSIndexDailyTradeDataJobCompleted();
                 }
             }
 

@@ -69,12 +69,18 @@ namespace DawnQuant.App.Utils
 
 
                     config.CreateMap<StockTradeDataDto, StockTradeData>().ReverseMap();
-                    config.CreateMap<StockTradeData, StockPlotData>();
+                    config.CreateMap<StockTradeData, PlotData>();
                     config.CreateMap<AdjustedStateDto, AdjustedState>();
                     config.CreateMap<KCycleDto, KCycle>();
 
+                    //同花顺指数
+                    config.CreateMap<THSIndex, THSIndexDto>().ReverseMap();
+                    config.CreateMap<THSIndexMember, THSIndexMemberDto>().ReverseMap();
+                    config.CreateMap<THSIndexTradeData, THSIndexTradeDataDto>().ReverseMap();
+                    config.CreateMap<THSIndexTradeData, PlotData>();
 
-
+                    //行业分类
+                    config.CreateMap<Industry, IndustryDto>();
 
                 });
 

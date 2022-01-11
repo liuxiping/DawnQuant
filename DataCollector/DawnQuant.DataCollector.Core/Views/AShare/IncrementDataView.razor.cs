@@ -34,8 +34,8 @@ namespace DawnQuant.DataCollector.Core.Views.AShare
         private void ClearMessage()
         {
             ViewModel.Message = "";
-            ViewModel.StockDailyIndicatorProgress = "";
-            ViewModel.DailyTradeDataProgress = "";
+            ViewModel.InStockDailyIndicatorProgress = "";
+            ViewModel.InStockDailyTradeDataProgress = "";
             ViewModel.InSyncTurnoverProgress = "";
         }
 

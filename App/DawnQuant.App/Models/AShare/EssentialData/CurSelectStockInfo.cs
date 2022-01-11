@@ -9,7 +9,7 @@ namespace DawnQuant.App.Models.AShare.EssentialData
     /// <summary>
     /// 当前选择的股票基本信息
     /// </summary>
-    public class CurSelectStockInfo: StockPlotData
+    public class CurSelectStockInfo: PlotData
     {
 
         public KCycle KCycle { get; set; } 

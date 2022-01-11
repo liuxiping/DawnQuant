@@ -126,6 +126,8 @@ namespace DawnQuant.AShare.Api
 
                 //同花顺指数
                 endpoints.MapGrpcService<THSIndexService>();
+                endpoints.MapGrpcService<THSIndexMemberService>();
+                endpoints.MapGrpcService<THSIndexTradeDataService>();
 
 
 

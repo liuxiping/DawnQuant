@@ -178,5 +178,37 @@ namespace DawnQuant.App.Views.AShare.SubjectAndHot
             }
 
         }
+
+        /// <summary>
+        /// 导入同花顺行业成分股
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _miImportSubjectFromTHSIndustry_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new ImportSubjectFromTHSIndustryWindow();
+
+            win.ViewModel.Category = Model.CurSelCategory;
+
+            if (win.ShowDialog() == true)
+            {
+                Model.RefreshSubjectAndHotStockCategories();
+            }
+           
+        }
+
+        private void _miMergeSubjectAndHot_Click(object sender, RoutedEventArgs e)
+        {
+            var win = new MergeSubjectAndHotWindow();
+
+            win.ViewModel.Category = Model.CurSelCategory;
+
+            if (win.ShowDialog() == true)
+            {
+                Model.RefreshSubjectAndHotStockCategories();
+            }
+
+        }
+        
     }
 }

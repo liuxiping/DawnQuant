@@ -109,6 +109,7 @@
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="DevExpress.Wpf.Accordion" Version="21.2.3" />
     <PackageReference Include="DevExpress.Wpf.Charts" Version="21.2.3" />
+    <PackageReference Include="DevExpress.Wpf.Core" Version="21.2.3" />
     <PackageReference Include="DevExpress.Wpf.Grid" Version="21.2.3" />
     <PackageReference Include="DevExpress.Wpf.Themes.Win10Light" Version="21.2.3" />
     <PackageReference Include="Google.Protobuf" Version="3.19.1" />

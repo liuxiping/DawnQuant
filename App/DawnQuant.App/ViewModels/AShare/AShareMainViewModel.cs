@@ -30,7 +30,6 @@ namespace DawnQuant.App.ViewModels.AShare
             _aShareDataMaintainService = IOCUtil.Container.Resolve<AShareDataMaintainService>();
             _msgNotify = IOCUtil.Container.Resolve<MessageUtil>();
 
-
             Initialize();
         }
 
@@ -86,9 +85,9 @@ namespace DawnQuant.App.ViewModels.AShare
         /// </summary>
         private void DownloadAllAShareData()
         {
-            _aShareDataMaintainService.DownLoadStockDataProgress += (complete, total) =>
+            _aShareDataMaintainService.DownLoadAShareStockDataProgress += (complete, total) =>
             {
-                _msgNotify.OnDownloadAShareDataProgress(complete, total);
+                _msgNotify.OnDownloadAllAShareDataProgress(complete, total);
             };
 
             App.IsUpdateAllAShareData = true;
@@ -103,7 +102,7 @@ namespace DawnQuant.App.ViewModels.AShare
             //保存配置
             AppLocalConfig.Instance.Save();
 
-            _msgNotify.OnDownloadAShareDataComplete(true);
+            _msgNotify.OnDownloadAShareDataComplete();
 
             Notify_DataUpdateScheduledTaskJobCompleted();
 

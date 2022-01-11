@@ -25,7 +25,6 @@ namespace DawnQuant.AShare.Entities.EssentialData
         /// <summary>
         /// 代码
         /// </summary>
-        [Key]
         public string TSCode { get; set; }
 
         /// <summary>
@@ -48,7 +47,7 @@ namespace DawnQuant.AShare.Entities.EssentialData
         /// 上市日期
         /// </summary>
         [DataType(DataType.Date)]
-        public DateTime ListDate { get; set; }
+        public DateTime? ListDate { get; set; }
 
 
         /// <summary>

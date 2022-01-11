@@ -8,9 +8,9 @@
              StartupUri="LoginWindow.xaml">
     <Application.Resources>
         <localConverter:DateTimeConverter x:Key="joinDateTimeConverter"></localConverter:DateTimeConverter>
-        
+        <localConverter:LongDateTimeConverter x:Key="indexJoinDateTimeConverter"></localConverter:LongDateTimeConverter>
         <localConverter:StockCodeConverter x:Key="stockCodeConverter"></localConverter:StockCodeConverter>
-        
+        <localConverter:BoolToVisibilityConverter x:Key="btovConverter"></localConverter:BoolToVisibilityConverter>
         <ControlTemplate TargetType="Button" x:Key="IconButton">
             <ContentControl  >
                 <TextBlock  FontSize="{TemplateBinding FontSize}" 

@@ -13,6 +13,7 @@ namespace DawnQuant.AShare.Repository.Abstract.EssentialData
 {
     public interface ITHSIndexMemberRepository : IRepository<THSIndexMember, long>
     {
-        
+        void Empty();
+        void Empty(string tscode);
     }
 }

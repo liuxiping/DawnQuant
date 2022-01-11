@@ -26,6 +26,8 @@ service SubjectAndHotStockApi {
   //导入数据
   rpc ImportSubjectAndHotStocks(ImportSubjectAndHotStocksRequest) returns( google.protobuf.Empty);
 
+  rpc ImportSubjectAndHotStocksByIndustries(ImportSubjectAndHotStocksByIndustriesRequest) returns ( google.protobuf.Empty);
+
 }
 
 message DelSubjectAndHotStockByIdRequest
@@ -80,6 +82,11 @@ message ImportSubjectAndHotStocksRequest
 }
 
 
+message ImportSubjectAndHotStocksByIndustriesRequest{
+	int64 UserId=1;
+	int64 CategoryId=2;
+	repeated int32  Industries=3;
+}
 
 
 

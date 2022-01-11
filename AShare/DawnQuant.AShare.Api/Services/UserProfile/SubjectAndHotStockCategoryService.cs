@@ -11,6 +11,8 @@ using DawnQuant.AShare.Entities;
 using Google.Protobuf.WellKnownTypes;
 using DawnQuant.AShare.Repository.Abstract.UserProfile;
 using DawnQuant.AShare.Entities.UserProfile;
+using Microsoft.EntityFrameworkCore;
+using System.Transactions;
 
 namespace DawnQuant.AShare.Api.UserProfile
 {
@@ -76,6 +78,65 @@ namespace DawnQuant.AShare.Api.UserProfile
                 return new Empty();
             });
            
+        }
+
+        public override Task<Empty> MergeSubjectAndHotStockCategory(MergeSubjectAndHotStockCategoryRequest request, ServerCallContext context)
+        {
+            return Task.Run(() =>
+            {
+                SubjectAndHotStockCategory toCategory=_subjectAndHotStockCategoryRepository.Entities
+                .Where(p=>p.Id==request.ToCategoryId && p.UserId== request.UserId).FirstOrDefault();
+
+                if (toCategory != null)
+                {
+                    //添加到合并的分类中
+                    List<SubjectAndHotStock> ustocks = new List<SubjectAndHotStock>();
+
+                    List<SubjectAndHotStock> allStocks = new List<SubjectAndHotStock>();
+                    foreach (var cid in request.FromCategoriesId)
+                    {
+                        var stocks = _subjectAndHotStockRepository.Entities.Where(p => p.CategoryId == cid).ToList();
+                        allStocks.AddRange(stocks);
+                    }
+                    //去重
+                    allStocks = allStocks.DistinctBy(p => p.TSCode).ToList();
+
+                    foreach (var stock in allStocks)
+                    {
+                        //检测数据是否存在 如果存在则更新时间
+                        var self = _subjectAndHotStockRepository.Entities.Where(p => p.UserId == request.UserId &&
+                            p.CategoryId == toCategory.Id && p.TSCode == stock.TSCode).AsNoTracking().FirstOrDefault();
+                        if (self != null)
+                        {
+                            //已经存在 更新创建时间
+                            self.CreateTime = DateTime.Now;
+                            ustocks.Add(self);
+                        }
+                        else
+                        {
+                            //更改分类
+                            stock.CreateTime = DateTime.Now;
+                            stock.CategoryId = toCategory.Id;
+                            ustocks.Add(stock);
+                        }
+
+                        using (var scope = new TransactionScope())
+                        {
+                            //保存到合并的分类中
+                            _subjectAndHotStockRepository.Save(ustocks);
+
+                            //删除分类
+
+                            foreach (var cid in request.FromCategoriesId)
+                            {
+                                _subjectAndHotStockCategoryRepository.Delete(cid);
+                            }
+                            scope.Complete();
+                        }
+                    }
+                }
+                return new Empty();
+            });
         }
     }
 }

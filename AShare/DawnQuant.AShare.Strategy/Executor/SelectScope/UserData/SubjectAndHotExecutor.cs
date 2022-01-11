@@ -16,7 +16,6 @@ namespace DawnQuant.AShare.Strategy.Executor.SelectScope
 
         private readonly ISubjectAndHotStockRepository _subjectAndHotStockRepository;
 
-
         public SubjectAndHotExecutor(ISubjectAndHotStockRepository subjectAndHotStockRepository)
         {
             _subjectAndHotStockRepository = subjectAndHotStockRepository;
@@ -25,7 +24,22 @@ namespace DawnQuant.AShare.Strategy.Executor.SelectScope
         public List<string> Execute()
         {
             SubjectAndHotExecutorParameter pa = (SubjectAndHotExecutorParameter)Parameter;
-            var temp = _subjectAndHotStockRepository.Entities.Where(p => p.UserId == pa.UserId).Select(p => p.TSCode).ToList();
+
+            List<string> temp = null;
+            if (pa.OnlyFocus)
+            {
+                temp = _subjectAndHotStockRepository.Entities
+                   .Where(p => p.UserId == pa.UserId && p.IsFocus == true)
+                   .Select(p => p.TSCode).ToList();
+
+            }
+            else
+            {
+                temp = _subjectAndHotStockRepository.Entities
+                   .Where(p => p.UserId == pa.UserId)
+                   .Select(p => p.TSCode).ToList();
+
+            }
             return temp;
         }
     }

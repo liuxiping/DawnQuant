@@ -48,9 +48,6 @@ namespace DawnQuant.App.Views.AShare.SelfSelStock
                     view.GetRowHandleByListIndex(e.ListSourceRowIndex)) + 1;
         }
 
-        private void DXWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
+       
     }
 }

@@ -15,7 +15,12 @@ service IndustryApi {
   rpc  ParseIndustry(ParseIndustryRequest) returns (ParseIndustryResponse);
 
   //获取第三级行业
-  rpc  GetThreeLevelIndustries(google.protobuf.Empty) returns (GetThreeLevelIndustriesResponse);
+ rpc  GetThreeLevelIndustries(google.protobuf.Empty) returns (GetThreeLevelIndustriesResponse);
+
+ rpc  GetAllIndustries(google.protobuf.Empty) returns (GetAllIndustriesResponse);
+
+ //清理无效的行业
+ rpc ClearInvalidIndustry(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
 
 
@@ -47,6 +52,10 @@ message GetThreeLevelIndustriesResponse
     repeated  IndustryDto Entities=1;
 }
 
+message GetAllIndustriesResponse
+{
+     repeated  IndustryDto Entities=1;
+}
 
 
 

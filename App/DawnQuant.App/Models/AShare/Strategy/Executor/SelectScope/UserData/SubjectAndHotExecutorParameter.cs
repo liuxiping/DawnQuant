@@ -29,6 +29,13 @@ namespace DawnQuant.App.Models.AShare.Strategy.Executor.SelectScope
         public string UserName { get; set; }
 
 
+        /// <summary>
+        /// 重点关注股票
+        /// </summary>
+        [DisplayName("仅重点关注股票")]
+        public bool OnlyFocus { get; set; } = false;
+
+
         public override void Initialize(string json)
         {
             

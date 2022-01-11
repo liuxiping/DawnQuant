@@ -76,9 +76,20 @@ namespace DawnQuant.DataCollector.Core.Collectors.AShare
                     completetscodes.Add(tscode);
 
                     complete++;
+
                     Msg = $"行业信息已经成功采集{complete}个股票，总共{all}个股票";
                     OnProgressChanged();
                 }
+
+                Msg = $"行业信息已经成功采集{complete}个股票，总共{all}个股票,正在清理无效行业";
+                OnProgressChanged();
+
+                //清理无效数据
+                var iclient = new IndustryApi.IndustryApiClient(channel);
+                iclient.ClearInvalidIndustry(new Empty());
+
+                Msg = $"行业信息已经成功采集{complete}个股票，总共{all}个股票，无效行业清理完成";
+                OnProgressChanged();
             }
             finally
             {

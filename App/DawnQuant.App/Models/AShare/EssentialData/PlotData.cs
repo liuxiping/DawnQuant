@@ -9,7 +9,7 @@ namespace DawnQuant.App.Models.AShare.EssentialData
     /// <summary>
     /// 绘图数据
     /// </summary>
-    public class StockPlotData
+    public class PlotData
     {
         /// <summary>
         /// 交易时间
@@ -62,22 +62,47 @@ namespace DawnQuant.App.Models.AShare.EssentialData
         /// <summary>
         /// 涨幅 
         /// </summary>
-        public double Gain { get { return (Close - PreClose) / (PreClose*100); } }
+        public double Gain { 
+            get 
+            {
+                if (PreClose > 0)
+                {
+                    return (Close - PreClose) / (PreClose * 100);
+                }
+                else
+                {
+                    return 0;
+                }
+            } 
+        }
         /// <summary>
         /// 振幅
         /// </summary>
-        public double AM { get { return (High - Low) / (PreClose*100); } }
-
+        public double AM
+        {
+            get
+            {
+                if (PreClose > 0)
+                {
+                    return (High - Low) / (PreClose * 100);
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
 
         public bool IsRise { get { return Close>= Open; } }
-
 
         /// <summary>
         /// 换手率
         /// </summary>
         public double Turnover { get; set; }
 
-
+        /// <summary>
+        /// 缩小 绘图使用
+        /// </summary>
         public double ScaleDownTurnoverFree
         {
             get
@@ -91,7 +116,6 @@ namespace DawnQuant.App.Models.AShare.EssentialData
         /// </summary>
         public double TurnoverFree { get; set; }
 
-
         //均线
         public double MA5 { get; set; }
         public double MA10 { get; set; }
@@ -100,7 +124,6 @@ namespace DawnQuant.App.Models.AShare.EssentialData
         public double MA60 { get; set; }
         public double MA120 { get; set; }
         public double MA250 { get; set; }
-
 
         //MACD
         /// <summary>
@@ -119,7 +142,6 @@ namespace DawnQuant.App.Models.AShare.EssentialData
         /// </summary>
         public double MacdHist { get; set; }
       
-
 
     }
 }

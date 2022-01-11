@@ -137,6 +137,12 @@ namespace DawnQuant.AShare.Repository.Impl.EssentialData
                 en.HasIndex(p => new { p.Date, p.Event }).IsUnique();
 
             });
+
+            modelBuilder.Entity<THSIndex>(en =>
+            {
+                en.HasKey(p => new { p.TSCode, p.Type });
+
+            });
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -38,9 +38,10 @@
                         <ToggleButton  Margin="0,1,8,1" Command="{Binding ShowM30CycleCommand}" Padding="2" IsEnabled="False" Name="_btn30M" Visibility="Collapsed" Click="btnMenu_Click">30分钟</ToggleButton>
                         <ToggleButton  Margin="0,1,8,1" Command="{Binding ShowM60CycleCommand}" Padding="2" IsEnabled="False" Name="_btn60M" Visibility="Collapsed" Click="btnMenu_Click">60分钟</ToggleButton>
                         <ToggleButton  Margin="0,1,8,1" Command="{Binding ShowM120CycleCommand}" Padding="2" IsEnabled="False" Name="_btn120M" Visibility="Collapsed" Click="btnMenu_Click">120分钟</ToggleButton>
-                        <ToggleButton  Margin="0,1,8,1" Command="{Binding ShowStockInfoCommand}" Padding="2"  Name="_btnStockInfo" Click="btnMenu_Click">个股资料</ToggleButton>
+                        <ToggleButton  Margin="0,1,8,1" Command="{Binding ShowStockInfoCommand}" Padding="2"  Name="_btnStockInfo" Click="btnMenu_Click" Content="{Binding F10Caption}"></ToggleButton>
                     </StackPanel>
-                    <Menu Grid.Column="1" FontSize="15" >
+                    
+                    <Menu Grid.Column="1" FontSize="15" Visibility="{Binding ShowAdjustMenu, Converter={StaticResource btovConverter}}" >
                         <MenuItem Header="除权" Name="_miShow" Foreground="DodgerBlue">
                             <MenuItem  Header="除权" Name="_miNone"  IsChecked="True"  Click="_miNone_Click"></MenuItem>
                             <MenuItem Header="前复权"  Name="_miPre" Click="_miPre_Click"></MenuItem>
@@ -52,12 +53,11 @@
             </Grid>
         </dx:ThemedBorder>
         <Grid x:Name="_gdContent" Grid.Row="1">
+            
             <Grid x:Name="_gdF10" Visibility="{Binding VA, ConverterParameter=F10, Converter={StaticResource vaConverter}}" >
-
-                <wv2:WebView2 Name="_wvStockInfo"></wv2:WebView2>
-                <!--<WebBrowser x:Name="_wbStockInfo"></WebBrowser>-->
-
+            <wv2:WebView2 Name="_wvInfo"></wv2:WebView2>
             </Grid>
+            
             <Grid  Grid.Row="1" Name="_gdChart" Visibility="{Binding VA , ConverterParameter=Chart, Converter={StaticResource vaConverter}}">
                 <dxc:ChartControl x:Name="_fchart"    CustomDrawCrosshair="_fchart_CustomDrawCrosshair"
                               DataSource="{Binding Path=PlotContext.PlotDatas}" 
@@ -298,7 +298,9 @@
                                             ValueDataMember="ScaleDownTurnoverFree" 
                                             Pane="{Binding ElementName=_macdPane}"
                                             AxisY="{Binding ElementName=_macdAxis}"
-                                            Brush="Transparent"   >
+                                            Brush="Transparent"  
+                                            Visible="{Binding ShowTurnoverFree}"
+                                           >
                             <dxc:SplineSeries2D.LineStyle>
                                 <dxc:LineStyle Thickness="1" ></dxc:LineStyle>
                             </dxc:SplineSeries2D.LineStyle>

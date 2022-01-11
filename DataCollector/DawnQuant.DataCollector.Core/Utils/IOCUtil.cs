@@ -73,11 +73,11 @@ namespace DawnQuant.DataCollector.Core.Utils
 
 
             serviceCollection.AddSingleton<SubjectAndHotCollector>();
+            serviceCollection.AddSingleton<THSIndexCollector>();
 
+            
 
             //认证信息
-
-
             serviceCollection.AddSingleton<AuthContext>((s) =>
             {
                 var config = s.GetService<CollectorConfig>();

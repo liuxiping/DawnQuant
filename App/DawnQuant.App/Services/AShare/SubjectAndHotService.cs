@@ -11,6 +11,8 @@ using DawnQuant.AShare.Api.EssentialData;
 using DawnQuant.App.Models.AShare.UserProfile;
 using DawnQuant.App.Utils;
 using Autofac;
+using DawnQuant.App.Models.AShare.EssentialData;
+using Google.Protobuf.WellKnownTypes;
 
 namespace DawnQuant.App.Services.AShare
 {
@@ -22,7 +24,6 @@ namespace DawnQuant.App.Services.AShare
         private readonly GrpcChannelSet _grpcChannelSet;
         private readonly IPassportProvider _passportProvider;
         private readonly IMapper _mapper;
-
 
         public SubjectAndHotService( )
         {
@@ -64,21 +65,21 @@ namespace DawnQuant.App.Services.AShare
         /// </summary>
         /// <param name="userid"></param>
         /// <returns></returns>
-        public ObservableCollection<SubjectAndHotStockCategory> GetSubjectAndHotStockCategories(long userid)
+        public ObservableCollection<SubjectAndHotStockCategory> GetSubjectAndHotStockCategories( )
         {
 
             var client = new SubjectAndHotStockCategoryApi.SubjectAndHotStockCategoryApiClient(_grpcChannelSet.AShareGrpcChannel);
 
             Metadata meta = new Metadata();
             meta.AddAuthorization(_passportProvider?.AccessToken);
-            var dtos = client.GetSubjectAndHotStockCategoriesByUser(new GetSubjectAndHotStockCategoriesByUserRequest { UserId = userid });
+            var dtos = client.GetSubjectAndHotStockCategoriesByUser(new GetSubjectAndHotStockCategoriesByUserRequest { UserId = _passportProvider.UserId });
 
             return _mapper.Map<ObservableCollection<SubjectAndHotStockCategory>>(dtos.Entities.OrderBy(p => p.SortNum));
 
         }
 
         /// <summary>
-        /// 根据龙头股分类获取相关龙头股
+        /// 根据题材热点分类获取相关题材热点股
         /// </summary>
         /// <param name="categoryId"></param>
         /// <returns></returns>
@@ -93,7 +94,7 @@ namespace DawnQuant.App.Services.AShare
 
 
         /// <summary>
-        /// 根据用户获取龙头股
+        /// 根据用户获取题材热点股
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
@@ -107,11 +108,11 @@ namespace DawnQuant.App.Services.AShare
             return _mapper.Map<ObservableCollection<SubjectAndHotStock>>(dtos.Entities);
         }
 
-        
 
-        
+
+
         /// <summary>
-        /// 保存龙头股分类
+        /// 保存题材热点分类
         /// </summary>
         /// <param name="category"></param>
         /// <returns></returns>
@@ -131,7 +132,7 @@ namespace DawnQuant.App.Services.AShare
         }
 
         /// <summary>
-        /// 保存龙头股
+        /// 保存题材热点
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -217,6 +218,112 @@ namespace DawnQuant.App.Services.AShare
             request.UserId = _passportProvider.UserId;
             request.StocksId.AddRange(stocksId);
             client.ImportSubjectAndHotStocks(request, meta);
+        }
+
+
+        /// <summary>
+        /// 获取行业分类
+        /// </summary>
+        /// <returns></returns>
+        public ObservableCollection<Industry> GetAllInustries()
+        {
+            var client = new IndustryApi.IndustryApiClient(_grpcChannelSet.AShareGrpcChannel);
+
+            Metadata meta = new Metadata();
+            meta.AddAuthorization(_passportProvider?.AccessToken);
+            var response = client.GetAllIndustries(new Empty(), meta);
+
+            ObservableCollection<Industry> industries = new ObservableCollection<Industry>();
+
+            //顶级
+            foreach (var f in response.Entities.Where(p => p.ParentId==0 && p.Level == 1))
+            {
+                Industry fi = new Industry()
+                {
+                    Id = f.Id,
+                    Name = f.Name,
+                    Level = f.Level,
+                    ParentId = f.ParentId,
+                    SubIndustries = new List<Industry>() 
+                };
+
+                industries.Add(fi);
+
+                //第二级别
+                foreach (var s in response.Entities.Where(p => p.ParentId == fi.Id &&
+                p.Level == 2))
+                {
+
+                    Industry si = new Industry()
+                    {
+                        Id = s.Id,
+                        Name = s.Name,
+                        Level = s.Level,
+                        ParentId = s.Id,
+                        SubIndustries = new List<Industry>()
+                    };
+
+                    fi.SubIndustries.Add(si);
+
+                    //第三级别
+
+                    foreach (var t in response.Entities.Where(p => p.ParentId == si.Id &&
+                    p.Level == 3))  
+                    {
+                        Industry ti = new Industry()
+                        {
+                            Id = t.Id,
+                            Name = t.Name,
+                            Level = t.Level,
+                            ParentId = si.Id,
+                            SubIndustries = null
+                        };
+                        si.SubIndustries.Add(ti);
+                    }
+                }
+
+            }
+            return industries;
+
+        }
+
+
+        /// <summary>
+        /// 根据行业导入题材热点股票
+        /// </summary>
+        /// <param name="categoryId"></param>
+        /// <param name="stocksId"></param>
+        public void ImportSubjectAndHotStocksByIndustries(long categoryId, List<int> industries)
+        {
+            var client = new SubjectAndHotStockApi.SubjectAndHotStockApiClient(_grpcChannelSet.AShareGrpcChannel);
+
+            Metadata meta = new Metadata();
+            meta.AddAuthorization(_passportProvider?.AccessToken);
+
+            ImportSubjectAndHotStocksByIndustriesRequest request = new ImportSubjectAndHotStocksByIndustriesRequest();
+            request.CategoryId = categoryId;
+            request.UserId = _passportProvider.UserId;
+            request.Industries.AddRange(industries);
+            client.ImportSubjectAndHotStocksByIndustries(request, meta);
+        }
+
+        /// <summary>
+        /// 合并分类
+        /// </summary>
+        /// <param name="to"></param>
+        /// <param name="from"></param>
+        public void MergeSubjectAndHotStockCategory(long to, List<long> from)
+        {
+            var client = new SubjectAndHotStockCategoryApi.SubjectAndHotStockCategoryApiClient(_grpcChannelSet.AShareGrpcChannel);
+
+            Metadata meta = new Metadata();
+            meta.AddAuthorization(_passportProvider?.AccessToken);
+
+            MergeSubjectAndHotStockCategoryRequest request = new MergeSubjectAndHotStockCategoryRequest();
+            request.ToCategoryId = to;
+            request.UserId = _passportProvider.UserId;
+            request.FromCategoriesId.AddRange(from);
+            client.MergeSubjectAndHotStockCategory(request, meta);
         }
     }
 }

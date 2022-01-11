@@ -47,9 +47,9 @@ namespace DawnQuant.DataCollector.Core.Job
                     {
                         var jobMessageUtility = scope.ServiceProvider.GetService<JobMessageUtil>();
 
-                        jobMessageUtility.OnInDailyTradeDataFromSinaJobStarted();
+                        jobMessageUtility.OnInStockDailyTradeDataFromSinaJobStarted();
                         await collector.CollectInDailyTradeDataFromSina(new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day));
-                        jobMessageUtility.OnInDailyTradeDataFromSinaJobCompleted();
+                        jobMessageUtility.OnInStockDailyTradeDataFromSinaJobCompleted();
 
                     }
                 }

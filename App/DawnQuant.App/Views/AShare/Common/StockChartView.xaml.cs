@@ -66,45 +66,22 @@ namespace DawnQuant.App.Views.AShare.Common
         private async void NavigateToF10()
         {
 
-            //if (Model != null && !string.IsNullOrEmpty(Model.F10Url))
-            //{
-            //    _wbStockInfo.Navigate(Model.F10Url);
-            //}
-            if (_wvStockInfo.CoreWebView2 == null)
+            if (_wvInfo.CoreWebView2 == null)
             {
-               await _wvStockInfo.EnsureCoreWebView2Async();
+               await _wvInfo.EnsureCoreWebView2Async();
             }
-            _wvStockInfo.CoreWebView2.Navigate(Model.F10Url);
-        
+
+            if(Model!=null && !string.IsNullOrEmpty(Model.F10Url))
+            {
+                _wvInfo.CoreWebView2.Navigate(Model.F10Url);
+            }
 
         }
 
         private void _financialChart_Loaded(object sender, RoutedEventArgs e)
         {
-
-          //  _wbStockInfo.Navigating += WbStockInfo_Navigating;
         }
 
-        #region 废弃
-         
-        //private void WbStockInfo_Navigating(object sender, NavigatingCancelEventArgs e)
-        //{
-        //    SetWebBrowserSilent(sender as WebBrowser, true);
-        //}
-
-
-        //private void SetWebBrowserSilent(WebBrowser webBrowser, bool silent)
-        //{
-        //    FieldInfo fi = typeof(WebBrowser).GetField("_axIWebBrowser2", BindingFlags.Instance | BindingFlags.NonPublic);
-        //    if (fi != null)
-        //    {
-        //        object browser = fi.GetValue(webBrowser);
-        //        if (browser != null)
-        //            browser.GetType().InvokeMember("Silent", BindingFlags.SetProperty, null, browser, new object[] { silent });
-        //    }
-        //}
-
-        #endregion 
 
         private void _financialChart_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -114,7 +91,6 @@ namespace DawnQuant.App.Views.AShare.Common
                 NavigateToF10();
             }
         }
-
 
 
 
@@ -197,7 +173,6 @@ namespace DawnQuant.App.Views.AShare.Common
             }
         }
 
-
         StatisticsWindowView _statisticsWindowView = null;
 
         /// <summary>
@@ -213,11 +188,11 @@ namespace DawnQuant.App.Views.AShare.Common
 
                 if (_fchart.SelectedItems?.Count > 0)
                 {
-                    var selectedItems = new List<StockPlotData>();
+                    var selectedItems = new List<PlotData>();
                   
                     for(int i=0;i< _fchart.SelectedItems.Count; i++)
                     {
-                        selectedItems.Add((StockPlotData)_fchart.SelectedItems[i]);
+                        selectedItems.Add((PlotData)_fchart.SelectedItems[i]);
                     }
 
                     Point rp = Mouse.GetPosition(e.Source as FrameworkElement);
@@ -234,7 +209,7 @@ namespace DawnQuant.App.Views.AShare.Common
 
                     StatisticsWindowViewModel m = new StatisticsWindowViewModel();
 
-                    m.Title = $"{Model.StockName}  个股K线区间统计";
+                    m.Title = $"{Model.Name}  个股K线区间统计";
 
                     m.Start = selectedItems.First().FormatedTradeDateTime;
                     m.End = selectedItems.Last().FormatedTradeDateTime;

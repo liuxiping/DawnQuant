@@ -81,7 +81,7 @@ namespace DawnQuant.App.Utils
             builder.RegisterType<SelfSelService>().SingleInstance();
             builder.RegisterType<BellwetherService>().SingleInstance();
             builder.RegisterType<SubjectAndHotService>().SingleInstance();
-            builder.RegisterType<StockPlotDataService>().SingleInstance();
+            builder.RegisterType<PlotDataService>().SingleInstance();
             builder.RegisterType<StockStrategyService>().SingleInstance();
             builder.RegisterType<StrategyExecutorService>().SingleInstance();
             builder.RegisterType<StrategyMetadataService>().SingleInstance();
@@ -90,7 +90,10 @@ namespace DawnQuant.App.Utils
 
             builder.RegisterType<SettingService>().SingleInstance();
 
+            builder.RegisterType<THSIndexService>().SingleInstance();
+
             
+
             //映射转换服务
             builder.AddAutoMapper();
 

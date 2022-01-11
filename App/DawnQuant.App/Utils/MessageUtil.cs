@@ -26,19 +26,19 @@ namespace DawnQuant.App.Utils
         /// <summary>
         /// 下载交易数据进度
         /// </summary>
-        public event Action<int,int> DownloadAShareDataProgress;
-        public void OnDownloadAShareDataProgress(int complete,int total)
+        public event Action<int,int> DownloadAllAShareDataProgress;
+        public void OnDownloadAllAShareDataProgress(int complete,int total)
         {
-            DownloadAShareDataProgress?.Invoke(complete, total);
+            DownloadAllAShareDataProgress?.Invoke(complete, total);
         }
 
         /// <summary>
         /// 下载A股数据完成通知
         /// </summary>
-        public event Action<bool> DownloadAShareDataComplete;
-        public void OnDownloadAShareDataComplete(bool isDownlaodAllData)
+        public event Action DownloadAllAShareDataComplete;
+        public void OnDownloadAShareDataComplete( )
         {
-            DownloadAShareDataComplete?.Invoke(isDownlaodAllData);
+            DownloadAllAShareDataComplete?.Invoke();
         }
 
 

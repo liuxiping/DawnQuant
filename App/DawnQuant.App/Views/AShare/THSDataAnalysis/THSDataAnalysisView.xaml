@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:DawnQuant.App.Views.AShare.THSDataAnalysis"
              xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
              xmlns:dxcn="http://schemas.devexpress.com/winfx/2008/xaml/core/internal" 
+             xmlns:THSIndex="clr-namespace:DawnQuant.App.Views.AShare.THSDataAnalysis.THSIndex"
 
              x:Class="DawnQuant.App.Views.AShare.THSDataAnalysis.THSDataAnalysisView"
              mc:Ignorable="d"   FontSize="15"
@@ -21,15 +22,15 @@
 
     </UserControl.Resources>
     <Grid>
-        <dx:DXTabControl Margin="0 -1 0 -1"     Panel.ZIndex="-100">
+        <dx:DXTabControl Margin="0 -1 0 -1"   Padding="0"   >
             <dx:DXTabControl.ItemContainerStyle>
                 <Style TargetType="dx:DXTabItem">
                     <Setter Property="HoverBackgroundTemplate" Value="{StaticResource TabItemHoverBackground}"/>
                     <Setter Property="FocusedBackgroundTemplate" Value="{StaticResource TabItemFocusedBackground}"/>
                 </Style>
             </dx:DXTabControl.ItemContainerStyle>
-            <dx:DXTabItem Header="同花顺概念指数"    >
-                <Grid Background="#00000000"/>
+            <dx:DXTabItem Header="同花顺指数"    >
+                <THSIndex:THSIndexView></THSIndex:THSIndexView>
             </dx:DXTabItem>
             <dx:DXTabItem Header="同花顺行业指数"   >
                 <Grid Background="#00000000"/>

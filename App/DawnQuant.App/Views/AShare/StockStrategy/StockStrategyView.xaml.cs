@@ -30,6 +30,13 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
             InitializeComponent();
             DataContext = new StockStrategyViewModel();
 
+            Model.SelfSelectStockCategoriesLoad += Model_SelfSelectStockCategoriesLoad;
+
+        }
+
+        private void Model_SelfSelectStockCategoriesLoad()
+        {
+            CreateMoveToCategoryMenuItem();
         }
 
         //private void _btnGroup_Checked(object sender, RoutedEventArgs e)
@@ -163,7 +170,7 @@ namespace DawnQuant.App.Views.AShare.StockStrategy
 
         private void _stockStrategyView_Loaded(object sender, RoutedEventArgs e)
         {
-            CreateMoveToCategoryMenuItem();
+          
             if (_acStrategyList.Items.Count > 0)
             {
                 _acStrategyList.SelectedItem = _acStrategyList.Items[0];

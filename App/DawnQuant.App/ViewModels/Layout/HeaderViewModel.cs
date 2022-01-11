@@ -53,9 +53,9 @@ namespace DawnQuant.App.ViewModels.Layout
                    string dataPath = System.IO.Path.Combine(Environment.CurrentDirectory, "Data");
                    Directory.Delete(dataPath, true);
 
-                   _aShareDataMaintainService.DownLoadStockDataProgress += (complete, total) =>
+                   _aShareDataMaintainService.DownLoadAShareStockDataProgress += (complete, total) =>
                      {
-                         _messageNotify.OnDownloadAShareDataProgress(complete, total);
+                         _messageNotify.OnDownloadAllAShareDataProgress(complete, total);
                      };
                    _aShareDataMaintainService.DownLoadStockData(1);
 
@@ -66,7 +66,7 @@ namespace DawnQuant.App.ViewModels.Layout
                    App.IsUpdateAllAShareData = false;
 
                    //数据下载全部完成，通知
-                   notify.OnDownloadAShareDataComplete(true);
+                   notify.OnDownloadAShareDataComplete();
                  
 
                });
