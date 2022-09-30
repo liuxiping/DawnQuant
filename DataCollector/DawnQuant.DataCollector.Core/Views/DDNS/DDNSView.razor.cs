@@ -64,8 +64,8 @@ namespace DawnQuant.DataCollector.Core.Views.DDNS
                     {
                         DefaultRequestMethod = RequestMethod.GET,
 
-                        SecretId = "AKIDEH5csZliNlrhLlMTbXFhU6RWehX6lASS",
-                        SecretKey = "2BAsNo1ygqkSvFXbP1aHQoRm63s37yco",
+                        SecretId = "",
+                        SecretKey = "",
                     });
 
                     Message += "更新 www.dawnquant.com，";
